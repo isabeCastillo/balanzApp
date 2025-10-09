@@ -14,7 +14,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/loginb.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("BalanzApp");
         stage.setScene(scene);
