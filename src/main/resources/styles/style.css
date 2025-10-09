@@ -1,0 +1,111 @@
+/* Fuente Cuprum desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cuprum&display=swap');
+
+.root {
+    -fx-font-family: 'Cuprum', sans-serif;
+}
+
+/*LOGIN*/
+/* Panel izquierdo */
+#leftPanel {
+    -fx-background-color: #5A008A;
+    -fx-pref-width: 260;
+    -fx-padding: 30;
+}
+
+#welcomeTitle {
+    -fx-text-fill: white;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+#welcomeMessage {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+#noAccountLabel {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10px;
+}
+
+#btnRegistro {
+    -fx-background-color: white;
+    -fx-text-fill: #5A008A;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* Panel central */
+#centerPanel {
+    -fx-background-color: white;
+    -fx-padding: 30;
+}
+
+#userLabel, #passLabel {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+#btnIngresar {
+    -fx-background-color: #5A008A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/*REGISTRO*/
+/* Panel izquierdo */
+#leftPanel {
+    -fx-background-color: #5A008A;
+    -fx-pref-width: 260;
+    -fx-padding: 30;
+}
+
+#registerTitle {
+    -fx-text-fill: white;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+#registerMessage {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+#alreadyAccountLabel {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+}
+
+#btnLogin {
+    -fx-background-color: white;
+    -fx-text-fill: #5A008A;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+/* Panel central */
+#centerPanel {
+    -fx-background-color: white;
+    -fx-padding: 30;
+}
+
+#userLabel, #emailLabel, #passLabel {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+#btnRegistrar {
+    -fx-background-color: #5A008A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
