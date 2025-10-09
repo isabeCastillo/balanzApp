@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-    private static Stage primaryStage; // Referencia global al Stage
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws IOException {

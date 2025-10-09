@@ -26,7 +26,6 @@ public class RegisterController {
 
     @FXML
     private void initialize() {
-        // Puedes agregar lógica al cargar la vista
     }
 
     @FXML
