@@ -4,6 +4,7 @@ module com.example.balanzapp {
     requires java.sql;
 
 
+
     opens com.example.balanzapp to javafx.fxml;
     exports com.example.balanzapp;
     exports com.example.balanzapp.controllers;

@@ -109,3 +109,56 @@
     -fx-border-radius: 5;
     -fx-background-radius: 5;
 }
+
+
+/* LIBRO DIARIO */
+
+
+/* Título principal */
+.titulo {
+    -fx-font-size: 22px;
+    -fx-text-fill: #5A238A;
+    -fx-font-weight: bold;
+}
+
+/* Campos de entrada */
+.combo-box, .text-field, .date-picker {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D8BFD8;
+    -fx-border-radius: 6px;
+    -fx-padding: 6px;
+    -fx-font-size: 13px;
+}
+
+/* Radio buttons */
+.radio-button {
+    -fx-text-fill: #5A238A;
+    -fx-font-weight: bold;
+}
+
+/* Botones funcionales */
+.button {
+    -fx-background-color: #E6DAF5;
+    -fx-text-fill: #5A238A;
+    -fx-font-weight: bold;
+    -fx-border-radius: 6px;
+    -fx-padding: 6px 12px;
+    -fx-effect: dropshadow(gaussian, rgba(90,35,138,0.2), 4, 0.5, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: #D8BFD8;
+}
+
+/* Tabla */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D8BFD8;
+    -fx-border-radius: 6px;
+}
+
+.table-column {
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 13px;
+    -fx-text-fill: #5A238A;
+}
