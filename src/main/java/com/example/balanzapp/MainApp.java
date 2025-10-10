@@ -1,4 +1,4 @@
-package com.example.balanzapp.controllers;
+package com.example.balanzapp;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

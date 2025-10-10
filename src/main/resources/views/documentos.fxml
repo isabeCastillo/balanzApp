@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.balanzapp.controllers.DocumentosController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="397.0" prefWidth="175.0" style="-fx-background-color: #5A238A;">
+               <children>
+                  <VBox layoutY="81.0" prefHeight="234.0" prefWidth="138.0">
+                     <children>
+                        <Button fx:id="btninicio" mnemonicParsing="false" onAction="#goToHome" prefHeight="28.0" prefWidth="138.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE" />
+                        <Button fx:id="btndoc" mnemonicParsing="false" onAction="#goToDoc" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE" />
+                        <Button fx:id="btnlibrodiario" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE" />
+                        <Button fx:id="btnlibromayor" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE" />
+                        <Button fx:id="btnbalances" mnemonicParsing="false" onAction="#goToBlances" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Balances                      " textFill="WHITE" />
+                        <Button fx:id="btnestadoderesultados" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE" />
+                        <Button fx:id="btncatalogo" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE" />
+                        <Button fx:id="btnusuario" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE" />
+                        <Button fx:id="btnbitacora" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="btncerrar" layoutX="26.0" layoutY="340.0" mnemonicParsing="false" onAction="#Close" prefHeight="25.0" prefWidth="93.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE" />
+                  <ImageView fitHeight="17.0" fitWidth="27.0" layoutX="16.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../imagenes/logout.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="lblUs" layoutX="19.0" layoutY="22.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd" />
+                  <Label fx:id="lblad" layoutX="19.0" layoutY="39.0" text="Rol" textFill="WHITE" />
+               </children>
+            </AnchorPane>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Label layoutX="158.0" layoutY="14.0" text="Documentos" />
+            <Label layoutX="9.0" layoutY="62.0" text="Nombre" />
+            <Label layoutX="251.0" layoutY="62.0" text="Subir Documento" />
+            <TextField fx:id="txtNombreDocumento" layoutX="8.0" layoutY="85.0" prefHeight="25.0" prefWidth="200.0" text="Ingrese el nombre del documento" />
+            <ComboBox fx:id="cmbElegirDoc" layoutX="250.0" layoutY="85.0" prefWidth="150.0" promptText="Elige tu documento" />
+            <Button fx:id="btnagregar" layoutX="53.0" layoutY="142.0" mnemonicParsing="false" onAction="#AggDoc" text="Agregar" />
+            <Button fx:id="btneditar" layoutX="173.0" layoutY="142.0" mnemonicParsing="false" onAction="#EditDoc" text="Editar" />
+            <Button fx:id="btneliminar" layoutX="266.0" layoutY="142.0" mnemonicParsing="false" onAction="#EliminarDoc" text="Eliminar" />
+            <TableView layoutX="9.0" layoutY="183.0" prefHeight="205.0" prefWidth="401.0">
+              <columns>
+                <TableColumn prefWidth="131.99999523162842" text="Nombre Del Archivo" />
+                <TableColumn prefWidth="89.99993896484375" text="Clasificacion" />
+                  <TableColumn prefWidth="60.00007629394531" text="Fecha" />
+                  <TableColumn prefWidth="60.0" text="Usuario" />
+                  <TableColumn prefWidth="57.33330281575519" text="Ver" />
+              </columns>
+            </TableView>
+         </children></AnchorPane>
+  </items>
+</SplitPane>

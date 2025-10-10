@@ -1,5 +1,6 @@
 package com.example.balanzapp.controllers;
 
+import com.example.balanzapp.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.IOException;
