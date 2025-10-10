@@ -10,7 +10,8 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class DocumentosController {
+public class LibroDiarioController {
+
     @FXML
     private Button btnagregar;
 
@@ -128,11 +129,7 @@ public class DocumentosController {
 
     @FXML
     void goToLibroDiario(ActionEvent event) {
-        try {
-            MainApp.setRoot("libroDiario");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @FXML
@@ -146,3 +143,4 @@ public class DocumentosController {
     }
 
 }
+

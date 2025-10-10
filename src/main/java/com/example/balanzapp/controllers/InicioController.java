@@ -68,6 +68,11 @@ public class InicioController {
     }
 
     public void goToLibroDiario(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("libroDiario");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void goToLibroMayor(ActionEvent actionEvent) {
