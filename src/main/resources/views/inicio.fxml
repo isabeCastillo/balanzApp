@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController">
    <children>
-      <SplitPane dividerPositions="0.23348017621145378" prefHeight="403.0" prefWidth="606.0">
+      <SplitPane dividerPositions="0.23348017621145378" prefHeight="600.0" prefWidth="900.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="421.0" prefWidth="172.0" style="-fx-background-color: #5A238A;">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
                <children>
                   <VBox layoutY="81.0" prefHeight="234.0" prefWidth="138.0">
                      <children>

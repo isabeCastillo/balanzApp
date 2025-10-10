@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class LibroDiarioController {
+public class LibroMayorController {
 
     @FXML
     private Button btnagregar;
@@ -150,5 +150,7 @@ public class LibroDiarioController {
 
     }
 
+
 }
+
 
