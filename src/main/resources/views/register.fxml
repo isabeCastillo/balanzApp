@@ -7,7 +7,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.balanzapp.controllers.RegisterController"
-            prefWidth="600" prefHeight="400"
+            prefHeight="600.0" prefWidth="900.0"
             stylesheets="@../styles/style.css">
 
     <!-- Panel izquierdo -->

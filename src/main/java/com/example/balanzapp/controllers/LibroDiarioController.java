@@ -129,12 +129,20 @@ public class LibroDiarioController {
 
     @FXML
     void goToLibroDiario(ActionEvent event) {
-
+        try {
+            MainApp.setRoot("libroDiario");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void goToLibroMayor(ActionEvent event) {
-
+        try {
+            MainApp.setRoot("libroMayor");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

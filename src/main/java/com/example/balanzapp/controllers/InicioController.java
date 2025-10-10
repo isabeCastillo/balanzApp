@@ -76,6 +76,11 @@ public class InicioController {
     }
 
     public void goToLibroMayor(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("libroMayor");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void goToBlances(ActionEvent actionEvent) {
