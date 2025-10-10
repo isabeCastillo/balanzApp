@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../styles/style.css"
+            fx:controller="com.example.balanzapp.controllers.LibroDiarioController"
+            prefHeight="600.0" prefWidth="900.0">
+
+    <children>
+        <SplitPane dividerPositions="0.25" prefWidth="900.0" prefHeight="600.0">
+            <items>
+
+                <!-- Panel lateral -->
+                <AnchorPane prefWidth="200.0" style="-fx-background-color: #5A238A;">
+                    <children>
+                        <VBox layoutY="80.0" spacing="5.0" prefWidth="180.0" alignment="TOP_LEFT">
+                            <children>
+                                <Button text="Inicio" onAction="#goToHome" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Documentos" onAction="#goToDoc" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Libro Diario" onAction="#goToLibroDiario" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Libro Mayor" onAction="#goToLibroMayor" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Balances" onAction="#goToBlances" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Estado de resultado" onAction="#goToEstadoResultados" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Catálogo de cuenta" onAction="#goToCatalogoCuentas" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Usuario" onAction="#goToUsuario" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button text="Bitácora del Auditor" onAction="#goToBitacoraAuditor" textFill="WHITE" style="-fx-background-color: transparent;" />
+                            </children>
+                        </VBox>
+
+                        <Button text="Cerrar sesión" layoutX="20.0" layoutY="500.0" onAction="#Close" textFill="WHITE" style="-fx-background-color: transparent;" />
+                        <ImageView layoutX="15.0" layoutY="505.0" fitWidth="25.0" fitHeight="20.0" preserveRatio="true">
+                            <image>
+                                <Image url="@../imagenes/logout.png" />
+                            </image>
+                        </ImageView>
+
+                        <Label text="Nombre" layoutX="20.0" layoutY="20.0" textFill="WHITE"/>
+                        <Label text="Rol" layoutX="20.0" layoutY="40.0" textFill="WHITE"/>
+                    </children>
+                </AnchorPane>
+
+                <AnchorPane prefWidth="700.0">
+                    <children>
+                        <VBox spacing="15.0">
+                            <children>
+                                <Label text="Libro Mayor" styleClass="titulo"/>
+
+                                <GridPane hgap="10" vgap="10">
+                                    <children>
+                                        <Label text="Cuenta:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                        <ComboBox fx:id="comboCuenta" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                        <Label text="Desde:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                        <DatePicker fx:id="dateDesde" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                                        <Label text="Hasta:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                        <DatePicker fx:id="dateHasta" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                    </children>
+                                </GridPane>
+
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Button text="Buscar" />
+                                        <Button text="Descargar PDF" />
+                                        <Button text="Descargar Excel" />
+                                    </children>
+                                </HBox>
+
+                                <TableView fx:id="tablaMayor" prefHeight="300.0">
+                                    <columns>
+                                        <TableColumn text="Fecha"/>
+                                        <TableColumn text="Concepto"/>
+                                        <TableColumn text="Documentos"/>
+                                        <TableColumn text="Debe"/>
+                                        <TableColumn text="Haber"/>
+                                        <TableColumn text="Saldo"/>
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
