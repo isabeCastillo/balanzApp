@@ -17,7 +17,7 @@
             <items>
 
                 <!-- Panel lateral -->
-                <AnchorPane prefWidth="200.0" style="-fx-background-color: #5A238A;">
+                <AnchorPane prefWidth="200.0" fx:id="fondo">
                     <children>
                         <VBox layoutY="80.0" spacing="5.0" prefWidth="180.0" alignment="TOP_LEFT">
                             <children>
