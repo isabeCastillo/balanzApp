@@ -4,11 +4,16 @@
 .root {
     -fx-font-family: 'Cuprum', sans-serif;
 }
-
+#fondo {
+    -fx-background-image: url("../imagenes/fondo.jpg");
+}
 /*LOGIN*/
 /* Panel izquierdo */
 #leftPanel {
-    -fx-background-color: #5A008A;
+    -fx-background-image: url("../imagenes/fondo.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center center;
     -fx-pref-width: 260;
     -fx-padding: 30;
 }

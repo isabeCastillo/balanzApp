@@ -9,14 +9,18 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController"  stylesheets="@../styles/style.css">
    <children>
       <SplitPane dividerPositions="0.23348017621145378" prefHeight="600.0" prefWidth="900.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
+
+          <AnchorPane fx:id="fondo" minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" >
                <children>
-                  <VBox layoutY="81.0" prefHeight="234.0" prefWidth="138.0">
-                     <children>
+
+
+                   <VBox layoutY="81.0" prefHeight="234.0" prefWidth="138.0">
+                     <children >
+
                         <Button fx:id="btninicio" mnemonicParsing="false" onAction="#goToHome" prefHeight="28.0" prefWidth="138.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE" />
                         <Button fx:id="btndoc" mnemonicParsing="false" onAction="#goToDoc" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE" />
                         <Button fx:id="btnlibrodiario" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE" />
