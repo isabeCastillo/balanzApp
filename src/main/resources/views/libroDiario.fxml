@@ -1,90 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@../styles/style.css"
-            fx:controller="com.example.balanzapp.controllers.LibroDiarioController"
-            prefHeight="600.0" prefWidth="900.0">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.LibroDiarioController">
 
     <children>
-        <SplitPane dividerPositions="0.25" prefWidth="900.0" prefHeight="600.0">
+        <SplitPane dividerPositions="0.25" prefHeight="600.0" prefWidth="900.0">
             <items>
 
                 <!-- Panel lateral -->
                 <AnchorPane prefWidth="200.0" fx:id="fondo">
                     <children>
-                        <VBox layoutY="80.0" spacing="5.0" prefWidth="180.0" alignment="TOP_LEFT">
+                        <VBox alignment="TOP_LEFT" layoutY="80.0" prefWidth="180.0" spacing="5.0">
                             <children>
-                                <Button text="Inicio" onAction="#goToHome" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Documentos" onAction="#goToDoc" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Libro Diario" onAction="#goToLibroDiario" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Libro Mayor" onAction="#goToLibroMayor" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Balances" onAction="#goToBlances" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Estado de resultado" onAction="#goToEstadoResultados" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Catálogo de cuenta" onAction="#goToCatalogoCuentas" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Usuario" onAction="#goToUsuario" textFill="WHITE" style="-fx-background-color: transparent;" />
-                                <Button text="Bitácora del Auditor" onAction="#goToBitacoraAuditor" textFill="WHITE" style="-fx-background-color: transparent;" />
+                                <Button onAction="#goToHome" style="-fx-background-color: transparent;" text="Inicio" textFill="WHITE" />
+                                <Button onAction="#goToDoc" style="-fx-background-color: transparent;" text="Documentos" textFill="WHITE" />
+                                <Button onAction="#goToLibroDiario" style="-fx-background-color: transparent;" text="Libro Diario" textFill="WHITE" />
+                                <Button onAction="#goToLibroMayor" style="-fx-background-color: transparent;" text="Libro Mayor" textFill="WHITE" />
+                        <ComboBox fx:id="cmbbalances" prefWidth="150.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                           <effect>
+                              <ColorAdjust brightness="1.0" />
+                           </effect>
+                        </ComboBox>
+                                <Button onAction="#goToEstadoResultados" style="-fx-background-color: transparent;" text="Estado de resultado" textFill="WHITE" />
+                                <Button onAction="#goToCatalogoCuentas" style="-fx-background-color: transparent;" text="Catálogo de cuenta" textFill="WHITE" />
+                                <Button onAction="#goToUsuario" style="-fx-background-color: transparent;" text="Usuario" textFill="WHITE" />
+                                <Button onAction="#goToBitacoraAuditor" style="-fx-background-color: transparent;" text="Bitácora del Auditor" textFill="WHITE" />
                             </children>
                         </VBox>
 
-                        <Button text="Cerrar sesión" layoutX="20.0" layoutY="500.0" onAction="#Close" textFill="WHITE" style="-fx-background-color: transparent;" />
-                        <ImageView layoutX="15.0" layoutY="505.0" fitWidth="25.0" fitHeight="20.0" preserveRatio="true">
+                        <Button layoutX="20.0" layoutY="500.0" onAction="#Close" style="-fx-background-color: transparent;" text="Cerrar sesión" textFill="WHITE" />
+                        <ImageView fitHeight="20.0" fitWidth="25.0" layoutX="15.0" layoutY="505.0" preserveRatio="true">
                             <image>
                                 <Image url="@../imagenes/logout.png" />
                             </image>
                         </ImageView>
 
-                        <Label text="Nombre" layoutX="20.0" layoutY="20.0" textFill="WHITE"/>
-                        <Label text="Rol" layoutX="20.0" layoutY="40.0" textFill="WHITE"/>
+                        <Label layoutX="20.0" layoutY="20.0" text="Nombre" textFill="WHITE" />
+                        <Label layoutX="20.0" layoutY="40.0" text="Rol" textFill="WHITE" />
                     </children>
                 </AnchorPane>
 
                 <AnchorPane prefWidth="700.0">
                     <children>
-                        <VBox spacing="15.0" >
+                        <VBox spacing="15.0">
                             <children>
-                                <Label text="Libro Diario" styleClass="titulo"/>
+                                <Label styleClass="titulo" text="Libro Diario" />
 
 
                                 <GridPane hgap="10" vgap="10">
                                     <children>
-                                        <Label text="Año:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                                        <ComboBox fx:id="comboAnio" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                        <Label text="Año:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="comboAnio" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                        <Label text="Mes:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                                        <ComboBox fx:id="comboMes" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                                        <Label text="Mes:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="comboMes" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                                     </children>
+                           <columnConstraints>
+                              <ColumnConstraints />
+                              <ColumnConstraints />
+                              <ColumnConstraints />
+                              <ColumnConstraints />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
 
 
                                 <GridPane hgap="10" vgap="10">
                                     <children>
-                                        <Label text="Fecha:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                                        <DatePicker fx:id="dateFecha" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                        <Label text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <DatePicker fx:id="dateFecha" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                        <Label text="Concepto:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                                        <TextField fx:id="txtConcepto" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                                        <Label text="Concepto:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                        <TextField fx:id="txtConcepto" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                                        <Label text="Cuenta:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                                        <ComboBox fx:id="comboCuenta" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                        <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <ComboBox fx:id="comboCuenta" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                        <Label text="Tipo:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-                                        <HBox spacing="10.0" GridPane.rowIndex="1" GridPane.columnIndex="3">
+                                        <Label text="Tipo:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <HBox spacing="10.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                             <children>
                                                 <RadioButton fx:id="radioDebe" text="Debe" />
-                                                <RadioButton fx:id="radioHaber" text="Haber"/>
+                                                <RadioButton fx:id="radioHaber" text="Haber" />
                                             </children>
                                         </HBox>
 
-                                        <Label text="Monto:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="txtMonto" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                        <Label text="Monto:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <TextField fx:id="txtMonto" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     </children>
+                           <columnConstraints>
+                              <ColumnConstraints />
+                              <ColumnConstraints />
+                              <ColumnConstraints />
+                              <ColumnConstraints />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
 
                                 <HBox spacing="10.0">
@@ -94,20 +127,20 @@
                                         <Button text="Descargar Excel" />
                                         <Button text="Buscar" />
                                         <Button text="Agregar" />
-                                        <Button text="Editar"/>
-                                        <Button text="Eliminar"/>
+                                        <Button text="Editar" />
+                                        <Button text="Eliminar" />
                                     </children>
                                 </HBox>
 
                                 <TableView fx:id="tablaDiario" prefHeight="300.0">
                                     <columns>
-                                        <TableColumn text="Fecha"/>
-                                        <TableColumn text="N° de Partida"/>
-                                        <TableColumn text="Concepto"/>
-                                        <TableColumn text="Cuenta"/>
-                                        <TableColumn text="Debe"/>
-                                        <TableColumn text="Haber"/>
-                                        <TableColumn text="Documento"/>
+                                        <TableColumn text="Fecha" />
+                                        <TableColumn text="N° de Partida" />
+                                        <TableColumn text="Concepto" />
+                                        <TableColumn text="Cuenta" />
+                                        <TableColumn text="Debe" />
+                                        <TableColumn text="Haber" />
+                                        <TableColumn text="Documento" />
                                     </columns>
                                 </TableView>
                             </children>

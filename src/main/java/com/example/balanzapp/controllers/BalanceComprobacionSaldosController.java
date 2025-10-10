@@ -8,20 +8,24 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DocumentosController {
-    @FXML
-    private Button btnagregar;
+public class BalanceComprobacionSaldosController {
 
     @FXML
-    private ComboBox<String> cmbbalances;
+    private Button btnDecargarPdf;
+
+    @FXML
+    private Button btnDescargarExcel;
 
     @FXML
     private Button btnbitacora;
+
+    @FXML
+    private Button btnbuscar;
 
     @FXML
     private Button btncatalogo;
@@ -31,12 +35,6 @@ public class DocumentosController {
 
     @FXML
     private Button btndoc;
-
-    @FXML
-    private Button btneditar;
-
-    @FXML
-    private Button btneliminar;
 
     @FXML
     private Button btnestadoderesultados;
@@ -54,7 +52,13 @@ public class DocumentosController {
     private Button btnusuario;
 
     @FXML
-    private ComboBox<?> cmbElegirDoc;
+    private ComboBox<?> cmbAño;
+
+    @FXML
+    private ComboBox<?> cmbPeriodo;
+
+    @FXML
+    private ComboBox<String> cmbbalances;
 
     @FXML
     private Label lblUs;
@@ -63,7 +67,7 @@ public class DocumentosController {
     private Label lblad;
 
     @FXML
-    private TextField txtNombreDocumento;
+    private TableView<?> tblComprobacionSaldos;
 
     @FXML
     private void initialize(){
@@ -72,7 +76,6 @@ public class DocumentosController {
                 "Balance general"
         );
         cmbbalances.setOnAction(event -> balanceSelec());
-
 
     }
     private void balanceSelec() {
@@ -97,8 +100,7 @@ public class DocumentosController {
     }
 
     @FXML
-    void AggDoc(ActionEvent event) {
-
+    void Buscar(ActionEvent event) {
 
     }
 
@@ -108,12 +110,12 @@ public class DocumentosController {
     }
 
     @FXML
-    void EditDoc(ActionEvent event) {
+    void DecargarPdf(ActionEvent event) {
 
     }
 
     @FXML
-    void EliminarDoc(ActionEvent event) {
+    void DescargarExcel(ActionEvent event) {
 
     }
 
@@ -134,6 +136,7 @@ public class DocumentosController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @FXML
@@ -143,6 +146,7 @@ public class DocumentosController {
 
     @FXML
     void goToHome(ActionEvent event) {
+
         try {
             MainApp.setRoot("inicio");
         } catch (IOException e) {
@@ -157,16 +161,17 @@ public class DocumentosController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @FXML
     void goToLibroMayor(ActionEvent event) {
-
         try {
             MainApp.setRoot("libroMayor");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @FXML

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane dividerPositions="0.3425468904244818" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="678.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BalanceComprobacionSaldosController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #5A238A;">
+         <children>
+            <VBox layoutX="8.0" layoutY="110.0" prefHeight="261.0" prefWidth="228.0">
+               <children>
+                  <Button fx:id="btninicio" mnemonicParsing="false" onAction="#goToHome" prefHeight="28.0" prefWidth="138.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE" />
+                  <Button fx:id="btndoc" mnemonicParsing="false" onAction="#goToDoc" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE" />
+                  <Button fx:id="btnlibrodiario" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE" />
+                  <Button fx:id="btnlibromayor" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE" />
+                  <ComboBox fx:id="cmbbalances" prefWidth="150.0" promptText="  Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
+                  </ComboBox>
+                  <Button fx:id="btnestadoderesultados" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: transparent;" text=" Estado De Resultados         " textFill="WHITE" />
+                  <Button fx:id="btncatalogo" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE" />
+                  <Button fx:id="btnusuario" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE" />
+                  <Button fx:id="btnbitacora" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE" />
+               </children>
+            </VBox>
+            <Button fx:id="btncerrar" layoutX="47.0" layoutY="379.0" mnemonicParsing="false" onAction="#Close" prefHeight="25.0" prefWidth="93.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE" />
+            <ImageView fitHeight="17.0" fitWidth="27.0" layoutX="40.0" layoutY="384.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imagenes/logout.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lblUs" layoutX="23.0" layoutY="18.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd" />
+            <Label fx:id="lblad" layoutX="23.0" layoutY="31.0" text="Rol" textFill="WHITE" />
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="533.0" prefWidth="469.0">
+         <children>
+            <Label layoutX="122.0" layoutY="33.0" text="Balanza De Comprobación De Saldos" />
+            <Label layoutX="66.0" layoutY="76.0" text="Periodo" />
+            <Label layoutX="307.0" layoutY="76.0" text="Año" />
+            <ComboBox fx:id="cmbPeriodo" layoutX="32.0" layoutY="93.0" prefWidth="150.0" />
+            <ComboBox fx:id="cmbAño" layoutX="254.0" layoutY="93.0" prefWidth="150.0" />
+            <Button fx:id="btnbuscar" layoutX="182.0" layoutY="142.0" mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
+            <Button fx:id="btnDecargarPdf" layoutX="40.0" layoutY="186.0" mnemonicParsing="false" onAction="#DecargarPdf" text="Decargar PDF" />
+            <Button fx:id="btnDescargarExcel" layoutX="281.0" layoutY="186.0" mnemonicParsing="false" onAction="#DescargarExcel" text="Descargar Excel" />
+            <TableView fx:id="tblComprobacionSaldos" layoutX="22.0" layoutY="260.0" prefHeight="242.0" prefWidth="405.0">
+              <columns>
+                <TableColumn prefWidth="99.33331298828125" text="Codigo" />
+                <TableColumn prefWidth="111.3333740234375" text="Cuenta" />
+                  <TableColumn prefWidth="98.00003051757812" text="Debe" />
+                  <TableColumn prefWidth="95.33331298828125" text="Haber" />
+              </columns>
+            </TableView>
+         </children></AnchorPane>
+  </items>
+</SplitPane>

@@ -16,7 +16,7 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0">
          <children>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" fx:id="fondo">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
                <children>
                   <VBox layoutY="81.0" prefHeight="600.0" prefWidth="900.0">
                      <children>
@@ -24,7 +24,7 @@
                         <Button fx:id="btndoc" mnemonicParsing="false" onAction="#goToDoc" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE" />
                         <Button fx:id="btnlibrodiario" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE" />
                         <Button fx:id="btnlibromayor" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE" />
-                        <Button fx:id="btnbalances" mnemonicParsing="false" onAction="#goToBlances" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Balances                      " textFill="WHITE" />
+
                         <Button fx:id="btnestadoderesultados" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE" />
                         <Button fx:id="btncatalogo" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE" />
                         <Button fx:id="btnusuario" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE" />

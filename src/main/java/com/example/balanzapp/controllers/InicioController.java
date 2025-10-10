@@ -3,14 +3,19 @@ package com.example.balanzapp.controllers;
 import com.example.balanzapp.MainApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class InicioController {
+
     @FXML
-    private Button btnbalances;
+    private ComboBox<String> cmbbalances;
 
     @FXML
     private Button btnbitacora;
@@ -47,17 +52,42 @@ public class InicioController {
 
     @FXML
     private void initialize(){
-
+        cmbbalances.getItems().addAll(
+                "Balance de comprobación de saldos",
+                "Balance general"
+        );
+        cmbbalances.setOnAction(event -> balanceSelec());
     }
+    private void balanceSelec() {
+        String seleccion = cmbbalances.getValue();
+        String rutaFXML = null;
 
-    public void goToHome(ActionEvent actionEvent) throws IOException {
-        try {
-            MainApp.setRoot("inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (seleccion.equals("Balance de comprobación de saldos")) {
+            rutaFXML = "/views/balanceSaldos.fxml";
+        } else if (seleccion.equals("Balance general")) {
+            rutaFXML = "/views/balanceGeneral.fxml";
         }
 
+        if (rutaFXML != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
+                Stage stage = (Stage) cmbbalances.getScene().getWindow();
+                stage.getScene().setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+        public void goToHome (ActionEvent actionEvent) throws IOException {
+            try {
+                MainApp.setRoot("inicio");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
     public void goToDoc(ActionEvent actionEvent) throws IOException {
         try {
@@ -83,8 +113,6 @@ public class InicioController {
         }
     }
 
-    public void goToBlances(ActionEvent actionEvent) {
-    }
 
     public void goToEstadoResultados(ActionEvent actionEvent) {
     }
