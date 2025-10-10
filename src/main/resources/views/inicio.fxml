@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.effect.ColorAdjust?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController">
    <children>
       <SplitPane dividerPositions="0.23348017621145378" prefHeight="600.0" prefWidth="900.0">
@@ -21,7 +23,12 @@
                         <Button fx:id="btndoc" mnemonicParsing="false" onAction="#goToDoc" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE" />
                         <Button fx:id="btnlibrodiario" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE" />
                         <Button fx:id="btnlibromayor" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE" />
-                        <Button fx:id="btnestadoderesultados" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE" />
+                         <ComboBox fx:id="cmbbalances" prefWidth="150.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                             <effect>
+                                 <ColorAdjust brightness="1.0" />
+                             </effect>
+                         </ComboBox>
+                         <Button fx:id="btnestadoderesultados" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE" />
                         <Button fx:id="btncatalogo" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE" />
                         <Button fx:id="btnusuario" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE" />
                         <Button fx:id="btnbitacora" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="25.0" prefWidth="145.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE" />

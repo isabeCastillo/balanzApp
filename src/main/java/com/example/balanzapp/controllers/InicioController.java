@@ -1,6 +1,7 @@
 package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.MainApp;
+import com.example.balanzapp.models.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,14 +51,17 @@ public class InicioController {
     @FXML
     private Label lblad;
 
+    private Usuario usuarioLogueado;
+
     @FXML
-    private void initialize(){
+    private void initialize() {
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"
         );
         cmbbalances.setOnAction(event -> balanceSelec());
     }
+
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
         String rutaFXML = null;
@@ -79,19 +83,49 @@ public class InicioController {
         }
     }
 
-        public void goToHome (ActionEvent actionEvent) throws IOException {
-            try {
-                MainApp.setRoot("inicio");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void setDatosUsuario(Usuario usuario) {
+        this.usuarioLogueado = usuario;
+        lblUs.setText(usuario.getNombre());
+        lblad.setText(usuario.getRol().getNombre_rol());
 
+        // Control de permisos por rol
+        int nivel = usuario.getRol().getNivel_acceso();
+
+        if (nivel == 1) {
+            btnusuario.setVisible(true);
+            btnbitacora.setVisible(true);
+            btndoc.setVisible(true);
+            btnlibrodiario.setVisible(true);
+            btnlibromayor.setVisible(true);
+            btncatalogo.setVisible(true);
+        } else if (nivel == 2) {
+            btnusuario.setVisible(false);
+            btnbitacora.setVisible(false);
+            btndoc.setVisible(true);
+            btnlibrodiario.setVisible(true);
+            btnlibromayor.setVisible(true);
+            btncatalogo.setVisible(true);
+        } else if (nivel == 3) { // 🔹 Auditor
+            btnusuario.setVisible(false);
+            btnbitacora.setVisible(true);
+            btndoc.setVisible(false);
+            btnlibrodiario.setVisible(false);
+            btnlibromayor.setVisible(false);
+            btncatalogo.setVisible(false);
         }
+    }
 
-
-    public void goToDoc(ActionEvent actionEvent) throws IOException {
+    public void goToHome(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("documentos");
+            MainApp.setRoot("/views/inicio.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void goToDoc(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("/views/documentos.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,7 +133,7 @@ public class InicioController {
 
     public void goToLibroDiario(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("libroDiario");
+            MainApp.setRoot("/views/libroDiario.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,26 +141,48 @@ public class InicioController {
 
     public void goToLibroMayor(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("libroMayor");
+            MainApp.setRoot("/views/libroMayor.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
     public void goToEstadoResultados(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("estadoResultados");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void goToCatalogoCuentas(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("catalogo");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void goToUsuario(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("usuarios");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void goToBitacoraAuditor(ActionEvent actionEvent) {
+        try {
+            MainApp.setRoot("bitacora");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
     public void Close(ActionEvent actionEvent) {
-
+        try {
+            MainApp.setRoot("login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

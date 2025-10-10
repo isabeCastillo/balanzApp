@@ -5,7 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexionDB {
-    private static String url = "jdbc:postgresql://localhost:5432/db_contable";
+
+    private static String url = "jdbc:postgresql://localhost:5432/db_contables";
 
     private static  final String USER = "postgres";
 
