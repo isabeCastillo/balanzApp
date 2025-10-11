@@ -5,7 +5,9 @@ import com.example.balanzapp.models.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -117,15 +119,22 @@ public class InicioController {
 
     public void goToHome(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("/views/inicio.fxml");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/inicio.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void goToDoc(ActionEvent actionEvent) {
+
         try {
-            MainApp.setRoot("/views/documentos.fxml");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/documentos.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -133,7 +142,10 @@ public class InicioController {
 
     public void goToLibroDiario(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("/views/libroDiario.fxml");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/libroDiario.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,7 +153,10 @@ public class InicioController {
 
     public void goToLibroMayor(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("/views/libroMayor.fxml");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/libroMayor.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -149,7 +164,10 @@ public class InicioController {
 
     public void goToEstadoResultados(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("estadoResultados");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/estadoResultados.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,7 +175,10 @@ public class InicioController {
 
     public void goToCatalogoCuentas(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("catalogo");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -165,7 +186,10 @@ public class InicioController {
 
     public void goToUsuario(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("usuarios");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/usuarios.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -173,14 +197,20 @@ public class InicioController {
 
     public void goToBitacoraAuditor(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("bitacora");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/bitacora.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public void Close(ActionEvent actionEvent) {
         try {
-            MainApp.setRoot("login");
+            Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

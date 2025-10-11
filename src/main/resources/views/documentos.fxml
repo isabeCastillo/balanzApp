@@ -14,28 +14,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.2335" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.DocumentosController">
+<SplitPane dividerPositions="0.2335" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" stylesheets="@../styles/style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.DocumentosController">
   <items>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
          <children>
             <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
                <children>
-                  <Button fx:id="btninicio1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
+                  <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btndoc1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
+                  <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnlibrodiario1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
+                  <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnlibromayor1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
+                  <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
@@ -45,29 +45,29 @@
                         <ColorAdjust brightness="1.0" />
                      </effect>
                   </ComboBox>
-                  <Button fx:id="btnestadoderesultados1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
+                  <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btncatalogo1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
+                  <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnusuario1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
+                  <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnbitacora1" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
+                  <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold Italic" size="12.0" />
                      </font>
                   </Button>
                </children>
             </VBox>
-            <Button fx:id="btncerrar1" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
+            <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
                <font>
                   <Font name="Georgia Bold" size="12.0" />
                </font>

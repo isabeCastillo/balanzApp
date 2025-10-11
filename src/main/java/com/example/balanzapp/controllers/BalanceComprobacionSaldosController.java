@@ -105,11 +105,6 @@ public class BalanceComprobacionSaldosController {
     }
 
     @FXML
-    void Close(ActionEvent event) {
-
-    }
-
-    @FXML
     void DecargarPdf(ActionEvent event) {
 
     }
@@ -118,7 +113,6 @@ public class BalanceComprobacionSaldosController {
     void DescargarExcel(ActionEvent event) {
 
     }
-
     @FXML
     void goToBitacoraAuditor(ActionEvent event) {
 
@@ -131,11 +125,6 @@ public class BalanceComprobacionSaldosController {
 
     @FXML
     void goToDoc(ActionEvent event) {
-        try {
-            MainApp.setRoot("documentos");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -147,30 +136,15 @@ public class BalanceComprobacionSaldosController {
     @FXML
     void goToHome(ActionEvent event) {
 
-        try {
-            MainApp.setRoot("inicio");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     void goToLibroDiario(ActionEvent event) {
-        try {
-            MainApp.setRoot("libroDiario");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
     @FXML
     void goToLibroMayor(ActionEvent event) {
-        try {
-            MainApp.setRoot("libroMayor");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 

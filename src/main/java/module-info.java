@@ -5,6 +5,7 @@ module com.example.balanzapp {
     requires javafx.graphics;
 
 
+
     opens com.example.balanzapp to javafx.fxml;
     exports com.example.balanzapp;
     exports com.example.balanzapp.controllers;
