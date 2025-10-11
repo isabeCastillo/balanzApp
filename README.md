@@ -42,6 +42,7 @@ El proyecto sigue el patrón **MVC (Modelo–Vista–Controlador)**.
 ---
 
 ## Clonar el Repositorio
+
 Con las dependencias instaladas, clona el repositorio de BalanzApp en tu equipo utilizando Git. Ejecuta el siguiente comando en tu terminal o usa tu herramienta de Git preferida:
 https://github.com/isabeCastillo/balanzApp.git
 ---
@@ -70,4 +71,4 @@ Para poder ejecutarlo solamente debes de localizarte en el archivo HelloApplicat
 ## **Con esto, tu proyecto se debería estar ejecutando sin problemas y mostrarte el Inicio de Sesión.**
 <img width="1364" height="711" alt="image" src="https://github.com/user-attachments/assets/759a34f4-cbda-4637-9894-a632109a9dd0" />
 
-##Si tienes algun problema que que te aparezca que te falta JDK lo que debes de hacer es que al clonarlo y abrirlo en el Intellij IDEA dale click a la pestaña que aparece en la parte inferior derecha de la pantalla y listo
+## Si tienes algun problema que que te aparezca que te falta JDK lo que debes de hacer es que al clonarlo y abrirlo en el Intellij IDEA dale click a la pestaña que aparece en la parte inferior derecha de la pantalla y listo
