@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.2335" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" stylesheets="@../styles/style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.DocumentosController">
+<SplitPane dividerPositions="0.2335" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.DocumentosController">
   <items>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
          <children>
@@ -96,21 +96,21 @@
       </AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
-            <Label layoutX="158.0" layoutY="14.0" text="Documentos" />
-            <Label layoutX="9.0" layoutY="62.0" text="Nombre" />
-            <Label layoutX="251.0" layoutY="62.0" text="Subir Documento" />
-            <TextField fx:id="txtNombreDocumento" layoutX="8.0" layoutY="85.0" prefHeight="25.0" prefWidth="200.0" text="Ingrese el nombre del documento" />
-            <ComboBox fx:id="cmbElegirDoc" layoutX="250.0" layoutY="85.0" prefWidth="150.0" promptText="Elige tu documento" />
-            <Button fx:id="btnagregar" layoutX="53.0" layoutY="142.0" mnemonicParsing="false" onAction="#AggDoc" text="Agregar" />
-            <Button fx:id="btneditar" layoutX="173.0" layoutY="142.0" mnemonicParsing="false" onAction="#EditDoc" text="Editar" />
-            <Button fx:id="btneliminar" layoutX="266.0" layoutY="142.0" mnemonicParsing="false" onAction="#EliminarDoc" text="Eliminar" />
-            <TableView layoutX="9.0" layoutY="183.0" prefHeight="205.0" prefWidth="401.0">
+            <Label layoutX="301.0" layoutY="23.0" text="Documentos" />
+            <Label layoutX="114.0" layoutY="61.0" text="Nombre" />
+            <Label layoutX="463.0" layoutY="54.0" text="Subir Documento" />
+            <TextField fx:id="txtNombreDocumento" layoutX="105.0" layoutY="85.0" prefHeight="25.0" prefWidth="200.0" text="Ingrese el nombre del documento" />
+            <ComboBox fx:id="cmbElegirDoc" layoutX="463.0" layoutY="81.0" prefWidth="150.0" promptText="Elige tu documento" />
+            <Button fx:id="btnagregar" layoutX="106.0" layoutY="153.0" mnemonicParsing="false" onAction="#AggDoc" prefHeight="23.0" prefWidth="102.0" text="Agregar" />
+            <Button fx:id="btneditar" layoutX="305.0" layoutY="153.0" mnemonicParsing="false" onAction="#EditDoc" prefHeight="23.0" prefWidth="91.0" text="Editar" />
+            <Button fx:id="btneliminar" layoutX="502.0" layoutY="153.0" mnemonicParsing="false" onAction="#EliminarDoc" prefHeight="23.0" prefWidth="91.0" text="Eliminar" />
+            <TableView layoutX="20.0" layoutY="196.0" prefHeight="205.0" prefWidth="582.0">
               <columns>
-                <TableColumn prefWidth="131.99999523162842" text="Nombre Del Archivo" />
-                <TableColumn prefWidth="89.99993896484375" text="Clasificacion" />
-                  <TableColumn prefWidth="60.00007629394531" text="Fecha" />
-                  <TableColumn prefWidth="60.0" text="Usuario" />
-                  <TableColumn prefWidth="57.33330281575519" text="Ver" />
+                <TableColumn prefWidth="189.9999542236328" text="Nombre Del Archivo" />
+                <TableColumn prefWidth="88.00003051757812" text="Clasificacion" />
+                  <TableColumn minWidth="4.66668701171875" prefWidth="86.0" text="Fecha" />
+                  <TableColumn prefWidth="91.33331298828125" text="Usuario" />
+                  <TableColumn prefWidth="116.66668701171875" text="Ver" />
               </columns>
             </TableView>
          </children>

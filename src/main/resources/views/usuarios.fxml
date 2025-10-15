@@ -3,9 +3,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,11 +15,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BalanceComprobacionSaldosController">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.UsuarioController">
    <children>
-      <SplitPane dividerPositions="0.2335" layoutX="-5.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
-         <items>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="600.0" prefWidth="900.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #5A238A;">
                <children>
                   <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
                      <children>
@@ -68,17 +71,12 @@
                         </Button>
                      </children>
                   </VBox>
-                  <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Label fx:id="lblUs1" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
+                  <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblad1" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
+                  <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
@@ -93,33 +91,35 @@
                         <Image url="@../imagenes/logout.png" />
                      </image>
                   </ImageView>
+                  <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="664.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label layoutX="196.0" layoutY="41.0" text="Balanza De Comprobación De Saldos">
-                     <font>
-                        <Font name="Georgia" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="184.0" layoutY="84.0" text="Periodo" />
-                  <Label layoutX="425.0" layoutY="84.0" text="Año" />
-                  <ComboBox fx:id="cmbPeriodo" layoutX="150.0" layoutY="101.0" prefWidth="150.0" />
-                  <ComboBox fx:id="cmbAño" layoutX="372.0" layoutY="101.0" prefWidth="150.0" />
-                  <Button fx:id="btnbuscar" layoutX="300.0" layoutY="150.0" mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
-                  <Button fx:id="btnDecargarPdf" layoutX="158.0" layoutY="194.0" mnemonicParsing="false" onAction="#DecargarPdf" text="Decargar PDF" />
-                  <Button fx:id="btnDescargarExcel" layoutX="399.0" layoutY="194.0" mnemonicParsing="false" onAction="#DescargarExcel" text="Descargar Excel" />
-                  <TableView fx:id="tblComprobacionSaldos" layoutX="3.0" layoutY="268.0" prefHeight="300.0" prefWidth="679.0">
-                     <columns>
-                        <TableColumn prefWidth="99.33331298828125" text="Codigo" />
-                        <TableColumn prefWidth="368.0" text="Cuenta" />
-                        <TableColumn prefWidth="107.0" text="Debe" />
-                        <TableColumn prefWidth="103.0" text="Haber" />
-                     </columns>
+                  <Label layoutX="290.0" layoutY="31.0" text="Usuario" />
+                  <Label layoutX="119.0" layoutY="95.0" text="Nombre" />
+                  <Label layoutX="423.0" layoutY="95.0" text="Roles" />
+                  <TextField fx:id="txtNombreUsuario" layoutX="67.0" layoutY="127.0" text="Ingrese el nombre" />
+                  <ComboBox fx:id="cmbRoles" layoutX="362.0" layoutY="127.0" prefHeight="25.0" prefWidth="169.0" promptText="Seleccione una opción" />
+                  <Label layoutX="276.0" layoutY="178.0" text="Contraseña" />
+                  <PasswordField fx:id="txtContraseña" layoutX="238.0" layoutY="203.0" />
+                  <Button fx:id="btnAgregarUsuario" layoutX="67.0" layoutY="261.0" mnemonicParsing="false" text="Agregar" />
+                  <Button fx:id="btnEditar" layoutX="276.0" layoutY="261.0" mnemonicParsing="false" text="Editar" />
+                  <Button fx:id="btnEliminar" layoutX="447.0" layoutY="261.0" mnemonicParsing="false" text="Eliminar" />
+                  <TableView fx:id="tblUsuarios" layoutX="110.0" layoutY="318.0" prefHeight="195.0" prefWidth="392.0">
+                    <columns>
+                      <TableColumn prefWidth="137.99996948242188" text="Nombre" />
+                      <TableColumn prefWidth="119.33331298828125" text="Contraseña" />
+                        <TableColumn prefWidth="133.3333740234375" text="Rol" />
+                    </columns>
                   </TableView>
                </children>
             </AnchorPane>
-         </items>
+        </items>
       </SplitPane>
    </children>
 </AnchorPane>

@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BalanceComprobacionSaldosController">
+<AnchorPane prefHeight="565.0" prefWidth="869.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BalanceGeneralController">
    <children>
-      <SplitPane dividerPositions="0.2335" layoutX="-5.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
-         <items>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="565.0" prefWidth="869.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="197.0" style="-fx-background-color: #5A238A;">
                <children>
-                  <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
+                  <VBox layoutX="14.0" layoutY="68.0" prefHeight="425.0" prefWidth="207.0">
                      <children>
                         <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
                            <font>
@@ -68,58 +68,61 @@
                         </Button>
                      </children>
                   </VBox>
-                  <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Label fx:id="lblUs1" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
+                  <Label fx:id="lblUs" layoutX="53.0" layoutY="24.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblad1" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
+                  <Label fx:id="lblad" layoutX="53.0" layoutY="41.0" text="Rol" textFill="WHITE">
                      <font>
                         <Font name="Georgia Bold" size="12.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../imagenes/user.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="16.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
+                  <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="57.0" layoutY="501.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
+                     <font>
+                        <Font name="Georgia Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="35.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../imagenes/logout.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="664.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label layoutX="196.0" layoutY="41.0" text="Balanza De Comprobación De Saldos">
-                     <font>
-                        <Font name="Georgia" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="184.0" layoutY="84.0" text="Periodo" />
-                  <Label layoutX="425.0" layoutY="84.0" text="Año" />
-                  <ComboBox fx:id="cmbPeriodo" layoutX="150.0" layoutY="101.0" prefWidth="150.0" />
-                  <ComboBox fx:id="cmbAño" layoutX="372.0" layoutY="101.0" prefWidth="150.0" />
-                  <Button fx:id="btnbuscar" layoutX="300.0" layoutY="150.0" mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
-                  <Button fx:id="btnDecargarPdf" layoutX="158.0" layoutY="194.0" mnemonicParsing="false" onAction="#DecargarPdf" text="Decargar PDF" />
-                  <Button fx:id="btnDescargarExcel" layoutX="399.0" layoutY="194.0" mnemonicParsing="false" onAction="#DescargarExcel" text="Descargar Excel" />
-                  <TableView fx:id="tblComprobacionSaldos" layoutX="3.0" layoutY="268.0" prefHeight="300.0" prefWidth="679.0">
-                     <columns>
-                        <TableColumn prefWidth="99.33331298828125" text="Codigo" />
-                        <TableColumn prefWidth="368.0" text="Cuenta" />
-                        <TableColumn prefWidth="107.0" text="Debe" />
-                        <TableColumn prefWidth="103.0" text="Haber" />
-                     </columns>
-                  </TableView>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="664.0">
+                     <children>
+                        <Label layoutX="196.0" layoutY="41.0" text="Balance General">
+                           <font>
+                              <Font name="Georgia" size="19.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="150.0" layoutY="84.0" text="Periodo" />
+                        <Label layoutX="425.0" layoutY="84.0" text="Año" />
+                        <ComboBox fx:id="cmbPeriodo" layoutX="95.0" layoutY="101.0" prefWidth="150.0" />
+                        <ComboBox fx:id="cmbAño" layoutX="372.0" layoutY="101.0" prefWidth="150.0" />
+                        <Button fx:id="btnbuscar" layoutX="300.0" layoutY="150.0" mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
+                        <Button fx:id="btnDecargarPdf" layoutX="158.0" layoutY="194.0" mnemonicParsing="false" onAction="#DecargarPdf" text="Decargar PDF" />
+                        <Button fx:id="btnDescargarExcel" layoutX="399.0" layoutY="194.0" mnemonicParsing="false" onAction="#DescargarExcel" text="Descargar Excel" />
+                        <TableView fx:id="tblBalanceGeneral" layoutX="24.0" layoutY="299.0" prefHeight="219.0" prefWidth="562.0">
+                          <columns>
+                            <TableColumn prefWidth="173.9999942779541" text="Activo" />
+                            <TableColumn prefWidth="180.6667022705078" text="Pasivo" />
+                              <TableColumn prefWidth="205.99990844726562" text="Patrimonio" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
-         </items>
+        </items>
       </SplitPane>
    </children>
 </AnchorPane>
