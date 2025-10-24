@@ -6,125 +6,96 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class CatalogoCuentaController {
 
-    @FXML
-    private Button btnagregar;
+    @FXML private Button btnagregar;
+    @FXML private ComboBox<String> cmbbalances;
+    @FXML private Button btnbitacora;
+    @FXML private Button btncatalogo;
+    @FXML private Button btncerrar;
+    @FXML private Button btndoc;
+    @FXML private Button btneditar;
+    @FXML private Button btneliminar;
+    @FXML private Button btnestadoderesultados;
+    @FXML private Button btninicio;
+    @FXML private Button btnlibrodiario;
+    @FXML private Button btnlibromayor;
+    @FXML private Button btnusuario;
+    @FXML private ComboBox<?> cmbElegirDoc;
+    @FXML private Label lblUs;
+    @FXML private Label lblad;
+    @FXML private TextField txtNombreDocumento;
 
-    @FXML
-    private ComboBox<String> cmbbalances;
+    // Campos del formulario principal
+    @FXML private TextField txtCodigo;
+    @FXML private ComboBox<String> cmbCuenta;
+    @FXML private ComboBox<String> cmbTipo;
+    @FXML private TableView<?> tblCatalogo;
 
-    @FXML
-    private Button btnbitacora;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
-    @FXML
-    private Button btncatalogo;
-
-    @FXML
-    private Button btncerrar;
-
-    @FXML
-    private Button btndoc;
-
-    @FXML
-    private Button btneditar;
-
-    @FXML
-    private Button btneliminar;
-
-    @FXML
-    private Button btnestadoderesultados;
-
-    @FXML
-    private Button btninicio;
-
-    @FXML
-    private Button btnlibrodiario;
-
-    @FXML
-    private Button btnlibromayor;
-
-    @FXML
-    private Button btnusuario;
-
-    @FXML
-    private ComboBox<?> cmbElegirDoc;
-
-    @FXML
-    private Label lblUs;
-
-    @FXML
-    private Label lblad;
-
-    @FXML
-    private TextField txtNombreDocumento;
-
-
-
+    public void setUsuario(String usuario, String rol) {
+        lblUs.setText(usuario);
+        lblad.setText(rol);
+    }
 
     @FXML
     void Close(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
+            Parent root = loader.load();
+
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
-    void EditDoc(ActionEvent event) {
-
-    }
+    void goToBitacoraAuditor(ActionEvent actionEvent) { cambiarVista("/views/bitacora.fxml", actionEvent); }
 
     @FXML
-    void EliminarDoc(ActionEvent event) {
-
-    }
+    void goToCatalogoCuentas(ActionEvent actionEvent) { cambiarVista("/views/catalogo_cuenta.fxml", actionEvent); }
 
     @FXML
-    void goToBitacoraAuditor(ActionEvent actionEvent) {
+    void goToDoc(ActionEvent actionEvent) { cambiarVista("/views/documentos.fxml", actionEvent); }
+
+    @FXML
+    void goToEstadoResultados(ActionEvent actionEvent) { cambiarVista("/views/estadosResultados.fxml", actionEvent); }
+
+    @FXML
+    void goToHome(ActionEvent actionEvent) { cambiarVista("/views/inicio.fxml", actionEvent); }
+
+    @FXML
+    void goToLibroDiario(ActionEvent actionEvent) { cambiarVista("/views/libroDiario.fxml", actionEvent); }
+
+    @FXML
+    void goToLibroMayor(ActionEvent actionEvent) { cambiarVista("/views/libroMayor.fxml", actionEvent); }
+
+    @FXML
+    void goToUsuario(ActionEvent actionEvent) { cambiarVista("/views/usuarios.fxml", actionEvent); }
+
+
+    private void cambiarVista(String fxml, ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/bitacora.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+            Parent root = loader.load();
 
-    }
+            // Pasar usuario/rol a la siguiente vista (si tiene los labels)
+            Object controller = loader.getController();
+            if (controller instanceof CatalogoCuentaController nextController) {
+                nextController.setUsuario(lblUs.getText(), lblad.getText());
+            }
 
-
-    @FXML
-    void goToCatalogoCuentas(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo_cuenta.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    void goToDoc(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/documentos.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -133,64 +104,9 @@ public class CatalogoCuentaController {
     }
 
     @FXML
-    void goToEstadoResultados(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/estadosResultados.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    void goToHome(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/inicio.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void goToLibroDiario(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/libroDiario.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void goToLibroMayor(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/libroMayor.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void goToUsuario(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/usuarios.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void initialize() {
+        cmbCuenta.getItems().addAll("Activo", "Pasivo", "Capital", "Ingresos", "Gastos");
+        cmbTipo.getItems().addAll("Corriente", "No corriente");
+        cmbbalances.getItems().addAll("General", "Comparativo", "Consolidado");
     }
 }
