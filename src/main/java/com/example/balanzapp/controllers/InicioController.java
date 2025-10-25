@@ -164,7 +164,7 @@ public class InicioController {
 
     public void goToEstadoResultados(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/estadoResultados.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/views/estadosResultados.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -175,7 +175,7 @@ public class InicioController {
 
     public void goToCatalogoCuentas(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo_cuenta.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

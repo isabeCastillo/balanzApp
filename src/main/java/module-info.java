@@ -3,7 +3,7 @@ module com.example.balanzapp {
     requires javafx.fxml;
     requires java.sql;
     requires javafx.graphics;
-
+    requires javafx.base;
 
 
     opens com.example.balanzapp to javafx.fxml;

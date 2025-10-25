@@ -131,7 +131,7 @@ public class BalanceComprobacionSaldosController {
     @FXML
     void goToCatalogoCuentas(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo_cuenta.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
