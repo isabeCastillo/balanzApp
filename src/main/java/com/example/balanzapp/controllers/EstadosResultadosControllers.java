@@ -39,7 +39,8 @@ public class EstadosResultadosControllers {
         cmbPeriodo.getItems().addAll("Meensual", "Trimestral", "Anual");
         cmbAnio.getItems().addAll("2023", "2024", "2025");
         cmbMes.getItems().addAll("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-        cmbbalances.getItems().addAll("General", "Comparativo", "Consolidado");
+        cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
+
     }
 
 

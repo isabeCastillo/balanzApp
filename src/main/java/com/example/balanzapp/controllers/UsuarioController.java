@@ -52,7 +52,7 @@ public class UsuarioController {
     private ComboBox<?> cmbRoles;
 
     @FXML
-    private ComboBox<?> cmbbalances;
+    private ComboBox<String> cmbbalances;
 
     @FXML
     private Label lblUs;
@@ -68,6 +68,37 @@ public class UsuarioController {
 
     @FXML
     private TextField txtNombreUsuario;
+
+    @FXML
+    private void initialize(){
+        cmbbalances.getItems().addAll(
+                "Balance de comprobación de saldos",
+                "Balance general"
+        );
+        cmbbalances.setOnAction(event -> balanceSelec());
+
+
+    }
+    private void balanceSelec() {
+        String seleccion = cmbbalances.getValue();
+        String rutaFXML = null;
+
+        if (seleccion.equals("Balance de comprobación de saldos")) {
+            rutaFXML = "/views/balanceSaldos.fxml";
+        } else if (seleccion.equals("Balance general")) {
+            rutaFXML = "/views/balanceGeneral.fxml";
+        }
+
+        if (rutaFXML != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
+                Stage stage = (Stage) cmbbalances.getScene().getWindow();
+                stage.getScene().setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @FXML
     void Close(ActionEvent actionEvent) {

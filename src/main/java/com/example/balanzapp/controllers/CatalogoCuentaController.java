@@ -107,6 +107,6 @@ public class CatalogoCuentaController {
     public void initialize() {
         cmbCuenta.getItems().addAll("Activo", "Pasivo", "Capital", "Ingresos", "Gastos");
         cmbTipo.getItems().addAll("Corriente", "No corriente");
-        cmbbalances.getItems().addAll("General", "Comparativo", "Consolidado");
+        cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
     }
 }

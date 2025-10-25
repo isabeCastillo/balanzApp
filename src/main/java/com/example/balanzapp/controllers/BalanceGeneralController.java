@@ -58,7 +58,7 @@ public class BalanceGeneralController {
     private ComboBox<?> cmbPeriodo;
 
     @FXML
-    private ComboBox<?> cmbbalances;
+    private ComboBox<String> cmbbalances;
 
     @FXML
     private Label lblUs;
