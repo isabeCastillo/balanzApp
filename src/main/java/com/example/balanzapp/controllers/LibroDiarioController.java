@@ -1,6 +1,9 @@
 package com.example.balanzapp.controllers;
 
+import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.MainApp;
+import com.example.balanzapp.dao.PartidaDAO;
+import com.example.balanzapp.models.Partida;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -18,14 +21,12 @@ import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LibroDiarioController extends BaseController{
-
-    @FXML
-    private Button btnagregar;
-
-    @FXML
-    private ComboBox<String> cmbbalances;
 
     @FXML
     private Button btnbitacora;
@@ -38,12 +39,6 @@ public class LibroDiarioController extends BaseController{
 
     @FXML
     private Button btndoc;
-
-    @FXML
-    private Button btneditar;
-
-    @FXML
-    private Button btneliminar;
 
     @FXML
     private Button btnestadoderesultados;
@@ -61,7 +56,19 @@ public class LibroDiarioController extends BaseController{
     private Button btnusuario;
 
     @FXML
-    private ComboBox<?> cmbElegirDoc;
+    private ComboBox<String> cmbbalances;
+
+    @FXML
+    private ComboBox<String> comboAnio;
+
+    @FXML
+    private ComboBox<String> comboCuenta;
+
+    @FXML
+    private ComboBox<String> comboMes;
+
+    @FXML
+    private DatePicker dateFecha;
 
     @FXML
     private Label lblUs;
@@ -70,22 +77,22 @@ public class LibroDiarioController extends BaseController{
     private Label lblad;
 
     @FXML
-    private TextField txtNombreDocumento;
+    private RadioButton radioDebe;
 
     @FXML
-    private Button btnSubirdoc;
+    private RadioButton radioHaber;
 
     @FXML
-    private Button btnbuscar;
+    private TableView<Partida> tablaDiario;
 
     @FXML
-    private Button btndescargarexcel;
+    private TextField txtConcepto;
+
+    @FXML
+    private TextField txtMonto;
 
     @FXML
     private Button btndescargarpdf;
-
-    @FXML
-    private TableView<String> tablaDiario;
 
 
     @FXML
@@ -97,6 +104,9 @@ public class LibroDiarioController extends BaseController{
         );
         cmbbalances.setOnAction(event -> balanceSelec());
         btndescargarpdf.setOnAction(e -> descargarpdf());
+        comboMes.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12");
+        cargarAniosDesdeBD();
+        cargarCuentasDesdeBD();
     }
 
 
@@ -276,6 +286,7 @@ public class LibroDiarioController extends BaseController{
             PdfPTable tablaPDF = new PdfPTable(tablaDiario.getColumns().size());
             tablaPDF.setWidthPercentage(100);
 
+            // Agregar encabezados de columna
             for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
                 PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -289,13 +300,16 @@ public class LibroDiarioController extends BaseController{
                 celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celdaVacia);
             } else {
+                for (Partida item : tablaDiario.getItems()) {
+                    for (TableColumn<Partida, ?> col : tablaDiario.getColumns()) {
 
-                tablaDiario.getItems().forEach(item -> {
-                    for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
-                        Object valor = col.getCellData(Integer.parseInt(item));
+                        //obtiene el valor de la columna usando el objeto Partida
+                        Object valor = col.getCellData(item);
+
+                        //agrega el valor a la celda del PDF
                         tablaPDF.addCell(valor == null ? "" : valor.toString());
                     }
-                });
+                }
             }
 
             documento.add(tablaPDF);
@@ -315,5 +329,46 @@ public class LibroDiarioController extends BaseController{
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    private void cargarAniosDesdeBD() {
+        String sql = "SELECT DISTINCT EXTRACT(YEAR FROM fecha) FROM tbl_partidas ORDER BY 1 DESC";
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                comboAnio.getItems().add(String.valueOf((int) rs.getDouble(1)));
+            }
+        } catch (SQLException e) { System.out.println(e); }
+    }
+
+    private void cargarCuentasDesdeBD() {
+        String sql = "SELECT id_cuenta, nombre FROM tbl_cntaContables";
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                comboCuenta.getItems().add(rs.getInt(1) + " - " + rs.getString(2));
+            }
+        } catch (SQLException e) { System.out.println(e); }
+    }
+
+    @FXML
+    private void agregarPartida() {
+        String cuentaStr = comboCuenta.getValue();
+        int idCuenta = Integer.parseInt(cuentaStr.split(" - ")[0]);
+
+        boolean esDebe = radioDebe.isSelected();
+        double monto = Double.parseDouble(txtMonto.getText());
+
+        PartidaDAO.insertarPartida(dateFecha.getValue(), txtConcepto.getText(), idCuenta, esDebe, monto, 2); // id_usuario = 2 (Cambiar dinámico)
+        cargarTabla();
+    }
+
+    private void cargarTabla() {
+        int mes = Integer.parseInt(comboMes.getValue());
+        int anio = Integer.parseInt(comboAnio.getValue());
+
+        tablaDiario.getItems().setAll(PartidaDAO.obtenerPartidasPorMesYAnio(mes, anio));
     }
 }

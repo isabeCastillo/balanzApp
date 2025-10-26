@@ -105,17 +105,18 @@
                         <ComboBox fx:id="cmbTipo" promptText="Tipo de cuenta" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
                     </GridPane>
                     <HBox spacing="10">
-                        <Button text="Agregar"/>
-                        <Button text="Editar"/>
-                        <Button text="Eliminar"/>
+                        <Button fx:id="btnagregar" text="Agregar" onAction="#agregarCuenta"/>
+                        <Button fx:id="btneditar" text="Editar" onAction="#editarCuenta"/>
+                        <Button fx:id="btneliminar" text="Eliminar" onAction="#eliminarCuenta"/>
                         <Button text="Descargar PDF"/>
                         <Button text="Descargar Excel"/>
                     </HBox>
                     <TableView fx:id="tblCatalogo" prefHeight="250" prefWidth="600">
                         <columns>
-                            <TableColumn text="Código" prefWidth="150"/>
-                            <TableColumn text="Catálogo de cuentas" prefWidth="300"/>
-                            <TableColumn text="Tipo de cuenta" prefWidth="150"/>
+                            <TableColumn fx:id="colCodigo" text="Código" prefWidth="150"/>
+                            <TableColumn fx:id="colNombre" text="Catálogo de cuentas" prefWidth="300"/>
+                            <TableColumn fx:id="colTipo" text="Tipo de cuenta" prefWidth="150"/>
+                            <TableColumn fx:id="colGrupo" text="Grupo" prefWidth="150"/>
                         </columns>
                     </TableView>
                 </VBox>

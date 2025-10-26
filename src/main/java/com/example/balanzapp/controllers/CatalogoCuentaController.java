@@ -1,5 +1,8 @@
 package com.example.balanzapp.controllers;
 
+import com.example.balanzapp.Conexion.ConexionDB;
+import com.example.balanzapp.dao.CatalogoDAO;
+import com.example.balanzapp.models.Cuenta;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,8 +10,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class CatalogoCuentaController extends BaseController{
 
@@ -74,7 +82,13 @@ public class CatalogoCuentaController extends BaseController{
     private ComboBox<String> cmbTipo;
 
     @FXML
-    private TableView<?> tblCatalogo;
+    private TableView<Cuenta> tblCatalogo;
+
+    @FXML private TableColumn<Cuenta, String> colCodigo;
+    @FXML private TableColumn<Cuenta, String> colNombre;
+    @FXML private TableColumn<Cuenta, String> colTipo;
+    @FXML private TableColumn<Cuenta, String> colGrupo;
+
 
     private Stage stage;
     private Scene scene;
@@ -134,8 +148,113 @@ public class CatalogoCuentaController extends BaseController{
     @FXML
     public void initialize() {
         cargarDatosUsuario();
-        cmbCuenta.getItems().addAll("Activo", "Pasivo", "Capital", "Ingresos", "Gastos");
-        cmbTipo.getItems().addAll("Corriente", "No corriente");
+        cargarCuentasDesdeBD();
+        cargarTiposDesdeBD();
+        cargarTabla();
         cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
+    }
+
+    private void cargarCuentasDesdeBD() {
+        String sql = "SELECT id_cuenta, nombre FROM tbl_cntaContables ORDER BY codigo ASC";
+
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                // Guarda ID y nombre juntos para usarlos en Libro Diario
+                cmbCuenta.getItems().add(rs.getInt("id_cuenta") + " - " + rs.getString("nombre"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al cargar cuentas: " + e.getMessage());
+        }
+    }
+    private void cargarTiposDesdeBD() {
+        String sql = "SELECT DISTINCT tipo FROM tbl_cntaContables ORDER BY tipo ASC";
+
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                cmbTipo.getItems().add(rs.getString("tipo"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al cargar tipos: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void agregarCuenta(ActionEvent event) {
+        String codigo = txtCodigo.getText();
+        String nombre = txtNombreDocumento.getText();
+        String tipo = cmbCuenta.getValue();
+        String grupo = cmbTipo.getValue();
+
+        if (codigo.isEmpty() || nombre.isEmpty() || tipo == null || grupo == null) {
+            mostrarAlerta("Complete todos los campos.");
+            return;
+        }
+
+        Cuenta cuenta = new Cuenta(codigo, nombre, tipo, grupo);
+
+        if (!CatalogoDAO.insertarCuenta(cuenta)) {
+            mostrarAlerta("existe una cuenta con este código.");
+            return;
+        }
+
+        cargarTabla();
+        limpiarCampos();
+    }
+    private void cargarTabla() {
+        tblCatalogo.getItems().setAll(CatalogoDAO.obtenerCuentas());
+    }
+    @FXML
+    private void eliminarCuenta() {
+        Cuenta seleccionada = tblCatalogo.getSelectionModel().getSelectedItem();
+        if (seleccionada == null) return;
+
+        CatalogoDAO.eliminarCuenta(seleccionada.getIdCuenta());
+        cargarTabla();
+    }
+    @FXML
+    private void editarCuenta(ActionEvent event) {
+        Cuenta seleccionada = tblCatalogo.getSelectionModel().getSelectedItem();
+
+        if (seleccionada == null) {
+            mostrarAlerta("Seleccione una cuenta de la tabla.");
+            return;
+        }
+
+        seleccionada.setNombre(txtNombreDocumento.getText());
+        seleccionada.setTipo(cmbCuenta.getValue());
+        seleccionada.setGrupo(cmbTipo.getValue());
+
+        if (CatalogoDAO.actualizarCuenta(seleccionada)) {
+            cargarTabla();
+            limpiarCampos();
+        } else {
+            mostrarAlerta("No se pudo actualizar la cuenta.");
+        }
+    }
+
+    private void limpiarCampos() {
+        txtCodigo.clear();
+        txtNombreDocumento.clear();
+        cmbCuenta.setValue(null);
+        cmbTipo.setValue(null);
+    }
+
+    private void mostrarAlerta(String mensaje){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Aviso");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.show();
     }
 }
