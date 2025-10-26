@@ -10,40 +10,75 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class CatalogoCuentaController {
+public class CatalogoCuentaController extends BaseController{
 
-    @FXML private Button btnagregar;
-    @FXML private ComboBox<String> cmbbalances;
-    @FXML private Button btnbitacora;
-    @FXML private Button btncatalogo;
-    @FXML private Button btncerrar;
-    @FXML private Button btndoc;
-    @FXML private Button btneditar;
-    @FXML private Button btneliminar;
-    @FXML private Button btnestadoderesultados;
-    @FXML private Button btninicio;
-    @FXML private Button btnlibrodiario;
-    @FXML private Button btnlibromayor;
-    @FXML private Button btnusuario;
-    @FXML private ComboBox<?> cmbElegirDoc;
-    @FXML private Label lblUs;
-    @FXML private Label lblad;
-    @FXML private TextField txtNombreDocumento;
+    @FXML
+    private Button btnagregar;
+
+    @FXML
+    private ComboBox<String> cmbbalances;
+
+    @FXML
+    private Button btnbitacora;
+
+    @FXML
+    private Button btncatalogo;
+
+    @FXML
+    private Button btncerrar;
+
+    @FXML
+    private Button btndoc;
+
+    @FXML
+    private Button btneditar;
+
+    @FXML
+    private Button btneliminar;
+
+    @FXML
+    private Button btnestadoderesultados;
+
+    @FXML
+    private Button btninicio;
+
+    @FXML
+    private Button btnlibrodiario;
+
+    @FXML
+    private Button btnlibromayor;
+
+    @FXML
+    private Button btnusuario;
+
+    @FXML
+    private ComboBox<?> cmbElegirDoc;
+
+    @FXML
+    private Label lblUs;
+
+    @FXML
+    private Label lblad;
+
+    @FXML
+    private TextField txtNombreDocumento;
 
     // Campos del formulario principal
-    @FXML private TextField txtCodigo;
-    @FXML private ComboBox<String> cmbCuenta;
-    @FXML private ComboBox<String> cmbTipo;
-    @FXML private TableView<?> tblCatalogo;
+    @FXML
+    private TextField txtCodigo;
+
+    @FXML
+    private ComboBox<String> cmbCuenta;
+
+    @FXML
+    private ComboBox<String> cmbTipo;
+
+    @FXML
+    private TableView<?> tblCatalogo;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
-
-    public void setUsuario(String usuario, String rol) {
-        lblUs.setText(usuario);
-        lblad.setText(rol);
-    }
 
     @FXML
     void Close(ActionEvent actionEvent) {
@@ -88,13 +123,6 @@ public class CatalogoCuentaController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
-
-            // Pasar usuario/rol a la siguiente vista (si tiene los labels)
-            Object controller = loader.getController();
-            if (controller instanceof CatalogoCuentaController nextController) {
-                nextController.setUsuario(lblUs.getText(), lblad.getText());
-            }
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -105,6 +133,7 @@ public class CatalogoCuentaController {
 
     @FXML
     public void initialize() {
+        cargarDatosUsuario();
         cmbCuenta.getItems().addAll("Activo", "Pasivo", "Capital", "Ingresos", "Gastos");
         cmbTipo.getItems().addAll("Corriente", "No corriente");
         cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");

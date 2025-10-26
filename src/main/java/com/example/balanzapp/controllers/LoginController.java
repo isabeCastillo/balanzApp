@@ -4,6 +4,7 @@ import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.MainApp;
 import com.example.balanzapp.models.Rol;
 import com.example.balanzapp.models.Usuario;
+import com.example.balanzapp.utils.sessionUsu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,8 +45,8 @@ public class LoginController {
                 Parent root = loader.load();
 
                 // Pasar los datos del usuario al InicioController
-                InicioController inicioController = loader.getController();
-                inicioController.setDatosUsuario(usuarioLogueado);
+                sessionUsu.setUsuarioActivo(usuarioLogueado);
+
 
                 Stage stage = (Stage) txtUsuario.getScene().getWindow();
                 stage.setScene(new Scene(root));

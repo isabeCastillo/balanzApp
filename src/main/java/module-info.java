@@ -5,6 +5,7 @@ module com.example.balanzapp {
     requires javafx.graphics;
     requires javafx.base;
     requires itextpdf;
+    requires java.desktop;
 
 
     opens com.example.balanzapp to javafx.fxml;

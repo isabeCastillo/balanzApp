@@ -10,37 +10,63 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class EstadosResultadosControllers {
+public class EstadosResultadosControllers extends BaseController{
 
-    @FXML private ComboBox<String> cmbbalances;
-    @FXML private ComboBox<String> cmbAnio;
-    @FXML private ComboBox<String> cmbMes;
-    @FXML private ComboBox<String> cmbPeriodo;
-    @FXML private Button btninicio;
-    @FXML private Button btndoc;
-    @FXML private Button btnlibrodiario;
-    @FXML private Button btnlibromayor;
-    @FXML private Button btnestadoderesultados;
-    @FXML private Button btncatalogo;
-    @FXML private Button btnusuario;
-    @FXML private Button btnbitacora;
-    @FXML private Button btncerrar;
-    @FXML private Label lblUs;
-    @FXML private Label lblad;
-    @FXML private TableView<?> tblResultados;
+    @FXML
+    private ComboBox<String> cmbbalances;
 
-    public void setUsuario(String usuario, String rol) {
-        lblUs.setText(usuario);
-        lblad.setText(rol);
-    }
+    @FXML
+    private ComboBox<String> cmbAnio;
+
+    @FXML
+    private ComboBox<String> cmbMes;
+
+    @FXML
+    private ComboBox<String> cmbPeriodo;
+
+    @FXML
+    private Button btninicio;
+
+    @FXML
+    private Button btndoc;
+
+    @FXML
+    private Button btnlibrodiario;
+
+    @FXML
+    private Button btnlibromayor;
+
+    @FXML
+    private Button btnestadoderesultados;
+
+    @FXML
+    private Button btncatalogo;
+
+    @FXML
+    private Button btnusuario;
+
+    @FXML
+    private Button btnbitacora;
+
+    @FXML
+    private Button btncerrar;
+
+    @FXML
+    private Label lblUs;
+
+    @FXML
+    private Label lblad;
+
+    @FXML
+    private TableView<?> tblResultados;
 
     @FXML
     public void initialize() {
-        cmbPeriodo.getItems().addAll("Meensual", "Trimestral", "Anual");
+        cargarDatosUsuario();
+        cmbPeriodo.getItems().addAll("Mensual", "Trimestral", "Anual");
         cmbAnio.getItems().addAll("2023", "2024", "2025");
         cmbMes.getItems().addAll("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
         cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
-
     }
 
 
@@ -63,12 +89,6 @@ public class EstadosResultadosControllers {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
-
-            Object controller = loader.getController();
-            if (controller instanceof EstadosResultadosControllers next) {
-                next.setUsuario(lblUs.getText(), lblad.getText());
-            }
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

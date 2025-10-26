@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DocumentosController {
+public class DocumentosController extends BaseController{
     @FXML
     private Button btnagregar;
 
@@ -73,6 +73,7 @@ public class DocumentosController {
 
     @FXML
     private void initialize(){
+        cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"

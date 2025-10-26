@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class BitacoraController {
+public class BitacoraController extends BaseController {
     @FXML
     private Button btnbitacora;
 
@@ -56,6 +56,7 @@ public class BitacoraController {
 
     @FXML
     private void initialize(){
+        cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"

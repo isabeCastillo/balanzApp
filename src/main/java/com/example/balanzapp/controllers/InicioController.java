@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class InicioController {
+public class InicioController extends BaseController{
 
     @FXML
     private ComboBox<String> cmbbalances;
@@ -57,6 +57,7 @@ public class InicioController {
 
     @FXML
     private void initialize() {
+        cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"
@@ -82,38 +83,6 @@ public class InicioController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public void setDatosUsuario(Usuario usuario) {
-        this.usuarioLogueado = usuario;
-        lblUs.setText(usuario.getNombre());
-        lblad.setText(usuario.getRol().getNombre_rol());
-
-        // Control de permisos por rol
-        int nivel = usuario.getRol().getNivel_acceso();
-
-        if (nivel == 1) {
-            btnusuario.setVisible(true);
-            btnbitacora.setVisible(true);
-            btndoc.setVisible(true);
-            btnlibrodiario.setVisible(true);
-            btnlibromayor.setVisible(true);
-            btncatalogo.setVisible(true);
-        } else if (nivel == 2) {
-            btnusuario.setVisible(false);
-            btnbitacora.setVisible(false);
-            btndoc.setVisible(true);
-            btnlibrodiario.setVisible(true);
-            btnlibromayor.setVisible(true);
-            btncatalogo.setVisible(true);
-        } else if (nivel == 3) { // 🔹 Auditor
-            btnusuario.setVisible(false);
-            btnbitacora.setVisible(true);
-            btndoc.setVisible(false);
-            btnlibrodiario.setVisible(false);
-            btnlibromayor.setVisible(false);
-            btncatalogo.setVisible(false);
         }
     }
 

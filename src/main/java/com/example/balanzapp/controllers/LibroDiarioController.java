@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class LibroDiarioController {
+public class LibroDiarioController extends BaseController{
 
     @FXML
     private Button btnagregar;
@@ -90,15 +90,13 @@ public class LibroDiarioController {
 
     @FXML
     private void initialize(){
+        cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"
         );
         cmbbalances.setOnAction(event -> balanceSelec());
-
-
         btndescargarpdf.setOnAction(e -> descargarpdf());
-
     }
 
 

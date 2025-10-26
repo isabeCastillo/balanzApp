@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class UsuarioController {
+public class UsuarioController extends BaseController{
     @FXML
     private Button btnAgregarUsuario;
 
@@ -71,6 +71,7 @@ public class UsuarioController {
 
     @FXML
     private void initialize(){
+        cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"
