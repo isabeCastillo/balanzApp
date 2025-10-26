@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.LibroMayorController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.LibroMayorController">
 
     <children>
         <SplitPane dividerPositions="0.2335" prefHeight="600.0" prefWidth="900.0">
@@ -133,9 +133,9 @@
 
                                 <HBox spacing="10.0">
                                     <children>
-                                        <Button text="Buscar" />
-                                        <Button text="Descargar PDF" />
-                                        <Button text="Descargar Excel" />
+                                        <Button fx:id="bntbuscar" text="Buscar" />
+                                        <Button fx:id="btndescargarpdf" text="Descargar PDF" />
+                                        <Button fx:id="btndescargarexcel" text="Descargar Excel" />
                                     </children>
                                 </HBox>
 
