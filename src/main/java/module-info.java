@@ -4,6 +4,7 @@ module com.example.balanzapp {
     requires java.sql;
     requires javafx.graphics;
     requires javafx.base;
+    requires itextpdf;
 
 
     opens com.example.balanzapp to javafx.fxml;

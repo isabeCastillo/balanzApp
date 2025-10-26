@@ -1,18 +1,22 @@
 package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.MainApp;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Paragraph;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class LibroDiarioController {
@@ -69,6 +73,22 @@ public class LibroDiarioController {
     private TextField txtNombreDocumento;
 
     @FXML
+    private Button btnSubirdoc;
+
+    @FXML
+    private Button btnbuscar;
+
+    @FXML
+    private Button btndescargarexcel;
+
+    @FXML
+    private Button btndescargarpdf;
+
+    @FXML
+    private TableView<String> tablaDiario;
+
+
+    @FXML
     private void initialize(){
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
@@ -76,7 +96,12 @@ public class LibroDiarioController {
         );
         cmbbalances.setOnAction(event -> balanceSelec());
 
+
+        btndescargarpdf.setOnAction(e -> descargarpdf());
+
     }
+
+
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
         String rutaFXML = null;
@@ -227,6 +252,70 @@ public class LibroDiarioController {
         }
 
     }
+    private void descargarpdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar como PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        fileChooser.setInitialFileName("Libro_Diario.pdf");
 
+        Stage stage = (Stage) btndescargarpdf.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+
+        if (archivo == null) return;
+
+        try {
+            Document documento = new Document(PageSize.A4.rotate());
+            PdfWriter.getInstance(documento, new FileOutputStream(archivo));
+            documento.open();
+
+            Font fontTitulo;
+            fontTitulo = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+            Paragraph titulo = new Paragraph("LIBRO DIARIO", fontTitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(20);
+            documento.add(titulo);
+
+            PdfPTable tablaPDF = new PdfPTable(tablaDiario.getColumns().size());
+            tablaPDF.setWidthPercentage(100);
+
+            for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
+                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celda);
+            }
+
+            if (tablaDiario.getItems().isEmpty()) {
+                PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
+                celdaVacia.setColspan(tablaDiario.getColumns().size());
+                celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celdaVacia);
+            } else {
+
+                tablaDiario.getItems().forEach(item -> {
+                    for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
+                        Object valor = col.getCellData(Integer.parseInt(item));
+                        tablaPDF.addCell(valor == null ? "" : valor.toString());
+                    }
+                });
+            }
+
+            documento.add(tablaPDF);
+            documento.close();
+
+            mostrarAlerta("Éxito", "El archivo PDF se generó correctamente.");
+
+        } catch (DocumentException | IOException ex) {
+            ex.printStackTrace();
+            mostrarAlerta("Error", "No se pudo generar el PDF.");
+        }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }
-
