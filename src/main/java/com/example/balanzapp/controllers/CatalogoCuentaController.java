@@ -86,15 +86,17 @@ public class CatalogoCuentaController extends BaseController{
     @FXML
     private Button btndescargarPdf;
 
-    // Campos del formulario principal
     @FXML
     private TextField txtCodigo;
 
     @FXML
-    private ComboBox<String> cmbCuenta;
+    private TextField txtCuenta;
 
     @FXML
-    private ComboBox<String> cmbTipo;
+    private TextField txtTipo;
+
+    @FXML
+    private TextField txtGrupo;
 
     @FXML
     private TableView<Cuenta> tblCatalogo;
@@ -163,15 +165,15 @@ public class CatalogoCuentaController extends BaseController{
     @FXML
     public void initialize() {
         cargarDatosUsuario();
-        cargarCuentasDesdeBD();
-        cargarTiposDesdeBD();
         cargarTabla();
         cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
         cmbbalances.setOnAction(event -> balanceSelec());
+
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
+
         btndescargarPdf.setOnAction(e -> descargarpdf());
     }
 
@@ -196,45 +198,14 @@ public class CatalogoCuentaController extends BaseController{
         }
     }
 
-    private void cargarCuentasDesdeBD() {
-        String sql = "SELECT id_cuenta, nombre FROM tbl_cntaContables ORDER BY codigo ASC";
-
-        try (Connection conn = ConexionDB.connection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                // Guarda ID y nombre juntos para usarlos en Libro Diario
-                cmbCuenta.getItems().add(rs.getInt("id_cuenta") + " - " + rs.getString("nombre"));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al cargar cuentas: " + e.getMessage());
-        }
-    }
-    private void cargarTiposDesdeBD() {
-        String sql = "SELECT DISTINCT tipo FROM tbl_cntaContables ORDER BY tipo ASC";
-
-        try (Connection conn = ConexionDB.connection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                cmbTipo.getItems().add(rs.getString("tipo"));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al cargar tipos: " + e.getMessage());
-        }
-    }
     @FXML
     private void agregarCuenta(ActionEvent event) {
         String codigo = txtCodigo.getText();
-        String nombre = txtNombreDocumento.getText();
-        String tipo = cmbCuenta.getValue();
-        String grupo = cmbTipo.getValue();
+        String nombre = txtCuenta.getText();
+        String tipo = txtTipo.getText();
+        String grupo = txtGrupo.getText();
 
-        if (codigo.isEmpty() || nombre.isEmpty() || tipo == null || grupo == null) {
+        if (codigo.isEmpty() || nombre.isEmpty() || tipo.isEmpty() || grupo.isEmpty()) {
             mostrarAlerta("Complete todos los campos.");
             return;
         }
@@ -250,8 +221,12 @@ public class CatalogoCuentaController extends BaseController{
         limpiarCampos();
     }
     private void cargarTabla() {
-        tblCatalogo.getItems().setAll(CatalogoDAO.obtenerCuentas());
+        var cuentas = CatalogoDAO.obtenerCuentas();
+        System.out.println("Cuentas cargadas: " + cuentas.size());
+        cuentas.forEach(c -> System.out.println(c.getCodigo() + " - " + c.getNombre()));
+        tblCatalogo.getItems().setAll(cuentas);
     }
+
     @FXML
     private void eliminarCuenta() {
         Cuenta seleccionada = tblCatalogo.getSelectionModel().getSelectedItem();
@@ -268,10 +243,10 @@ public class CatalogoCuentaController extends BaseController{
             mostrarAlerta("Seleccione una cuenta de la tabla.");
             return;
         }
-
-        seleccionada.setNombre(txtNombreDocumento.getText());
-        seleccionada.setTipo(cmbCuenta.getValue());
-        seleccionada.setGrupo(cmbTipo.getValue());
+        seleccionada.setCodigo(txtCodigo.getText());
+        seleccionada.setNombre(txtCuenta.getText());
+        seleccionada.setTipo(txtTipo.getText());
+        seleccionada.setGrupo(txtGrupo.getText());
 
         if (CatalogoDAO.actualizarCuenta(seleccionada)) {
             cargarTabla();
@@ -283,9 +258,9 @@ public class CatalogoCuentaController extends BaseController{
 
     private void limpiarCampos() {
         txtCodigo.clear();
-        txtNombreDocumento.clear();
-        cmbCuenta.setValue(null);
-        cmbTipo.setValue(null);
+        txtCuenta.clear();
+        txtGrupo.clear();
+        txtTipo.clear();
     }
 
     private void mostrarAlerta(String mensaje){
@@ -368,5 +343,4 @@ public class CatalogoCuentaController extends BaseController{
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-
 }

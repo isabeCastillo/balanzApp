@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -105,20 +104,17 @@
                     <Label styleClass="title-label" text="Catálogo de cuenta" />
                     <GridPane hgap="10" vgap="10">
                         <columnConstraints>
-                            <ColumnConstraints halignment="RIGHT" />
-                            <ColumnConstraints prefWidth="150" />
+                            <ColumnConstraints halignment="RIGHT"/>
+                            <ColumnConstraints prefWidth="150"/>
                         </columnConstraints>
-                        <Label text="Código:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField fx:id="txtCodigo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="cmbCuenta" promptText="Seleccione una opción" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Tipo:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                        <ComboBox fx:id="cmbTipo" promptText="Tipo de cuenta" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <rowConstraints>
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                  </rowConstraints>
+                        <Label text="Código:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtCodigo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label text="Cuenta:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtCuenta" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label text="Tipo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtTipo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <Label text="Grupo:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtGrupo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
                     </GridPane>
                     <HBox spacing="10">
                         <Button fx:id="btnagregar" onAction="#agregarCuenta" text="Agregar" />

@@ -34,28 +34,8 @@ public class CatalogoDAO {
 
         return cuentas;
     }
-    public static boolean existeCodigo(String codigo) {
-        String sql = "SELECT 1 FROM tbl_cntaContables WHERE codigo = ?";
-
-        try (Connection conn = ConexionDB.connection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, codigo);
-            ResultSet rs = ps.executeQuery();
-            return rs.next(); // Devuelve true si existe algo
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     public static boolean insertarCuenta(Cuenta cuenta) {
-
-        if (existeCodigo(cuenta.getCodigo())) {
-            return false;
-        }
-
         String sql = "INSERT INTO tbl_cntaContables (codigo, nombre, tipo, grupo) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionDB.connection();
