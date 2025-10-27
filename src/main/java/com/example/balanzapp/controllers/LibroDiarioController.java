@@ -25,6 +25,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LibroDiarioController extends BaseController{
 
@@ -260,15 +262,15 @@ public class LibroDiarioController extends BaseController{
         }
 
     }
+    @FXML
     private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar como PDF");
+        fileChooser.setTitle("Guardar Libro Diario como PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
         fileChooser.setInitialFileName("Libro_Diario.pdf");
 
         Stage stage = (Stage) btndescargarpdf.getScene().getWindow();
         java.io.File archivo = fileChooser.showSaveDialog(stage);
-
         if (archivo == null) return;
 
         try {
@@ -276,54 +278,55 @@ public class LibroDiarioController extends BaseController{
             PdfWriter.getInstance(documento, new FileOutputStream(archivo));
             documento.open();
 
-            Font fontTitulo;
-            fontTitulo = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            String fecha = LocalDateTime.now().format(formatter);
+
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Paragraph titulo = new Paragraph("LIBRO DIARIO", fontTitulo);
             titulo.setAlignment(Element.ALIGN_CENTER);
-            titulo.setSpacingAfter(20);
+            titulo.setSpacingAfter(5);
+
+            Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            fechaParrafo.setAlignment(Element.ALIGN_CENTER);
+            fechaParrafo.setSpacingAfter(20);
+
             documento.add(titulo);
+            documento.add(fechaParrafo);
 
             PdfPTable tablaPDF = new PdfPTable(tablaDiario.getColumns().size());
             tablaPDF.setWidthPercentage(100);
 
-            // Agregar encabezados de columna
             for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
                 PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celda);
             }
-
             if (tablaDiario.getItems().isEmpty()) {
                 PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
                 celdaVacia.setColspan(tablaDiario.getColumns().size());
                 celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celdaVacia);
             } else {
-                for (Partida item : tablaDiario.getItems()) {
-                    for (TableColumn<Partida, ?> col : tablaDiario.getColumns()) {
-
-                        //obtiene el valor de la columna usando el objeto Partida
-                        Object valor = col.getCellData(item);
-
-                        //agrega el valor a la celda del PDF
+                tablaDiario.getItems().forEach(item -> {
+                    for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
+                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
                         tablaPDF.addCell(valor == null ? "" : valor.toString());
                     }
-                }
+                });
             }
 
             documento.add(tablaPDF);
             documento.close();
 
-            mostrarAlerta("Éxito", "El archivo PDF se generó correctamente.");
-
+            Alerta("Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
             ex.printStackTrace();
-            mostrarAlerta("Error", "No se pudo generar el PDF.");
+            System.err.println("Error al generar el PDF: " + ex.getMessage());
         }
     }
-
-    private void mostrarAlerta(String titulo, String mensaje) {
+    private void Alerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);

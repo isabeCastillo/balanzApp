@@ -1,18 +1,23 @@
 package com.example.balanzapp.controllers;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BitacoraController extends BaseController {
     @FXML
@@ -55,6 +60,12 @@ public class BitacoraController extends BaseController {
     private TableView<?> tblbitacora;
 
     @FXML
+    private Button btndescargarExcel;
+
+    @FXML
+    private Button btndescargarPdf;
+
+    @FXML
     private void initialize(){
         cargarDatosUsuario();
         cmbbalances.getItems().addAll(
@@ -62,6 +73,7 @@ public class BitacoraController extends BaseController {
                 "Balance general"
         );
         cmbbalances.setOnAction(event -> balanceSelec());
+        btndescargarPdf.setOnAction(event -> descargarpdf());
 
     }
     private void balanceSelec() {
@@ -201,4 +213,76 @@ public class BitacoraController extends BaseController {
         }
 
     }
+    @FXML
+    private void descargarpdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Bitacora Del Auditor como PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        fileChooser.setInitialFileName("Bitacora_Auditor.pdf");
+
+        Stage stage = (Stage) btndescargarPdf.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        if (archivo == null) return;
+
+        try {
+            Document documento = new Document(PageSize.A4.rotate());
+            PdfWriter.getInstance(documento, new FileOutputStream(archivo));
+            documento.open();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            String fecha = LocalDateTime.now().format(formatter);
+
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph titulo = new Paragraph("BITACORA DEL AUDITOR", fontTitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(5);
+
+            Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            fechaParrafo.setAlignment(Element.ALIGN_CENTER);
+            fechaParrafo.setSpacingAfter(20);
+
+            documento.add(titulo);
+            documento.add(fechaParrafo);
+
+            PdfPTable tablaPDF = new PdfPTable(tblbitacora.getColumns().size());
+            tablaPDF.setWidthPercentage(100);
+
+            for (TableColumn<?, ?> col : tblbitacora.getColumns()) {
+                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celda);
+            }
+            if (tblbitacora.getItems().isEmpty()) {
+                PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
+                celdaVacia.setColspan(tblbitacora.getColumns().size());
+                celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celdaVacia);
+            } else {
+                tblbitacora.getItems().forEach(item -> {
+                    for (TableColumn<?, ?> col : tblbitacora.getColumns()) {
+                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
+                        tablaPDF.addCell(valor == null ? "" : valor.toString());
+                    }
+                });
+            }
+
+            documento.add(tablaPDF);
+            documento.close();
+
+            Alerta("Éxito", "El archivo PDF se generó correctamente.");
+        } catch (DocumentException | IOException ex) {
+            ex.printStackTrace();
+            System.err.println("Error al generar el PDF: " + ex.getMessage());
+        }
+    }
+    private void Alerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 }

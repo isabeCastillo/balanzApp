@@ -3,6 +3,10 @@ package com.example.balanzapp.controllers;
 import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.dao.CatalogoDAO;
 import com.example.balanzapp.models.Cuenta;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,12 +15,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CatalogoCuentaController extends BaseController{
 
@@ -70,6 +79,12 @@ public class CatalogoCuentaController extends BaseController{
 
     @FXML
     private TextField txtNombreDocumento;
+
+    @FXML
+    private Button btndescargarExcel;
+
+    @FXML
+    private Button btndescargarPdf;
 
     // Campos del formulario principal
     @FXML
@@ -157,6 +172,7 @@ public class CatalogoCuentaController extends BaseController{
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
+        btndescargarPdf.setOnAction(e -> descargarpdf());
     }
 
     private void balanceSelec() {
@@ -279,4 +295,78 @@ public class CatalogoCuentaController extends BaseController{
         alert.setContentText(mensaje);
         alert.show();
     }
+    @FXML
+    private void descargarpdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Catalogo de Cuentas como PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        fileChooser.setInitialFileName("Catalogo_Cuentas.pdf");
+
+        Stage stage = (Stage) btndescargarPdf.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        if (archivo == null) return;
+
+        try {
+            Document documento = new Document(PageSize.A4.rotate());
+            PdfWriter.getInstance(documento, new FileOutputStream(archivo));
+            documento.open();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            String fecha = LocalDateTime.now().format(formatter);
+
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph titulo = new Paragraph("CATALOGO DE CUENTAS", fontTitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(5);
+
+            Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            fechaParrafo.setAlignment(Element.ALIGN_CENTER);
+            fechaParrafo.setSpacingAfter(20);
+
+            documento.add(titulo);
+            documento.add(fechaParrafo);
+
+            PdfPTable tablaPDF = new PdfPTable(tblCatalogo.getColumns().size());
+            tablaPDF.setWidthPercentage(100);
+
+            for (TableColumn<?, ?> col : tblCatalogo.getColumns()) {
+                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celda);
+            }
+            if (tblCatalogo.getItems().isEmpty()) {
+                PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
+                celdaVacia.setColspan(tblCatalogo.getColumns().size());
+                celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celdaVacia);
+            } else {
+                tblCatalogo.getItems().forEach(item -> {
+                    for (TableColumn<?, ?> col : tblCatalogo.getColumns()) {
+                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
+                        tablaPDF.addCell(valor == null ? "" : valor.toString());
+                    }
+                });
+            }
+
+            documento.add(tablaPDF);
+            documento.close();
+
+            Alerta("Éxito", "El archivo PDF se generó correctamente.");
+
+
+        } catch (DocumentException | IOException ex) {
+            ex.printStackTrace();
+            System.err.println("Error al generar el PDF: " + ex.getMessage());
+        }
+    }
+    private void Alerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 }

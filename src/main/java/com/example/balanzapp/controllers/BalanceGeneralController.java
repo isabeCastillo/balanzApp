@@ -1,18 +1,24 @@
 package com.example.balanzapp.controllers;
 
+import com.example.balanzapp.models.Partida;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BalanceGeneralController extends BaseController{
     @FXML
@@ -77,6 +83,7 @@ public class BalanceGeneralController extends BaseController{
                 "Balance general"
         );
         cmbbalances.setOnAction(event -> balanceSelec());
+        btnDecargarPdf.setOnAction(e -> descargarpdf());
 
     }
     private void balanceSelec() {
@@ -115,16 +122,6 @@ public class BalanceGeneralController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    @FXML
-    void DecargarPdf(ActionEvent actionEvent) {
-
-    }
-
-    @FXML
-    void DescargarExcel(ActionEvent actionEvent) {
 
     }
 
@@ -235,4 +232,77 @@ public class BalanceGeneralController extends BaseController{
             e.printStackTrace();
         }
     }
+    @FXML
+    private void descargarpdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Balance General como PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        fileChooser.setInitialFileName("Balance_General.pdf");
+
+        Stage stage = (Stage) btnDecargarPdf.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        if (archivo == null) return;
+
+        try {
+            Document documento = new Document(PageSize.A4.rotate());
+            PdfWriter.getInstance(documento, new FileOutputStream(archivo));
+            documento.open();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            String fecha = LocalDateTime.now().format(formatter);
+
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph titulo = new Paragraph("BALANCE GENERAL", fontTitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(5);
+
+            Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            fechaParrafo.setAlignment(Element.ALIGN_CENTER);
+            fechaParrafo.setSpacingAfter(20);
+
+            documento.add(titulo);
+            documento.add(fechaParrafo);
+
+            PdfPTable tablaPDF = new PdfPTable(tblBalanceGeneral.getColumns().size());
+            tablaPDF.setWidthPercentage(100);
+
+            for (TableColumn<?, ?> col : tblBalanceGeneral.getColumns()) {
+                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celda);
+            }
+            if (tblBalanceGeneral.getItems().isEmpty()) {
+                PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
+                celdaVacia.setColspan(tblBalanceGeneral.getColumns().size());
+                celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablaPDF.addCell(celdaVacia);
+            } else {
+                tblBalanceGeneral.getItems().forEach(item -> {
+                    for (TableColumn<?, ?> col : tblBalanceGeneral.getColumns()) {
+                        Object valor = col.getCellData(Integer.parseInt(item));
+                        tablaPDF.addCell(valor == null ? "" : valor.toString());
+                    }
+                });
+            }
+
+            documento.add(tablaPDF);
+            documento.close();
+
+            Alerta("Éxito", "El archivo PDF se generó correctamente.");
+
+        } catch (DocumentException | IOException ex) {
+            ex.printStackTrace();
+            System.err.println("Error al generar el PDF: " + ex.getMessage());
+        }
+    }
+    private void Alerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 }

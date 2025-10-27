@@ -107,8 +107,8 @@
                   <ComboBox fx:id="cmbPeriodo" layoutX="150.0" layoutY="101.0" prefWidth="150.0" />
                   <ComboBox fx:id="cmbAño" layoutX="372.0" layoutY="101.0" prefWidth="150.0" />
                   <Button fx:id="btnbuscar" layoutX="300.0" layoutY="150.0" mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
-                  <Button fx:id="btnDecargarPdf" layoutX="158.0" layoutY="194.0" mnemonicParsing="false" onAction="#DecargarPdf" text="Decargar PDF" />
-                  <Button fx:id="btnDescargarExcel" layoutX="399.0" layoutY="194.0" mnemonicParsing="false" onAction="#DescargarExcel" text="Descargar Excel" />
+                  <Button fx:id="btnDecargarPdf" layoutX="158.0" layoutY="194.0" mnemonicParsing="false" text="Decargar PDF" />
+                  <Button fx:id="btnDescargarExcel" layoutX="399.0" layoutY="194.0" mnemonicParsing="false" text="Descargar Excel" />
                   <TableView fx:id="tblComprobacionSaldos" layoutX="3.0" layoutY="268.0" prefHeight="300.0" prefWidth="679.0">
                      <columns>
                         <TableColumn prefWidth="99.33331298828125" text="Codigo" />

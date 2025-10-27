@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LibroMayorController extends BaseController {
 
@@ -241,15 +243,15 @@ public class LibroMayorController extends BaseController {
         }
 
     }
-    private void descargarpdf(){
+    @FXML
+    private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar como PDF");
+        fileChooser.setTitle("Guardar Libro Mayor como PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
         fileChooser.setInitialFileName("Libro_Mayor.pdf");
 
         Stage stage = (Stage) btndescargarpdf.getScene().getWindow();
         java.io.File archivo = fileChooser.showSaveDialog(stage);
-
         if (archivo == null) return;
 
         try {
@@ -257,12 +259,21 @@ public class LibroMayorController extends BaseController {
             PdfWriter.getInstance(documento, new FileOutputStream(archivo));
             documento.open();
 
-            Font fontTitulo;
-            fontTitulo = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            String fecha = LocalDateTime.now().format(formatter);
+
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Paragraph titulo = new Paragraph("LIBRO MAYOR", fontTitulo);
             titulo.setAlignment(Element.ALIGN_CENTER);
-            titulo.setSpacingAfter(20);
+            titulo.setSpacingAfter(5);
+
+            Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            fechaParrafo.setAlignment(Element.ALIGN_CENTER);
+            fechaParrafo.setSpacingAfter(20);
+
             documento.add(titulo);
+            documento.add(fechaParrafo);
 
             PdfPTable tablaPDF = new PdfPTable(tablaMayor.getColumns().size());
             tablaPDF.setWidthPercentage(100);
@@ -273,17 +284,15 @@ public class LibroMayorController extends BaseController {
                 celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celda);
             }
-
             if (tablaMayor.getItems().isEmpty()) {
                 PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
                 celdaVacia.setColspan(tablaMayor.getColumns().size());
                 celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celdaVacia);
             } else {
-
                 tablaMayor.getItems().forEach(item -> {
                     for (TableColumn<?, ?> col : tablaMayor.getColumns()) {
-                        Object valor = col.getCellData(Integer.parseInt(item));
+                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
                         tablaPDF.addCell(valor == null ? "" : valor.toString());
                     }
                 });
@@ -292,15 +301,13 @@ public class LibroMayorController extends BaseController {
             documento.add(tablaPDF);
             documento.close();
 
-            mostrarAlerta("Éxito", "El archivo PDF se generó correctamente.");
-
+            Alerta("Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
             ex.printStackTrace();
-            mostrarAlerta("Error", "No se pudo generar el PDF.");
+            System.err.println("Error al generar el PDF: " + ex.getMessage());
         }
     }
-
-    private void mostrarAlerta(String titulo, String mensaje) {
+    private void Alerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
