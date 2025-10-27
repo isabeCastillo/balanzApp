@@ -67,8 +67,29 @@ public class EstadosResultadosControllers extends BaseController{
         cmbAnio.getItems().addAll("2023", "2024", "2025");
         cmbMes.getItems().addAll("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
         cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
-    }
+        cmbbalances.setOnAction(event -> balanceSelec());
 
+    }
+    private void balanceSelec() {
+        String seleccion = cmbbalances.getValue();
+        String rutaFXML = null;
+
+        if (seleccion.equals("Balance de comprobación de saldos")) {
+            rutaFXML = "/views/balanceSaldos.fxml";
+        } else if (seleccion.equals("Balance general")) {
+            rutaFXML = "/views/balanceGeneral.fxml";
+        }
+
+        if (rutaFXML != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
+                Stage stage = (Stage) cmbbalances.getScene().getWindow();
+                stage.getScene().setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @FXML
     void Close(ActionEvent event) {

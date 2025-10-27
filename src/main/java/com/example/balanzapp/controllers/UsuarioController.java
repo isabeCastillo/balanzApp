@@ -156,7 +156,7 @@ public class UsuarioController extends BaseController{
     @FXML
     void goToEstadoResultados(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/estadoResultados.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/views/estadosResultados.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

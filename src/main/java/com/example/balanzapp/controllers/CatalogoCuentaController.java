@@ -152,10 +152,32 @@ public class CatalogoCuentaController extends BaseController{
         cargarTiposDesdeBD();
         cargarTabla();
         cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
+        cmbbalances.setOnAction(event -> balanceSelec());
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
+    }
+
+    private void balanceSelec() {
+        String seleccion = cmbbalances.getValue();
+        String rutaFXML = null;
+
+        if (seleccion.equals("Balance de comprobación de saldos")) {
+            rutaFXML = "/views/balanceSaldos.fxml";
+        } else if (seleccion.equals("Balance general")) {
+            rutaFXML = "/views/balanceGeneral.fxml";
+        }
+
+        if (rutaFXML != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
+                Stage stage = (Stage) cmbbalances.getScene().getWindow();
+                stage.getScene().setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void cargarCuentasDesdeBD() {
