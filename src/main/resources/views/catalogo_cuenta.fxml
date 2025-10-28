@@ -113,8 +113,10 @@
                         <TextField fx:id="txtCuenta" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
                         <Label text="Tipo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                         <TextField fx:id="txtTipo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                        <Label text="Grupo:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <TextField fx:id="txtGrupo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        <Label text="Naturaleza:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtNaturaleza" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        <Label text="Grupo:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtGrupo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
                     </GridPane>
                     <HBox spacing="10">
                         <Button fx:id="btnagregar" onAction="#agregarCuenta" text="Agregar" />
@@ -128,6 +130,7 @@
                             <TableColumn fx:id="colCodigo" prefWidth="150" text="Código" />
                             <TableColumn fx:id="colNombre" prefWidth="300" text="Catálogo de cuentas" />
                             <TableColumn fx:id="colTipo" prefWidth="150" text="Tipo de cuenta" />
+                            <TableColumn fx:id="colNaturaleza" prefWidth="150" text="Acreedora o Deudora" />
                             <TableColumn fx:id="colGrupo" prefWidth="150" text="Grupo" />
                         </columns>
                     </TableView>

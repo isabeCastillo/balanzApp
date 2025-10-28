@@ -99,11 +99,14 @@ public class CatalogoCuentaController extends BaseController{
     private TextField txtGrupo;
 
     @FXML
+    private TextField txtNaturaleza;
+    @FXML
     private TableView<Cuenta> tblCatalogo;
 
     @FXML private TableColumn<Cuenta, String> colCodigo;
     @FXML private TableColumn<Cuenta, String> colNombre;
     @FXML private TableColumn<Cuenta, String> colTipo;
+    @FXML private TableColumn<Cuenta, String> colNaturaleza;
     @FXML private TableColumn<Cuenta, String> colGrupo;
 
 
@@ -172,9 +175,20 @@ public class CatalogoCuentaController extends BaseController{
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colNaturaleza.setCellValueFactory(new PropertyValueFactory<>("naturaleza"));
         colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
 
         btndescargarPdf.setOnAction(e -> descargarpdf());
+
+        tblCatalogo.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                txtCodigo.setText(newSel.getCodigo());
+                txtCuenta.setText(newSel.getNombre());
+                txtTipo.setText(newSel.getTipo());
+                txtNaturaleza.setText(newSel.getNaturaleza());
+                txtGrupo.setText(newSel.getGrupo());
+            }
+        });
     }
 
     private void balanceSelec() {
@@ -203,6 +217,7 @@ public class CatalogoCuentaController extends BaseController{
         String codigo = txtCodigo.getText();
         String nombre = txtCuenta.getText();
         String tipo = txtTipo.getText();
+        String naturaleza = txtNaturaleza.getText();
         String grupo = txtGrupo.getText();
 
         if (codigo.isEmpty() || nombre.isEmpty() || tipo.isEmpty() || grupo.isEmpty()) {
@@ -210,7 +225,7 @@ public class CatalogoCuentaController extends BaseController{
             return;
         }
 
-        Cuenta cuenta = new Cuenta(codigo, nombre, tipo, grupo);
+        Cuenta cuenta = new Cuenta(codigo, nombre, tipo,naturaleza, grupo);
 
         if (!CatalogoDAO.insertarCuenta(cuenta)) {
             mostrarAlerta("existe una cuenta con este código.");
@@ -246,6 +261,7 @@ public class CatalogoCuentaController extends BaseController{
         seleccionada.setCodigo(txtCodigo.getText());
         seleccionada.setNombre(txtCuenta.getText());
         seleccionada.setTipo(txtTipo.getText());
+        seleccionada.setNaturaleza(txtNaturaleza.getText());
         seleccionada.setGrupo(txtGrupo.getText());
 
         if (CatalogoDAO.actualizarCuenta(seleccionada)) {
@@ -261,6 +277,7 @@ public class CatalogoCuentaController extends BaseController{
         txtCuenta.clear();
         txtGrupo.clear();
         txtTipo.clear();
+        txtNaturaleza.clear();
     }
 
     private void mostrarAlerta(String mensaje){
@@ -273,7 +290,7 @@ public class CatalogoCuentaController extends BaseController{
     @FXML
     private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Catalogo de Cuentas como PDF");
+        fileChooser.setTitle("Guardar Catalogo de cuentas como PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
         fileChooser.setInitialFileName("Catalogo_Cuentas.pdf");
 
@@ -290,7 +307,7 @@ public class CatalogoCuentaController extends BaseController{
             String fecha = LocalDateTime.now().format(formatter);
 
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
-            Paragraph titulo = new Paragraph("CATALOGO DE CUENTAS", fontTitulo);
+            Paragraph titulo = new Paragraph("CATALOGO_CUENTA", fontTitulo);
             titulo.setAlignment(Element.ALIGN_CENTER);
             titulo.setSpacingAfter(5);
 
@@ -319,7 +336,7 @@ public class CatalogoCuentaController extends BaseController{
             } else {
                 tblCatalogo.getItems().forEach(item -> {
                     for (TableColumn<?, ?> col : tblCatalogo.getColumns()) {
-                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
+                        Object valor = col.getCellData(item.getIdCuenta());
                         tablaPDF.addCell(valor == null ? "" : valor.toString());
                     }
                 });
@@ -329,8 +346,6 @@ public class CatalogoCuentaController extends BaseController{
             documento.close();
 
             Alerta("Éxito", "El archivo PDF se generó correctamente.");
-
-
         } catch (DocumentException | IOException ex) {
             ex.printStackTrace();
             System.err.println("Error al generar el PDF: " + ex.getMessage());
@@ -342,5 +357,6 @@ public class CatalogoCuentaController extends BaseController{
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+
     }
 }

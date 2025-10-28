@@ -24,6 +24,7 @@ public class CatalogoDAO {
                 c.setCodigo(rs.getString("codigo"));
                 c.setNombre(rs.getString("nombre"));
                 c.setTipo(rs.getString("tipo"));
+                c.setNaturaleza(rs.getString("naturaleza"));
                 c.setGrupo(rs.getString("grupo"));
                 cuentas.add(c);
             }
@@ -36,7 +37,7 @@ public class CatalogoDAO {
     }
 
     public static boolean insertarCuenta(Cuenta cuenta) {
-        String sql = "INSERT INTO tbl_cntaContables (codigo, nombre, tipo, grupo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tbl_cntaContables (codigo, nombre, tipo, naturaleza, grupo) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -44,7 +45,8 @@ public class CatalogoDAO {
             ps.setString(1, cuenta.getCodigo());
             ps.setString(2, cuenta.getNombre());
             ps.setString(3, cuenta.getTipo());
-            ps.setString(4, cuenta.getGrupo());
+            ps.setString(4, cuenta.getNaturaleza());
+            ps.setString(5, cuenta.getGrupo());
 
             return ps.executeUpdate() > 0;
 
@@ -65,15 +67,17 @@ public class CatalogoDAO {
         }
     }
     public static boolean actualizarCuenta(Cuenta cuenta) {
-        String sql = "UPDATE tbl_cntaContables SET nombre=?, tipo=?, grupo=? WHERE codigo=?";
-
+        String sql = "UPDATE tbl_cntaContables SET nombre=?, tipo=?, naturaleza=?, grupo=? WHERE id_cuenta=?";
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, cuenta.getNombre());
             ps.setString(2, cuenta.getTipo());
-            ps.setString(3, cuenta.getGrupo());
-            ps.setString(4, cuenta.getCodigo());
+            ps.setString(3, cuenta.getNaturaleza());
+            ps.setString(4, cuenta.getGrupo());
+            ps.setInt(5, cuenta.getIdCuenta());
+
+
 
             return ps.executeUpdate() > 0;
 

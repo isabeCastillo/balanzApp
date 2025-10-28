@@ -5,22 +5,25 @@ public class Cuenta {
     private String codigo;
     private String nombre;
     private String tipo;
+    private String naturaleza;
     private String grupo;
 
     public Cuenta() {
     }
 
-    public Cuenta(int idCuenta, String codigo, String nombre, String tipo, String grupo) {
+    public Cuenta(int idCuenta, String codigo, String nombre, String tipo, String naturaleza, String grupo) {
         this.idCuenta = idCuenta;
         this.codigo = codigo;
         this.nombre = nombre;
         this.tipo = tipo;
+        this.naturaleza = naturaleza;
         this.grupo = grupo;
     }
-    public Cuenta(String codigo, String nombre, String tipo, String grupo) {
+    public Cuenta(String codigo, String nombre, String tipo, String naturaleza, String grupo) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.tipo = tipo;
+        this.naturaleza = naturaleza;
         this.grupo = grupo;
     }
 
@@ -55,6 +58,12 @@ public class Cuenta {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getNaturaleza(){return naturaleza;}
+
+    public  void setNaturaleza(String naturaleza){ this.naturaleza = naturaleza; }
+
+
 
     public String getGrupo() {
         return grupo;
