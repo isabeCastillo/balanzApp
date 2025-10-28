@@ -15,6 +15,10 @@ public class Rol {
         this.descripcion = descripcion;
         this.nivel_acceso = nivel_acceso;
     }
+    @Override
+    public String toString() {
+        return nombre_rol;
+    }
 
     public int getId_rol() {
         return id_rol;

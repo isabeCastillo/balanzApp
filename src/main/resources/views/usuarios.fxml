@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,111 +8,171 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/style.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.balanzapp.controllers.UsuarioController">
 
-<AnchorPane prefHeight="400.0" stylesheets="@../styles/style.css" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.UsuarioController">
-   <children>
-      <SplitPane dividerPositions="0.29797979797979796" prefHeight="600.0" prefWidth="900.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #5A238A;">
-               <children>
-                  <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
-                     <children>
-                        <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
+    <children>
+        <SplitPane dividerPositions="0.3">
+            <items>
+                <!-- Menú lateral -->
+                <AnchorPane style="-fx-background-color: #5A238A;">
+                    <children>
+                        <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
+                            <children>
+                                <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToHome" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-border-color: transparent; -fx-background-color: transparent;"
+                                        text="Inicio" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Documentos" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Libro Diario" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Libro Mayor" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <ComboBox fx:id="cmbbalances" prefHeight="51.0" prefWidth="207.0"
+                                          promptText="Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                    <effect>
+                                        <ColorAdjust brightness="1.0"/>
+                                    </effect>
+                                </ComboBox>
+                                <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Estado De Resultados" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Catalogo de cuentas" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Usuario" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0"
+                                        style="-fx-background-color: transparent;" text="Bitacora del Auditor" textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0"/>
+                                    </font>
+                                </Button>
+                            </children>
+                        </VBox>
+
+                        <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" text="Nombre" textFill="WHITE">
+                            <font>
+                                <Font name="Georgia Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
+                            <font>
+                                <Font name="Georgia Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                        <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0">
+                            <image>
+                                <Image url="@../imagenes/user.png"/>
+                            </image>
+                        </ImageView>
+                        <Button fx:id="btncerrar" layoutX="48.0" layoutY="523.0" mnemonicParsing="false"
+                                onAction="#Close" prefHeight="38.0" prefWidth="121.0"
+                                style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
+                            <font>
+                                <Font name="Georgia Bold" size="12.0"/>
+                            </font>
                         </Button>
-                        <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                        <ComboBox fx:id="cmbbalances" prefHeight="51.0" prefWidth="207.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                           <effect>
-                              <ColorAdjust brightness="1.0" />
-                           </effect>
-                        </ComboBox>
-                        <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="12.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </VBox>
-                  <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imagenes/user.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="16.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imagenes/logout.png" />
-                     </image>
-                  </ImageView>
-                  <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
-                     <font>
-                        <Font name="Georgia Bold" size="12.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Label layoutX="290.0" layoutY="31.0" text="Usuario" />
-                  <Label layoutX="119.0" layoutY="95.0" text="Nombre" />
-                  <Label layoutX="423.0" layoutY="95.0" text="Roles" />
-                  <TextField fx:id="txtNombreUsuario" layoutX="67.0" layoutY="127.0" text="Ingrese el nombre" />
-                  <ComboBox fx:id="cmbRoles" layoutX="362.0" layoutY="127.0" prefHeight="25.0" prefWidth="169.0" promptText="Seleccione una opción" />
-                  <Label layoutX="276.0" layoutY="178.0" text="Contraseña" />
-                  <PasswordField fx:id="txtContraseña" layoutX="238.0" layoutY="203.0" />
-                  <Button fx:id="btnAgregarUsuario" layoutX="67.0" layoutY="261.0" mnemonicParsing="false" text="Agregar" />
-                  <Button fx:id="btnEditar" layoutX="276.0" layoutY="261.0" mnemonicParsing="false" text="Editar" />
-                  <Button fx:id="btnEliminar" layoutX="447.0" layoutY="261.0" mnemonicParsing="false" text="Eliminar" />
-                  <TableView fx:id="tblUsuarios" layoutX="110.0" layoutY="318.0" prefHeight="195.0" prefWidth="392.0">
-                    <columns>
-                      <TableColumn prefWidth="137.99996948242188" text="Nombre" />
-                      <TableColumn prefWidth="119.33331298828125" text="Contraseña" />
-                        <TableColumn prefWidth="133.3333740234375" text="Rol" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </children>
+                    </children>
+                </AnchorPane>
+
+                <!-- Formulario de usuario -->
+                <AnchorPane>
+                    <children>
+                        <Label layoutX="290.0" layoutY="31.0" text="Usuarios"/>
+
+                        <Label layoutX="50.0" layoutY="95.0" text="Nombre Completo"/>
+                        <TextField fx:id="txtNombre" layoutX="50.0" layoutY="120.0" promptText="Nombre completo"/>
+
+                        <Label layoutX="300.0" layoutY="95.0" text="Género"/>
+                        <ComboBox fx:id="cmbGenero" layoutX="300.0" layoutY="120.0" promptText="Seleccione género"/>
+
+                        <Label layoutX="500.0" layoutY="95.0" text="Fecha Nacimiento"/>
+                        <DatePicker fx:id="dpFechaNacimiento" layoutX="500.0" layoutY="120.0"/>
+
+                        <Label layoutX="50.0" layoutY="170.0" text="DUI"/>
+                        <TextField fx:id="txtDUI" layoutX="50.0" layoutY="195.0"/>
+
+                        <Label layoutX="200.0" layoutY="170.0" text="Teléfono"/>
+                        <TextField fx:id="txtTelefono" layoutX="200.0" layoutY="195.0"/>
+
+                        <Label layoutX="350.0" layoutY="170.0" text="Dirección"/>
+                        <TextField fx:id="txtDireccion" layoutX="350.0" layoutY="195.0"/>
+
+                        <Label layoutX="500.0" layoutY="170.0" text="Correo"/>
+                        <TextField fx:id="txtCorreo" layoutX="500.0" layoutY="195.0"/>
+
+                        <Label layoutX="50.0" layoutY="230.0" text="Usuario"/>
+                        <TextField fx:id="txtNombreUsuario" layoutX="50.0" layoutY="255.0" promptText="Usuario"/>
+
+                        <Label layoutX="250.0" layoutY="230.0" text="Contraseña"/>
+                        <PasswordField fx:id="txtContraseña" layoutX="250.0" layoutY="255.0"/>
+
+                        <Label layoutX="450.0" layoutY="230.0" text="Rol"/>
+                        <ComboBox fx:id="cmbRoles" layoutX="450.0" layoutY="255.0" promptText="Seleccione rol"/>
+
+                        <Button fx:id="btnAgregarUsuario" layoutX="50.0" layoutY="300.0" mnemonicParsing="false"
+                                text="Agregar" onAction="#agregarUsuario"/>
+                        <Button fx:id="btnEditar" layoutX="150.0" layoutY="300.0" mnemonicParsing="false"
+                                text="Editar" onAction="#editarUsuario"/>
+                        <Button fx:id="btnEliminar" layoutX="250.0" layoutY="300.0" mnemonicParsing="false"
+                                text="Eliminar" onAction="#eliminarUsuario"/>
+
+                        <TableView fx:id="tblUsuarios" layoutX="50.0" layoutY="350.0" prefHeight="200.0" prefWidth="800.0">
+                            <columns>
+                                <TableColumn fx:id="colNombre" text="Nombre"/>
+                                <TableColumn fx:id="colGenero" text="Género"/>
+                                <TableColumn fx:id="colFechaNacimiento" text="Fecha Nacimiento"/>
+                                <TableColumn fx:id="colDUI" text="DUI"/>
+                                <TableColumn fx:id="colTelefono" text="Teléfono"/>
+                                <TableColumn fx:id="colDireccion" text="Dirección"/>
+                                <TableColumn fx:id="colCorreo" text="Correo"/>
+                                <TableColumn fx:id="colUsuario" text="Usuario"/>
+                                <TableColumn fx:id="colRol" text="Rol"/>
+                            </columns>
+                        </TableView>
+
+                    </children>
+                </AnchorPane>
+
+            </items>
+        </SplitPane>
+    </children>
 </AnchorPane>
+
