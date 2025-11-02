@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="900" stylesheets="@../styles/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.balanzapp.controllers.LoginController">
+<BorderPane prefHeight="650" prefWidth="1270" stylesheets="@../styles/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.balanzapp.controllers.LoginController">
 
     <!-- Panel izquierdo -->
     <left>

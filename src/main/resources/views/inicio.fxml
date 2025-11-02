@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController">
+<AnchorPane prefHeight="650.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.InicioController">
    <children>
-      <SplitPane dividerPositions="0.2335" prefHeight="600.0" prefWidth="900.0">
+      <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1250.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #5A238A;">
                <children>
