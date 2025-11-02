@@ -322,7 +322,7 @@ public class LibroMayorController extends BaseController {
     private void descargarexcel() {
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Libro Mayor Del Auditor en Excel");
+        fileChooser.setTitle("Guardar Libro Mayor en Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
         fileChooser.setInitialFileName("Libro_Mayor.xlsx");
 
