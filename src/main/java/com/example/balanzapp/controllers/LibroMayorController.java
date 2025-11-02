@@ -14,6 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -92,6 +95,7 @@ public class LibroMayorController extends BaseController {
         );
         cmbbalances.setOnAction(event -> balanceSelec());
         btndescargarpdf.setOnAction(e -> descargarpdf());
+        btndescargarexcel.setOnAction(e -> descargarpdf());
     }
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
@@ -313,6 +317,54 @@ public class LibroMayorController extends BaseController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    @FXML
+    private void descargarexcel() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Libro Mayor Del Auditor en Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        fileChooser.setInitialFileName("Libro_Mayor.xlsx");
+
+        Stage stage = (Stage) btndescargarexcel.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        if (archivo == null) return;
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+
+            XSSFSheet hoja = workbook.createSheet("Libro Mayor");
+            int filaIndex = 0;
+
+            Row filaCabecera = hoja.createRow(filaIndex++);
+            int colIndex = 0;
+            for (TableColumn<?, ?> col : tablaMayor.getColumns()) {
+                org.apache.poi.ss.usermodel.Cell cell = filaCabecera.createCell(colIndex++);
+                cell.setCellValue(col.getText());
+            }
+
+            for (Object item : tablaMayor.getItems()) {
+                Row fila = hoja.createRow(filaIndex++);
+                colIndex = 0;
+                for (TableColumn<?, ?> col : tablaMayor.getColumns()) {
+                    Object valor = col.getCellObservableValue((Integer) item).getValue();
+                    fila.createCell(colIndex++).setCellValue(valor == null ? "" : valor.toString());
+                }
+            }
+
+            for (int i = 0; i < tablaMayor.getColumns().size(); i++) {
+                hoja.autoSizeColumn(i);
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
+                workbook.write(fileOut);
+            }
+
+            Alerta("Éxito","El archivo Excel se generó correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error al generar Excel: " + e.getMessage());
+        }
     }
 }
 

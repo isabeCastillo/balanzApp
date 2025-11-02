@@ -18,6 +18,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -96,6 +99,9 @@ public class LibroDiarioController extends BaseController{
     @FXML
     private Button btndescargarpdf;
 
+    @FXML
+    private Button btndescargarexcel;
+
 
     @FXML
     private void initialize(){
@@ -109,6 +115,7 @@ public class LibroDiarioController extends BaseController{
         comboMes.getItems().addAll("1","2","3","4","5","6","7","8","9","10","11","12");
         cargarAniosDesdeBD();
         cargarCuentasDesdeBD();
+        btndescargarexcel.setOnAction(e -> descargarexcel());
     }
 
 
@@ -374,4 +381,53 @@ public class LibroDiarioController extends BaseController{
 
         tablaDiario.getItems().setAll(PartidaDAO.obtenerPartidasPorMesYAnio(mes, anio));
     }
+    @FXML
+    private void descargarexcel() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Libro Diario en Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        fileChooser.setInitialFileName("Libro_Diario.xlsx");
+
+        Stage stage = (Stage) btndescargarexcel.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        if (archivo == null) return;
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+
+            XSSFSheet hoja = workbook.createSheet("Libro Diario");
+            int filaIndex = 0;
+
+            Row filaCabecera = hoja.createRow(filaIndex++);
+            int colIndex = 0;
+            for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
+                org.apache.poi.ss.usermodel.Cell cell = filaCabecera.createCell(colIndex++);
+                cell.setCellValue(col.getText());
+            }
+
+            for (Object item : tablaDiario.getItems()) {
+                Row fila = hoja.createRow(filaIndex++);
+                colIndex = 0;
+                for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
+                    Object valor = col.getCellObservableValue((Integer) item).getValue();
+                    fila.createCell(colIndex++).setCellValue(valor == null ? "" : valor.toString());
+                }
+            }
+
+            for (int i = 0; i < tablaDiario.getColumns().size(); i++) {
+                hoja.autoSizeColumn(i);
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
+                workbook.write(fileOut);
+            }
+
+            Alerta("Éxito","El archivo Excel se generó correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error al generar Excel: " + e.getMessage());
+        }
+    }
+
 }

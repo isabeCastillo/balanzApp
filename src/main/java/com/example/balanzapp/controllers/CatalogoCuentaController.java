@@ -17,6 +17,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -115,6 +118,32 @@ public class CatalogoCuentaController extends BaseController{
     private Parent root;
 
     @FXML
+    public void initialize() {
+        cargarDatosUsuario();
+        cargarTabla();
+        cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
+        cmbbalances.setOnAction(event -> balanceSelec());
+
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colNaturaleza.setCellValueFactory(new PropertyValueFactory<>("naturaleza"));
+        colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
+
+        btndescargarPdf.setOnAction(e -> descargarpdf());
+        btndescargarExcel.setOnAction(e -> descargarexcel());
+
+        tblCatalogo.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                txtCodigo.setText(newSel.getCodigo());
+                txtCuenta.setText(newSel.getNombre());
+                txtTipo.setText(newSel.getTipo());
+                txtNaturaleza.setText(newSel.getNaturaleza());
+                txtGrupo.setText(newSel.getGrupo());
+            }
+        });
+    }
+    @FXML
     void Close(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
@@ -163,32 +192,6 @@ public class CatalogoCuentaController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    public void initialize() {
-        cargarDatosUsuario();
-        cargarTabla();
-        cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
-        cmbbalances.setOnAction(event -> balanceSelec());
-
-        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        colNaturaleza.setCellValueFactory(new PropertyValueFactory<>("naturaleza"));
-        colGrupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
-
-        btndescargarPdf.setOnAction(e -> descargarpdf());
-
-        tblCatalogo.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
-            if (newSel != null) {
-                txtCodigo.setText(newSel.getCodigo());
-                txtCuenta.setText(newSel.getNombre());
-                txtTipo.setText(newSel.getTipo());
-                txtNaturaleza.setText(newSel.getNaturaleza());
-                txtGrupo.setText(newSel.getGrupo());
-            }
-        });
     }
 
     private void balanceSelec() {
@@ -358,5 +361,53 @@ public class CatalogoCuentaController extends BaseController{
         alert.setContentText(mensaje);
         alert.showAndWait();
 
+    }
+    @FXML
+    private void descargarexcel() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Catalogo de Cuentas en Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        fileChooser.setInitialFileName("Catalogo_de_Cuentas.xlsx");
+
+        Stage stage = (Stage) btndescargarExcel.getScene().getWindow();
+        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        if (archivo == null) return;
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+
+            XSSFSheet hoja = workbook.createSheet("Catalogo De Cuentas");
+            int filaIndex = 0;
+
+            Row filaCabecera = hoja.createRow(filaIndex++);
+            int colIndex = 0;
+            for (TableColumn<?, ?> col : tblCatalogo.getColumns()) {
+                org.apache.poi.ss.usermodel.Cell cell = filaCabecera.createCell(colIndex++);
+                cell.setCellValue(col.getText());
+            }
+
+            for (Object item : tblCatalogo.getItems()) {
+                Row fila = hoja.createRow(filaIndex++);
+                colIndex = 0;
+                for (TableColumn<?, ?> col : tblCatalogo.getColumns()) {
+                    Object valor = col.getCellObservableValue((Integer) item).getValue();
+                    fila.createCell(colIndex++).setCellValue(valor == null ? "" : valor.toString());
+                }
+            }
+
+            for (int i = 0; i < tblCatalogo.getColumns().size(); i++) {
+                hoja.autoSizeColumn(i);
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
+                workbook.write(fileOut);
+            }
+
+            Alerta("Éxito","El archivo Excel se generó correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error al generar Excel: " + e.getMessage());
+        }
     }
 }

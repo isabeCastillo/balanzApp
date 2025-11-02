@@ -6,6 +6,8 @@ module com.example.balanzapp {
     requires javafx.base;
     requires itextpdf;
     requires java.desktop;
+    requires org.apache.poi.ooxml;
+    requires org.apache.poi.poi;
 
 
     opens com.example.balanzapp to javafx.fxml;
