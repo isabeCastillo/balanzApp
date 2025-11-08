@@ -88,6 +88,7 @@ public class BalanceComprobacionSaldosController extends BaseController{
         );
         cmbbalances.setOnAction(event -> balanceSelec());
         btnDecargarPdf.setOnAction(e -> descargarpdf());
+        btnDescargarExcel.setOnAction(e -> descargarexcel());
 
     }
     private void balanceSelec() {

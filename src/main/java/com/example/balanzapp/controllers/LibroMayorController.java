@@ -95,7 +95,7 @@ public class LibroMayorController extends BaseController {
         );
         cmbbalances.setOnAction(event -> balanceSelec());
         btndescargarpdf.setOnAction(e -> descargarpdf());
-        btndescargarexcel.setOnAction(e -> descargarpdf());
+        btndescargarexcel.setOnAction(e -> descargarexcel());
     }
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
