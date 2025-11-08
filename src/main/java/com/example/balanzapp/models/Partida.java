@@ -3,23 +3,30 @@ package com.example.balanzapp.models;
 import java.time.LocalDate;
 
 public class Partida {
+
     private int idPartida;
+    private int numeroPartida;
     private LocalDate fecha;
     private String concepto;
     private String cuenta;
     private double debe;
     private double haber;
+    private String documento;
 
     public Partida() {
     }
 
-    public Partida(int idPartida, LocalDate fecha, String concepto, String cuenta, double debe, double haber) {
+    public Partida(int idPartida, int numeroPartida, LocalDate fecha,
+                   String concepto, String cuenta, double debe, double haber,
+                   String documento) {
         this.idPartida = idPartida;
+        this.numeroPartida = numeroPartida;
         this.fecha = fecha;
         this.concepto = concepto;
         this.cuenta = cuenta;
         this.debe = debe;
         this.haber = haber;
+        this.documento = documento;
     }
 
     public int getIdPartida() {
@@ -28,6 +35,14 @@ public class Partida {
 
     public void setIdPartida(int idPartida) {
         this.idPartida = idPartida;
+    }
+
+    public int getNumeroPartida() {
+        return numeroPartida;
+    }
+
+    public void setNumeroPartida(int numeroPartida) {
+        this.numeroPartida = numeroPartida;
     }
 
     public LocalDate getFecha() {
@@ -68,5 +83,13 @@ public class Partida {
 
     public void setHaber(double haber) {
         this.haber = haber;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
     }
 }
