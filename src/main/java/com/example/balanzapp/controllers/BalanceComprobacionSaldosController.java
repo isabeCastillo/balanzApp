@@ -1,10 +1,13 @@
 package com.example.balanzapp.controllers;
 
-import com.example.balanzapp.MainApp;
+import com.example.balanzapp.Conexion.ConexionDB;
+import com.example.balanzapp.dao.BalanceComprobacionDAO;
+import com.example.balanzapp.models.BalanceComprobacion;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,84 +24,112 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class BalanceComprobacionSaldosController extends BaseController{
+public class BalanceComprobacionSaldosController extends BaseController {
+
+    @FXML private Button btnDecargarPdf;
+    @FXML private Button btnDescargarExcel;
+    @FXML private Button btnbitacora;
+    @FXML private Button btnbuscar;
+    @FXML private Button btncatalogo;
+    @FXML private Button btncerrar;
+    @FXML private Button btndoc;
+    @FXML private Button btnestadoderesultados;
+    @FXML private Button btninicio;
+    @FXML private Button btnlibrodiario;
+    @FXML private Button btnlibromayor;
+    @FXML private Button btnusuario;
+
+    @FXML private ComboBox<Integer> cmbAño;
+    @FXML private ComboBox<Integer> cmbPeriodo; // mes 1-12
+    @FXML private ComboBox<String> cmbbalances;
+
+    @FXML private Label lblUs;
+    @FXML private Label lblad;
+
+    @FXML private TableView<BalanceComprobacion> tblComprobacionSaldos;
+    @FXML private TableColumn<BalanceComprobacion, String> colCodigo;
+    @FXML private TableColumn<BalanceComprobacion, String> colCuenta;
+    @FXML private TableColumn<BalanceComprobacion, Double> colDebe;
+    @FXML private TableColumn<BalanceComprobacion, Double> colHaber;
 
     @FXML
-    private Button btnDecargarPdf;
-
-    @FXML
-    private Button btnDescargarExcel;
-
-    @FXML
-    private Button btnbitacora;
-
-    @FXML
-    private Button btnbuscar;
-
-    @FXML
-    private Button btncatalogo;
-
-    @FXML
-    private Button btncerrar;
-
-    @FXML
-    private Button btndoc;
-
-    @FXML
-    private Button btnestadoderesultados;
-
-    @FXML
-    private Button btninicio;
-
-    @FXML
-    private Button btnlibrodiario;
-
-    @FXML
-    private Button btnlibromayor;
-
-    @FXML
-    private Button btnusuario;
-
-    @FXML
-    private ComboBox<?> cmbAño;
-
-    @FXML
-    private ComboBox<?> cmbPeriodo;
-
-    @FXML
-    private ComboBox<String> cmbbalances;
-
-    @FXML
-    private Label lblUs;
-
-    @FXML
-    private Label lblad;
-
-    @FXML
-    private TableView<?> tblComprobacionSaldos;
-
-    @FXML
-    private void initialize(){
+    private void initialize() {
         cargarDatosUsuario();
+
+        // Combo de balances (para navegar entre vistas)
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"
         );
         cmbbalances.setOnAction(event -> balanceSelec());
+
+        // Configurar columnas de la tabla
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colCuenta.setCellValueFactory(new PropertyValueFactory<>("cuenta"));
+        colDebe.setCellValueFactory(new PropertyValueFactory<>("debe"));
+        colHaber.setCellValueFactory(new PropertyValueFactory<>("haber"));
+
+        // Llenar combos de periodo (mes) y año
+        cargarMeses();
+        cargarAniosDesdeBD();
+
+        // Seleccionar por defecto mes/año actual si existen
+        if (!cmbPeriodo.getItems().isEmpty()) {
+            int mesActual = LocalDate.now().getMonthValue();
+            if (cmbPeriodo.getItems().contains(mesActual)) {
+                cmbPeriodo.setValue(mesActual);
+            }
+        }
+        if (!cmbAño.getItems().isEmpty()) {
+            cmbAño.getSelectionModel().selectFirst();
+        }
+
+        // Acciones
         btnDecargarPdf.setOnAction(e -> descargarpdf());
         btnDescargarExcel.setOnAction(e -> descargarexcel());
-
+        btnbuscar.setOnAction(this::Buscar);
     }
+
+    // ====== CARGA DE COMBOS ======
+
+    private void cargarMeses() {
+        for (int m = 1; m <= 12; m++) {
+            cmbPeriodo.getItems().add(m);
+        }
+    }
+
+    private void cargarAniosDesdeBD() {
+        String sql = "SELECT DISTINCT EXTRACT(YEAR FROM fecha) AS anio FROM tbl_partidas ORDER BY anio DESC";
+
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                cmbAño.getItems().add(rs.getInt("anio"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error cargando años: " + e.getMessage());
+        }
+    }
+
+    // ====== NAVEGACIÓN BALANCES ======
+
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
         String rutaFXML = null;
 
-        if (seleccion.equals("Balance de comprobación de saldos")) {
+        if ("Balance de comprobación de saldos".equals(seleccion)) {
             rutaFXML = "/views/balanceSaldos.fxml";
-        } else if (seleccion.equals("Balance general")) {
+        } else if ("Balance general".equals(seleccion)) {
             rutaFXML = "/views/balanceGeneral.fxml";
         }
 
@@ -112,126 +144,82 @@ public class BalanceComprobacionSaldosController extends BaseController{
         }
     }
 
+    // ====== BOTÓN BUSCAR ======
+
     @FXML
     void Buscar(ActionEvent event) {
+        Integer mes = cmbPeriodo.getValue();
+        Integer anio = cmbAño.getValue();
 
+        if (mes == null || anio == null) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Selecciona un mes y un año.");
+            return;
+        }
+
+        var lista = BalanceComprobacionDAO.obtenerBalanceMensual(mes, anio);
+        tblComprobacionSaldos.setItems(FXCollections.observableArrayList(lista));
     }
+
+    // ====== NAVEGACIÓN GENERAL ======
 
     @FXML
     void goToBitacoraAuditor(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/bitacora.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/bitacora.fxml", actionEvent);
     }
 
     @FXML
     void goToCatalogoCuentas(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo_cuenta.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/catalogo_cuenta.fxml", actionEvent);
     }
 
     @FXML
     void goToDoc(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/documentos.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/documentos.fxml", actionEvent);
     }
 
     @FXML
     void goToEstadoResultados(ActionEvent actionEvent) {
-
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/estadosResultados.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cambiarVista("/views/estadosResultados.fxml", actionEvent);
     }
 
     @FXML
     void goToHome(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/inicio.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/inicio.fxml", actionEvent);
     }
 
     @FXML
     void goToLibroDiario(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/libroDiario.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/libroDiario.fxml", actionEvent);
     }
 
     @FXML
     void goToLibroMayor(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/libroMayor.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/libroMayor.fxml", actionEvent);
     }
 
     @FXML
     void goToUsuario(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/usuarios.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        cambiarVista("/views/usuarios.fxml", actionEvent);
     }
+
     @FXML
     void Close(ActionEvent actionEvent) {
+        cambiarVista("/views/login.fxml", actionEvent);
+    }
+
+    private void cambiarVista(String ruta, ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource(ruta));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    // ====== EXPORTAR PDF ======
+
     @FXML
     private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
@@ -264,45 +252,44 @@ public class BalanceComprobacionSaldosController extends BaseController{
             documento.add(titulo);
             documento.add(fechaParrafo);
 
-            PdfPTable tablaPDF = new PdfPTable(tblComprobacionSaldos.getColumns().size());
+            PdfPTable tablaPDF = new PdfPTable(4); // Codigo, Cuenta, Debe, Haber
             tablaPDF.setWidthPercentage(100);
 
-            for (TableColumn<?, ?> col : tblComprobacionSaldos.getColumns()) {
-                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
+            // encabezados
+            String[] headers = {"Codigo", "Cuenta", "Debe", "Haber"};
+            for (String h : headers) {
+                PdfPCell celda = new PdfPCell(new Phrase(h));
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celda);
             }
+
             if (tblComprobacionSaldos.getItems().isEmpty()) {
                 PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
-                celdaVacia.setColspan(tblComprobacionSaldos.getColumns().size());
+                celdaVacia.setColspan(4);
                 celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celdaVacia);
             } else {
-                tblComprobacionSaldos.getItems().forEach(item -> {
-                    for (TableColumn<?, ?> col : tblComprobacionSaldos.getColumns()) {
-                        Object valor = col.getCellData(Integer.parseInt((String) item));
-                        tablaPDF.addCell(valor == null ? "" : valor.toString());
-                    }
-                });
+                for (BalanceComprobacion b : tblComprobacionSaldos.getItems()) {
+                    tablaPDF.addCell(b.getCodigo());
+                    tablaPDF.addCell(b.getCuenta());
+                    tablaPDF.addCell(String.format("%.2f", b.getDebe()));
+                    tablaPDF.addCell(String.format("%.2f", b.getHaber()));
+                }
             }
 
             documento.add(tablaPDF);
             documento.close();
 
-            Alerta("Éxito", "El archivo PDF se generó correctamente.");
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
             ex.printStackTrace();
             System.err.println("Error al generar el PDF: " + ex.getMessage());
         }
     }
-    private void Alerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
+
+    // ====== EXPORTAR EXCEL ======
+
     @FXML
     private void descargarexcel() {
 
@@ -317,26 +304,26 @@ public class BalanceComprobacionSaldosController extends BaseController{
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
-            XSSFSheet hoja = workbook.createSheet("Balance Comprobacion De Saldos");
+            XSSFSheet hoja = workbook.createSheet("Balance Comprobacion");
             int filaIndex = 0;
 
+            // cabecera
             Row filaCabecera = hoja.createRow(filaIndex++);
-            int colIndex = 0;
-            for (TableColumn<?, ?> col : tblComprobacionSaldos.getColumns()) {
-                org.apache.poi.ss.usermodel.Cell cell = filaCabecera.createCell(colIndex++);
-                cell.setCellValue(col.getText());
-            }
+            filaCabecera.createCell(0).setCellValue("Codigo");
+            filaCabecera.createCell(1).setCellValue("Cuenta");
+            filaCabecera.createCell(2).setCellValue("Debe");
+            filaCabecera.createCell(3).setCellValue("Haber");
 
-            for (Object item : tblComprobacionSaldos.getItems()) {
+            // datos
+            for (BalanceComprobacion b : tblComprobacionSaldos.getItems()) {
                 Row fila = hoja.createRow(filaIndex++);
-                colIndex = 0;
-                for (TableColumn<?, ?> col : tblComprobacionSaldos.getColumns()) {
-                    Object valor = col.getCellObservableValue((Integer) item).getValue();
-                    fila.createCell(colIndex++).setCellValue(valor == null ? "" : valor.toString());
-                }
+                fila.createCell(0).setCellValue(b.getCodigo());
+                fila.createCell(1).setCellValue(b.getCuenta());
+                fila.createCell(2).setCellValue(b.getDebe());
+                fila.createCell(3).setCellValue(b.getHaber());
             }
 
-            for (int i = 0; i < tblComprobacionSaldos.getColumns().size(); i++) {
+            for (int i = 0; i < 4; i++) {
                 hoja.autoSizeColumn(i);
             }
 
@@ -344,7 +331,8 @@ public class BalanceComprobacionSaldosController extends BaseController{
                 workbook.write(fileOut);
             }
 
-            Alerta("Éxito","El archivo Excel se generó correctamente.");
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito",
+                    "El archivo Excel se generó correctamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -352,5 +340,13 @@ public class BalanceComprobacionSaldosController extends BaseController{
         }
     }
 
+    // ====== ALERTAS ======
 
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }
