@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -68,6 +69,9 @@ public class BitacoraController extends BaseController {
     private ComboBox<String> cmbbalances;
 
     @FXML
+    private ComboBox<String> cmbmodul;
+
+    @FXML
     private Label lblUs;
 
     @FXML
@@ -101,6 +105,15 @@ public class BitacoraController extends BaseController {
     private ComboBox<String> cmbusu;
 
     @FXML
+    private Button btnfiltrar;
+
+    @FXML
+    private DatePicker dtdesde;
+
+    @FXML
+    private DatePicker dthasta;
+
+    @FXML
     private TableColumn<Bitacora, String> colUsuario;
 
     @FXML
@@ -123,6 +136,9 @@ public class BitacoraController extends BaseController {
         colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
 
         cargarUsuariosCombo();
+        cmbmodul.getItems().add("Libro Diario");
+        btnfiltrar.setOnAction(event -> filtrarBitacora());
+
     }
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
@@ -425,6 +441,67 @@ public class BitacoraController extends BaseController {
             }
 
             cmbusu.setItems(listaUsuarios);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void filtrar(ActionEvent actionEvent) {
+
+    }
+    public void filtrarBitacora() {
+        String usuario = cmbusu.getValue();
+        LocalDate desde = dtdesde.getValue();
+        LocalDate hasta = dthasta.getValue();
+        String modulo = cmbmodul.getValue(); // Libro Diario
+
+        ObservableList<Bitacora> lista = FXCollections.observableArrayList();
+
+        String sql = "SELECT u.nombre AS usuario, b.accion AS accionRealizada, r.nombre_rol AS rol, b.modulo, b.fecha, b.hora " +
+                "FROM tbl_bitacaud b " +
+                "INNER JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario " +
+                "INNER JOIN tbl_roles r ON u.id_rol = r.id_rol WHERE 1=1";
+
+        if(usuario != null){
+            sql += " AND u.nombre = ?";
+        }
+        if(desde != null){
+            sql += " AND b.fecha >= ?";
+        }
+        if(hasta != null){
+            sql += " AND b.fecha <= ?";
+        }
+        if(modulo != null){
+            sql += " AND b.modulo = ?";
+        }
+
+        sql += " ORDER BY b.fecha DESC, b.hora DESC";
+
+        try {
+            Connection conn = ConexionDB.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            int i = 1;
+            if(usuario != null) ps.setString(i++, usuario);
+            if(desde != null) ps.setDate(i++, java.sql.Date.valueOf(desde));
+            if(hasta != null) ps.setDate(i++, java.sql.Date.valueOf(hasta));
+            if(modulo != null) ps.setString(i++, modulo);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                lista.add(new Bitacora(
+                        rs.getString("usuario"),
+                        rs.getString("accionRealizada"),
+                        rs.getString("rol"),
+                        rs.getString("modulo"),
+                        rs.getDate("fecha").toString(),
+                        rs.getTime("hora").toString()
+                ));
+            }
+
+            tblbitacora.setItems(lista);
 
         } catch (SQLException e) {
             e.printStackTrace();

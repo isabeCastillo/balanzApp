@@ -104,10 +104,10 @@
                       <Label layoutX="516.0" layoutY="74.0" text="Hasta" />
                       <Label layoutX="296.0" layoutY="167.0" text="Modulo" />
                       <ComboBox fx:id="cmbusu" layoutX="20.0" layoutY="104.0" prefWidth="150.0" />
-                      <DatePicker layoutX="226.0" layoutY="104.0" />
-                      <DatePicker layoutX="444.0" layoutY="104.0" />
-                      <ComboBox layoutX="242.0" layoutY="184.0" prefWidth="150.0" />
-                      <Button layoutX="171.0" layoutY="243.0" mnemonicParsing="false" text="Filtrar" />
+                      <DatePicker fx:id="dtdesde" layoutX="226.0" layoutY="104.0" />
+                      <DatePicker fx:id="dthasta" layoutX="444.0" layoutY="104.0" />
+                      <ComboBox fx:id="cmbmodul" layoutX="242.0" layoutY="184.0" prefWidth="150.0" />
+                      <Button fx:id="btnfiltrar" layoutX="171.0" layoutY="243.0" mnemonicParsing="false" onAction="#filtrar" text="Filtrar" />
                       <Button fx:id="btndescargarPdf" layoutX="270.0" layoutY="243.0" mnemonicParsing="false" text="Descargar PDF" />
                       <Button fx:id="btndescargarExcel" layoutX="401.0" layoutY="243.0" mnemonicParsing="false" text="Descargar Excel" />
                       <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="307.0" prefHeight="200.0" prefWidth="573.0">
