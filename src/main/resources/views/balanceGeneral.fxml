@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.DatePicker?>
 <AnchorPane prefHeight="650.0" prefWidth="1270.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BalanceGeneralController">
     <children>
         <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1250.0">
@@ -84,32 +85,54 @@
                   </ImageView>
               </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="664.0">
-                     <children>
-                        <Label layoutX="196.0" layoutY="41.0" text="Balance General">
-                           <font>
-                              <Font name="Georgia" size="19.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="150.0" layoutY="84.0" text="Periodo" />
-                        <Label layoutX="425.0" layoutY="84.0" text="Año" />
-                        <ComboBox fx:id="cmbPeriodo" layoutX="95.0" layoutY="101.0" prefWidth="150.0" />
-                        <ComboBox fx:id="cmbAño" layoutX="372.0" layoutY="101.0" prefWidth="150.0" />
-                        <Button fx:id="btnbuscar" layoutX="300.0" layoutY="150.0" mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
-                        <Button fx:id="btnDecargarPdf" layoutX="158.0" layoutY="194.0" mnemonicParsing="false" text="Decargar PDF" />
-                        <Button fx:id="btnDescargarExcel" layoutX="399.0" layoutY="194.0" mnemonicParsing="false" text="Descargar Excel" />
-                        <TableView fx:id="tblBalanceGeneral" layoutX="24.0" layoutY="299.0" prefHeight="219.0" prefWidth="562.0">
-                          <columns>
-                            <TableColumn prefWidth="173.9999942779541" text="Activo" />
-                            <TableColumn prefWidth="180.6667022705078" text="Pasivo" />
-                              <TableColumn prefWidth="205.99990844726562" text="Patrimonio" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-               </children>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                <children>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="664.0">
+                        <children>
+                            <Label layoutX="230.0" layoutY="30.0" text="Balance General">
+                                <font>
+                                    <Font name="Georgia" size="19.0" />
+                                </font>
+                            </Label>
+
+                            <!-- Filtros de fechas -->
+                            <Label layoutX="80.0" layoutY="80.0" text="Desde:" />
+                            <DatePicker fx:id="dateDesde" layoutX="130.0" layoutY="75.0" prefWidth="150.0" />
+
+                            <Label layoutX="320.0" layoutY="80.0" text="Hasta:" />
+                            <DatePicker fx:id="dateHasta" layoutX="370.0" layoutY="75.0" prefWidth="150.0" />
+
+                            <Button fx:id="btnbuscar" layoutX="280.0" layoutY="120.0"
+                                    mnemonicParsing="false" onAction="#Buscar" text="Buscar" />
+                            <Button fx:id="btnDecargarPdf" layoutX="150.0" layoutY="160.0"
+                                    mnemonicParsing="false" text="Descargar PDF" />
+                            <Button fx:id="btnDescargarExcel" layoutX="360.0" layoutY="160.0"
+                                    mnemonicParsing="false" text="Descargar Excel" />
+
+                            <!-- Tabla de Balance General: Activo / Pasivo / Patrimonio -->
+                            <TableView fx:id="tblBalanceGeneral"
+                                       layoutX="20.0" layoutY="210.0"
+                                       prefHeight="260.0" prefWidth="620.0">
+                                <columns>
+                                    <TableColumn fx:id="colActivo"        prefWidth="160.0" text="Activo" />
+                                    <TableColumn fx:id="colSaldoActivo"   prefWidth="80.0"  text="Saldo Activo" />
+                                    <TableColumn fx:id="colPasivo"        prefWidth="160.0" text="Pasivo" />
+                                    <TableColumn fx:id="colSaldoPasivo"   prefWidth="80.0"  text="Saldo Pasivo" />
+                                    <TableColumn fx:id="colPatrimonio"    prefWidth="160.0" text="Patrimonio" />
+                                    <TableColumn fx:id="colSaldoPatrimonio" prefWidth="80.0" text="Saldo Patrimonio" />
+                                </columns>
+                            </TableView>
+
+                            <!-- Totales -->
+                            <Label layoutX="40.0" layoutY="480.0" fx:id="lblTotalActivo" text="Total Activo: 0.00" />
+                            <Label layoutX="240.0" layoutY="480.0" fx:id="lblTotalPasivo" text="Total Pasivo: 0.00" />
+                            <Label layoutX="440.0" layoutY="480.0" fx:id="lblTotalPatrimonio" text="Total Patrimonio: 0.00" />
+
+                            <!-- Utilidad neta -->
+                            <Label layoutX="40.0" layoutY="510.0" fx:id="lblUtilidadNeta" text="Utilidad Neta del Ejercicio: 0.00" />
+                        </children>
+                    </AnchorPane>
+                </children>
             </AnchorPane>
         </items>
       </SplitPane>

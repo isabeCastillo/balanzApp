@@ -91,50 +91,57 @@
                 </children>
             </AnchorPane>
 
-            <AnchorPane prefHeight="600.0" prefWidth="693.0">
-                <VBox alignment="TOP_CENTER" spacing="15" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
-                    <Label styleClass="title-label" text="Estado de Resultados" />
+          <AnchorPane prefHeight="600.0" prefWidth="693.0">
+              <VBox alignment="TOP_CENTER" spacing="15"
+                    AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+                  <Label styleClass="title-label" text="Estado de Resultados" />
 
-                    <GridPane hgap="10" vgap="10">
-                        <columnConstraints>
-                            <ColumnConstraints halignment="RIGHT" />
-                            <ColumnConstraints prefWidth="150" />
-                            <ColumnConstraints prefWidth="150" />
-                        </columnConstraints>
+                  <GridPane hgap="10" vgap="10">
+                      <columnConstraints>
+                          <ColumnConstraints halignment="RIGHT" />
+                          <ColumnConstraints prefWidth="150" />
+                          <ColumnConstraints prefWidth="150" />
+                      </columnConstraints>
 
-                        <Label text="Periodo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <ComboBox fx:id="cmbPeriodo" promptText="Seleccione un periodo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                      <Label text="Periodo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                      <ComboBox fx:id="cmbPeriodo" promptText="Seleccione un periodo"
+                                GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Año:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="cmbAnio" promptText="Seleccione año" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                      <Label text="Año:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                      <ComboBox fx:id="cmbAnio" promptText="Seleccione año"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="Mes:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                        <ComboBox fx:id="cmbMes" promptText="Seleccione mes" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <rowConstraints>
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                  </rowConstraints>
-                    </GridPane>
+                      <Label text="Mes (para mensual / trimestral):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                      <ComboBox fx:id="cmbMes" promptText="Seleccione mes"
+                                GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                      <rowConstraints>
+                          <RowConstraints />
+                          <RowConstraints />
+                          <RowConstraints />
+                      </rowConstraints>
+                  </GridPane>
 
+                  <HBox spacing="10">
+                      <Button fx:id="btnGenerar" text="Generar" onAction="#generarEstado" />
+                      <Button fx:id="btndescargarPdf" text="Descargar PDF" />
+                      <Button fx:id="btndescargarExcel" text="Descargar Excel" />
+                  </HBox>
 
-                    <HBox spacing="10">
-                        <Button text="Generar" />
-                        <Button fx:id="btndescargarPdf" text="Descargar PDF" />
-                        <Button fx:id="btndescargarExcel" text="Descargar Excel" />
-                    </HBox>
+                  <TableView fx:id="tblResultados" prefHeight="350" prefWidth="600">
+                      <columns>
+                          <TableColumn fx:id="colCuenta" prefWidth="250" text="Cuenta" />
+                          <TableColumn fx:id="colDebe"   prefWidth="150" text="Debe" />
+                          <TableColumn fx:id="colHaber"  prefWidth="150" text="Haber" />
+                          <TableColumn fx:id="colSaldo"  prefWidth="150" text="Saldo" />
+                      </columns>
+                  </TableView>
 
-                    <TableView fx:id="tblResultados" prefHeight="350" prefWidth="600">
-                        <columns>
-                            <TableColumn prefWidth="250" text="Cuenta" />
-                            <TableColumn prefWidth="150" text="Debe" />
-                            <TableColumn prefWidth="150" text="Haber" />
-                            <TableColumn prefWidth="150" text="Saldo" />
-                        </columns>
-                    </TableView>
-                </VBox>
-            </AnchorPane>
-        </items>
+                  <!-- Utilidad neta calculada -->
+                  <Label fx:id="lblUtilidadNeta" text="Utilidad neta: 0.00" />
+              </VBox>
+          </AnchorPane>
+
+      </items>
     </SplitPane>
     </children>
 </AnchorPane>

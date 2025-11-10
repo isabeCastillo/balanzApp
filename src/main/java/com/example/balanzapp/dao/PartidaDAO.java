@@ -2,6 +2,8 @@ package com.example.balanzapp.dao;
 
 import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.models.DetallePartidaTemp;
+import com.example.balanzapp.models.EstadoResultadoFila;
+import com.example.balanzapp.models.BalanceGeneralFila;
 import com.example.balanzapp.models.Partida;
 
 import java.sql.*;
@@ -10,6 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PartidaDAO {
+
+    // ====== CLASE INTERNA PARA BALANCE GENERAL ======
+    private static class CuentaSaldo {
+        String nombre;
+        double saldo;
+
+        CuentaSaldo(String nombre, double saldo) {
+            this.nombre = nombre;
+            this.saldo = saldo;
+        }
+    }
+
+    // =================================================
+    //  LIBRO DIARIO
+    // =================================================
     public static List<Partida> obtenerPartidasPorMesYAnio(int mes, int anio) {
         List<Partida> lista = new ArrayList<>();
 
@@ -34,6 +51,7 @@ public class PartidaDAO {
 
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, mes);
             ps.setInt(2, anio);
 
@@ -75,6 +93,7 @@ public class PartidaDAO {
 
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, idPartida);
             ResultSet rs = ps.executeQuery();
 
@@ -96,6 +115,9 @@ public class PartidaDAO {
         return detalles;
     }
 
+    // =================================================
+    //  INSERTAR PARTIDAS
+    // =================================================
 
     public static void insertarPartidaConDetalles(
             LocalDate fecha,
@@ -221,5 +243,177 @@ public class PartidaDAO {
         } catch (SQLException e) {
             System.out.println("Error insertando partida: " + e.getMessage());
         }
+    }
+
+    // =================================================
+    //  BALANCE GENERAL
+    // =================================================
+
+    public static List<BalanceGeneralFila> obtenerBalanceGeneral(LocalDate desde,
+                                                                 LocalDate hasta) {
+        // ¡OJO! Aquí usamos los tipos EXACTOS que tienes en la BD:
+        // 'Activo', 'Pasivo', 'Capital'
+        List<CuentaSaldo> activos      = obtenerCuentasPorTipo("Activo", desde, hasta);
+        List<CuentaSaldo> pasivos      = obtenerCuentasPorTipo("Pasivo", desde, hasta);
+        List<CuentaSaldo> patrimonios  = obtenerCuentasPorTipo("Capital", desde, hasta);
+
+        int maxFilas = Math.max(activos.size(), Math.max(pasivos.size(), patrimonios.size()));
+        List<BalanceGeneralFila> filas = new ArrayList<>();
+
+        for (int i = 0; i < maxFilas; i++) {
+            String nombreActivo = "";
+            double saldoActivo = 0.0;
+
+            String nombrePasivo = "";
+            double saldoPasivo = 0.0;
+
+            String nombrePatrimonio = "";
+            double saldoPatrimonio = 0.0;
+
+            if (i < activos.size()) {
+                nombreActivo = activos.get(i).nombre;
+                saldoActivo = activos.get(i).saldo;
+            }
+            if (i < pasivos.size()) {
+                nombrePasivo = pasivos.get(i).nombre;
+                saldoPasivo = pasivos.get(i).saldo;
+            }
+            if (i < patrimonios.size()) {
+                nombrePatrimonio = patrimonios.get(i).nombre;
+                saldoPatrimonio = patrimonios.get(i).saldo;
+            }
+
+            filas.add(new BalanceGeneralFila(
+                    nombreActivo, saldoActivo,
+                    nombrePasivo, saldoPasivo,
+                    nombrePatrimonio, saldoPatrimonio
+            ));
+        }
+
+        return filas;
+    }
+
+    private static List<CuentaSaldo> obtenerCuentasPorTipo(String tipo,
+                                                           LocalDate desde,
+                                                           LocalDate hasta) {
+        List<CuentaSaldo> lista = new ArrayList<>();
+
+        String sql = """
+            SELECT c.nombre,
+                   SUM(d.debe - d.haber) AS saldo
+            FROM tbl_cntaContables c
+            JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
+            JOIN tbl_partidas p ON p.id_partida = d.id_partida
+            WHERE c.tipo = ?
+              AND p.fecha BETWEEN ? AND ?
+            GROUP BY c.nombre
+            HAVING SUM(d.debe - d.haber) <> 0
+            ORDER BY c.nombre
+            """;
+
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, tipo); // 'Activo', 'Pasivo', 'Capital'
+            ps.setDate(2, Date.valueOf(desde));
+            ps.setDate(3, Date.valueOf(hasta));
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String nombre = rs.getString("nombre");
+                double saldo = rs.getDouble("saldo");
+                lista.add(new CuentaSaldo(nombre, saldo));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo cuentas de tipo " + tipo + ": " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    // =================================================
+    //  ESTADO DE RESULTADOS
+    // =================================================
+
+    public static List<EstadoResultadoFila> obtenerEstadoResultados(
+            LocalDate desde,
+            LocalDate hasta
+    ) {
+        List<EstadoResultadoFila> lista = new ArrayList<>();
+
+        String sql = """
+            SELECT c.nombre AS cuenta,
+                   COALESCE(SUM(d.debe), 0)  AS debe,
+                   COALESCE(SUM(d.haber), 0) AS haber,
+                   COALESCE(SUM(d.haber - d.debe), 0) AS saldo
+            FROM tbl_cntaContables c
+            JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
+            JOIN tbl_partidas p       ON p.id_partida = d.id_partida
+            WHERE p.fecha BETWEEN ? AND ?
+              AND c.tipo IN ('Ingreso', 'Gasto')
+            GROUP BY c.nombre, c.codigo
+            ORDER BY c.codigo
+            """;
+
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDate(1, Date.valueOf(desde));
+            ps.setDate(2, Date.valueOf(hasta));
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String cuenta = rs.getString("cuenta");
+                double debe   = rs.getDouble("debe");
+                double haber  = rs.getDouble("haber");
+                double saldo  = rs.getDouble("saldo");
+
+                lista.add(new EstadoResultadoFila(cuenta, debe, haber, saldo));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error obteniendo estado de resultados: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public static double calcularUtilidadNeta(LocalDate desde,
+                                              LocalDate hasta) {
+        String sql = """
+            SELECT
+                COALESCE(SUM(
+                    CASE WHEN c.tipo = 'Ingreso'
+                         THEN d.haber - d.debe
+                         ELSE 0 END
+                ),0) +
+                COALESCE(SUM(
+                    CASE WHEN c.tipo = 'Gasto'
+                         THEN d.debe - d.haber
+                         ELSE 0 END
+                ),0) AS utilidad_neta
+            FROM tbl_cntaContables c
+            JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
+            JOIN tbl_partidas p ON p.id_partida = d.id_partida
+            WHERE p.fecha BETWEEN ? AND ?
+            """;
+
+        try (Connection conn = ConexionDB.connection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDate(1, Date.valueOf(desde));
+            ps.setDate(2, Date.valueOf(hasta));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("utilidad_neta");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error calculando utilidad neta: " + e.getMessage());
+        }
+
+        return 0.0;
     }
 }
