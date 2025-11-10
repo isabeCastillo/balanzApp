@@ -1,12 +1,12 @@
 package com.example.balanzapp.controllers;
 
-import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.dao.PartidaDAO;
 import com.example.balanzapp.models.EstadoResultadoFila;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,19 +23,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 public class EstadosResultadosControllers extends BaseController {
 
+    // Navbar
     @FXML private ComboBox<String> cmbbalances;
-    @FXML private ComboBox<String> cmbAnio;
-    @FXML private ComboBox<String> cmbMes;
-    @FXML private ComboBox<String> cmbPeriodo;
-
     @FXML private Button btninicio;
     @FXML private Button btndoc;
     @FXML private Button btnlibrodiario;
@@ -45,33 +40,37 @@ public class EstadosResultadosControllers extends BaseController {
     @FXML private Button btnusuario;
     @FXML private Button btnbitacora;
     @FXML private Button btncerrar;
-
-    @FXML private Button btnGenerar;
-    @FXML private Button btndescargarExcel;
-    @FXML private Button btndescargarPdf;
-
     @FXML private Label lblUs;
     @FXML private Label lblad;
-    @FXML private Label lblUtilidadNeta;
 
+    // Filtros
+    @FXML private DatePicker dateDesde;
+    @FXML private DatePicker dateHasta;
+
+    // Tabla estado de resultados
     @FXML private TableView<EstadoResultadoFila> tblResultados;
     @FXML private TableColumn<EstadoResultadoFila, String>  colCuenta;
     @FXML private TableColumn<EstadoResultadoFila, Double> colDebe;
     @FXML private TableColumn<EstadoResultadoFila, Double> colHaber;
     @FXML private TableColumn<EstadoResultadoFila, Double> colSaldo;
 
+    // Botones
+    @FXML private Button btndescargarExcel;
+    @FXML private Button btndescargarPdf;
+    @FXML private Button btnGenerar;
+
+    // Utilidad neta
+    @FXML private Label lblUtilidadNeta;
+
     @FXML
     public void initialize() {
         cargarDatosUsuario();
 
-        cmbPeriodo.getItems().addAll("Mensual", "Trimestral", "Anual");
-        cargarAniosDesdeBD();
-        cmbMes.getItems().addAll(
-                "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-                "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+        // Combo de balances en navbar
+        cmbbalances.getItems().addAll(
+                "Balance de comprobación de saldos",
+                "Balance general"
         );
-
-        cmbbalances.getItems().addAll("Balance de comprobación de saldos", "Balance general");
         cmbbalances.setOnAction(event -> balanceSelec());
 
         // Configurar columnas de la tabla
@@ -80,21 +79,15 @@ public class EstadosResultadosControllers extends BaseController {
         colHaber.setCellValueFactory(new PropertyValueFactory<>("haber"));
         colSaldo.setCellValueFactory(new PropertyValueFactory<>("saldo"));
 
+        // Fechas por defecto: desde inicio de mes hasta hoy
+        LocalDate hoy = LocalDate.now();
+        dateHasta.setValue(hoy);
+        dateDesde.setValue(hoy.withDayOfMonth(1));
+
+        // Acciones
+        btnGenerar.setOnAction(e -> generarEstado());
         btndescargarPdf.setOnAction(e -> descargarpdf());
         btndescargarExcel.setOnAction(e -> descargarexcel());
-    }
-
-    private void cargarAniosDesdeBD() {
-        String sql = "SELECT DISTINCT EXTRACT(YEAR FROM fecha) FROM tbl_partidas ORDER BY 1 DESC";
-        try (Connection conn = ConexionDB.connection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                cmbAnio.getItems().add(String.valueOf((int) rs.getDouble(1)));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error cargando años: " + e.getMessage());
-        }
     }
 
     private void balanceSelec() {
@@ -119,81 +112,25 @@ public class EstadosResultadosControllers extends BaseController {
     }
 
     // ================== GENERAR ESTADO ==================
-
     @FXML
-    void generarEstado(ActionEvent event) {
-        String periodo = cmbPeriodo.getValue();
-        String anioStr = cmbAnio.getValue();
-        String mesStr  = cmbMes.getValue();
+    public void generarEstado() {
+        LocalDate desde = dateDesde.getValue();
+        LocalDate hasta = dateHasta.getValue();
 
-        if (periodo == null || anioStr == null) {
-            mostrarError("Selecciona periodo y año.");
+        if (desde == null || hasta == null) {
+            mostrarError("Selecciona las fechas Desde y Hasta.");
+            return;
+        }
+        if (hasta.isBefore(desde)) {
+            mostrarError("La fecha 'Hasta' no puede ser anterior a 'Desde'.");
             return;
         }
 
-        int anio = Integer.parseInt(anioStr);
-        LocalDate desde;
-        LocalDate hasta;
-
-        switch (periodo) {
-            case "Mensual" -> {
-                if (mesStr == null) {
-                    mostrarError("Selecciona el mes para el periodo mensual.");
-                    return;
-                }
-                int mes = getNumeroMes(mesStr);
-                YearMonth ym = YearMonth.of(anio, mes);
-                desde = ym.atDay(1);
-                hasta = ym.atEndOfMonth();
-            }
-            case "Trimestral" -> {
-                if (mesStr == null) {
-                    mostrarError("Selecciona un mes dentro del trimestre.");
-                    return;
-                }
-                int mesRef = getNumeroMes(mesStr);
-                int mesInicioTrimestre = ((mesRef - 1) / 3) * 3 + 1;
-                int mesFinTrimestre = mesInicioTrimestre + 2;
-
-                YearMonth ymInicio = YearMonth.of(anio, mesInicioTrimestre);
-                YearMonth ymFin = YearMonth.of(anio, mesFinTrimestre);
-
-                desde = ymInicio.atDay(1);
-                hasta = ymFin.atEndOfMonth();
-            }
-            case "Anual" -> {
-                desde = LocalDate.of(anio, 1, 1);
-                hasta = LocalDate.of(anio, 12, 31);
-            }
-            default -> {
-                mostrarError("Periodo no válido.");
-                return;
-            }
-        }
-
-        var filas = PartidaDAO.obtenerEstadoResultados(desde, hasta);
-        tblResultados.getItems().setAll(filas);
+        var lista = PartidaDAO.obtenerEstadoResultados(desde, hasta);
+        tblResultados.setItems(FXCollections.observableArrayList(lista));
 
         double utilidad = PartidaDAO.calcularUtilidadNeta(desde, hasta);
         lblUtilidadNeta.setText(String.format("Utilidad neta: %.2f", utilidad));
-    }
-
-    private int getNumeroMes(String nombreMes) {
-        return switch (nombreMes) {
-            case "Enero" -> 1;
-            case "Febrero" -> 2;
-            case "Marzo" -> 3;
-            case "Abril" -> 4;
-            case "Mayo" -> 5;
-            case "Junio" -> 6;
-            case "Julio" -> 7;
-            case "Agosto" -> 8;
-            case "Septiembre" -> 9;
-            case "Octubre" -> 10;
-            case "Noviembre" -> 11;
-            case "Diciembre" -> 12;
-            default -> 1;
-        };
     }
 
     // ================== NAVEGACIÓN ==================
@@ -223,14 +160,13 @@ public class EstadosResultadosControllers extends BaseController {
         }
     }
 
-    // ================== EXPORTAR PDF ==================
-
+    // ================== PDF ==================
     @FXML
     private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar Estado De Resultados como PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
-        fileChooser.setInitialFileName("EstadoDe_Resultados.pdf");
+        fileChooser.setInitialFileName("Estado_De_Resultados.pdf");
 
         Stage stage = (Stage) btndescargarPdf.getScene().getWindow();
         java.io.File archivo = fileChooser.showSaveDialog(stage);
@@ -257,20 +193,21 @@ public class EstadosResultadosControllers extends BaseController {
             documento.add(titulo);
             documento.add(fechaParrafo);
 
-            PdfPTable tablaPDF = new PdfPTable(4);
+            PdfPTable tablaPDF = new PdfPTable(tblResultados.getColumns().size());
             tablaPDF.setWidthPercentage(100);
 
-            String[] headers = {"Cuenta", "Debe", "Haber", "Saldo"};
-            for (String h : headers) {
-                PdfPCell celda = new PdfPCell(new Phrase(h));
+            // Encabezados
+            for (TableColumn<?, ?> col : tblResultados.getColumns()) {
+                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celda);
             }
 
+            // Datos
             if (tblResultados.getItems().isEmpty()) {
                 PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
-                celdaVacia.setColspan(4);
+                celdaVacia.setColspan(tblResultados.getColumns().size());
                 celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celdaVacia);
             } else {
@@ -284,10 +221,12 @@ public class EstadosResultadosControllers extends BaseController {
 
             documento.add(tablaPDF);
 
-            // Agregar utilidad neta al final
-            Paragraph utilidadParrafo = new Paragraph(lblUtilidadNeta.getText());
-            utilidadParrafo.setSpacingBefore(10);
-            documento.add(utilidadParrafo);
+            Paragraph util = new Paragraph(
+                    lblUtilidadNeta.getText(),
+                    FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK)
+            );
+            util.setSpacingBefore(10);
+            documento.add(util);
 
             documento.close();
 
@@ -298,11 +237,9 @@ public class EstadosResultadosControllers extends BaseController {
         }
     }
 
-    // ================== EXPORTAR EXCEL ==================
-
+    // ================== EXCEL ==================
     @FXML
     private void descargarexcel() {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar Estados de Resultados en Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
@@ -317,26 +254,25 @@ public class EstadosResultadosControllers extends BaseController {
             XSSFSheet hoja = workbook.createSheet("Estado de Resultados");
             int filaIndex = 0;
 
+            // Encabezados
             Row filaCabecera = hoja.createRow(filaIndex++);
-            filaCabecera.createCell(0).setCellValue("Cuenta");
-            filaCabecera.createCell(1).setCellValue("Debe");
-            filaCabecera.createCell(2).setCellValue("Haber");
-            filaCabecera.createCell(3).setCellValue("Saldo");
-
-            for (EstadoResultadoFila fila : tblResultados.getItems()) {
-                Row r = hoja.createRow(filaIndex++);
-                r.createCell(0).setCellValue(fila.getCuenta());
-                r.createCell(1).setCellValue(fila.getDebe());
-                r.createCell(2).setCellValue(fila.getHaber());
-                r.createCell(3).setCellValue(fila.getSaldo());
+            int colIndex = 0;
+            for (TableColumn<?, ?> col : tblResultados.getColumns()) {
+                org.apache.poi.ss.usermodel.Cell cell = filaCabecera.createCell(colIndex++);
+                cell.setCellValue(col.getText());
             }
 
-            // Fila con utilidad neta
-            Row rUtil = hoja.createRow(filaIndex++);
-            rUtil.createCell(0).setCellValue("Utilidad neta");
-            rUtil.createCell(1).setCellValue(lblUtilidadNeta.getText());
+            // Datos
+            for (EstadoResultadoFila fila : tblResultados.getItems()) {
+                Row filaExcel = hoja.createRow(filaIndex++);
+                int c = 0;
+                filaExcel.createCell(c++).setCellValue(fila.getCuenta());
+                filaExcel.createCell(c++).setCellValue(fila.getDebe());
+                filaExcel.createCell(c++).setCellValue(fila.getHaber());
+                filaExcel.createCell(c++).setCellValue(fila.getSaldo());
+            }
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < tblResultados.getColumns().size(); i++) {
                 hoja.autoSizeColumn(i);
             }
 
@@ -353,7 +289,6 @@ public class EstadosResultadosControllers extends BaseController {
     }
 
     // ================== ALERTAS ==================
-
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR);
         alerta.setTitle("Error");

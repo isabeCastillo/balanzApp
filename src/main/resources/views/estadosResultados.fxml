@@ -18,6 +18,7 @@
 <?import javafx.scene.text.Font?>
 
 
+<?import javafx.scene.control.DatePicker?>
 <AnchorPane prefHeight="650.0" prefWidth="1270.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.EstadosResultadosControllers">
     <children>
         <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1250.0">
@@ -96,6 +97,7 @@
                     AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
                   <Label styleClass="title-label" text="Estado de Resultados" />
 
+                  <!-- Filtros: Desde / Hasta -->
                   <GridPane hgap="10" vgap="10">
                       <columnConstraints>
                           <ColumnConstraints halignment="RIGHT" />
@@ -103,19 +105,13 @@
                           <ColumnConstraints prefWidth="150" />
                       </columnConstraints>
 
-                      <Label text="Periodo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                      <ComboBox fx:id="cmbPeriodo" promptText="Seleccione un periodo"
-                                GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                      <Label text="Desde:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                      <DatePicker fx:id="dateDesde" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                      <Label text="Año:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                      <ComboBox fx:id="cmbAnio" promptText="Seleccione año"
-                                GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                      <Label text="Hasta:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                      <DatePicker fx:id="dateHasta" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                      <Label text="Mes (para mensual / trimestral):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                      <ComboBox fx:id="cmbMes" promptText="Seleccione mes"
-                                GridPane.columnIndex="1" GridPane.rowIndex="2" />
                       <rowConstraints>
-                          <RowConstraints />
                           <RowConstraints />
                           <RowConstraints />
                       </rowConstraints>
@@ -136,11 +132,9 @@
                       </columns>
                   </TableView>
 
-                  <!-- Utilidad neta calculada -->
                   <Label fx:id="lblUtilidadNeta" text="Utilidad neta: 0.00" />
               </VBox>
           </AnchorPane>
-
       </items>
     </SplitPane>
     </children>
