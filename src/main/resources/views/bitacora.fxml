@@ -14,115 +14,115 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1270.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BitacoraController">
+<AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BitacoraController">
     <children>
-        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1250.0">
+        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1453.0">
             <items>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #5A238A;">
-                   <children>
-                      <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
-                         <children>
-                            <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <ComboBox fx:id="cmbbalances" prefHeight="51.0" prefWidth="207.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                               <effect>
-                                  <ColorAdjust brightness="1.0" />
-                               </effect>
-                            </ComboBox>
-                            <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                            <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
-                               <font>
-                                  <Font name="Georgia Bold Italic" size="12.0" />
-                               </font>
-                            </Button>
-                         </children>
-                      </VBox>
-                      <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                            <Image url="@../imagenes/user.png" />
-                         </image>
-                      </ImageView>
-                      <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
-                         <font>
-                            <Font name="Georgia Bold" size="12.0" />
-                         </font>
-                      </Label>
-                      <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
-                         <font>
-                            <Font name="Georgia Bold" size="12.0" />
-                         </font>
-                      </Label>
-                      <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
-                         <font>
-                            <Font name="Georgia Bold" size="12.0" />
-                         </font>
-                      </Button>
-                      <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="16.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                            <Image url="@../imagenes/logout.png" />
-                         </image>
-                      </ImageView>
-                   </children>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="272.0" style="-fx-background-color: #5A238A;">
+                    <children>
+                        <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
+                            <children>
+                                <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <ComboBox fx:id="cmbbalances" prefHeight="51.0" prefWidth="207.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                    <effect>
+                                        <ColorAdjust brightness="1.0" />
+                                    </effect>
+                                </ComboBox>
+                                <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="47.0" prefWidth="275.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
+                                    <font>
+                                        <Font name="Georgia Bold Italic" size="12.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </VBox>
+                        <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../imagenes/user.png" />
+                            </image>
+                        </ImageView>
+                        <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
+                            <font>
+                                <Font name="Georgia Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
+                            <font>
+                                <Font name="Georgia Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
+                            <font>
+                                <Font name="Georgia Bold" size="12.0" />
+                            </font>
+                        </Button>
+                        <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="16.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../imagenes/logout.png" />
+                            </image>
+                        </ImageView>
+                    </children>
                 </AnchorPane>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                   <children>
-                      <Label layoutX="260.0" layoutY="20.0" text="Bitacora del Auditor" />
-                      <Label layoutX="27.0" layoutY="74.0" text="Usuario" />
-                      <Label layoutX="296.0" layoutY="74.0" text="Desde" />
-                      <Label layoutX="516.0" layoutY="74.0" text="Hasta" />
-                      <Label layoutX="296.0" layoutY="167.0" text="Modulo" />
-                      <ComboBox fx:id="cmbusu" layoutX="20.0" layoutY="104.0" prefWidth="150.0" />
-                      <DatePicker fx:id="dtdesde" layoutX="226.0" layoutY="104.0" />
-                      <DatePicker fx:id="dthasta" layoutX="444.0" layoutY="104.0" />
-                      <ComboBox fx:id="cmbmodul" layoutX="242.0" layoutY="184.0" prefWidth="150.0" />
-                      <Button fx:id="btnfiltrar" layoutX="171.0" layoutY="243.0" mnemonicParsing="false" onAction="#filtrar" text="Filtrar" />
-                      <Button fx:id="btndescargarPdf" layoutX="270.0" layoutY="243.0" mnemonicParsing="false" text="Descargar PDF" />
-                      <Button fx:id="btndescargarExcel" layoutX="401.0" layoutY="243.0" mnemonicParsing="false" text="Descargar Excel" />
-                      <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="307.0" prefHeight="200.0" prefWidth="573.0">
-                        <columns>
-                          <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
-                          <TableColumn fx:id="colAccion" prefWidth="113.3333740234375" text="Accion Realizada" />
-                            <TableColumn fx:id="colRol" prefWidth="77.333251953125" text="Rol" />
-                            <TableColumn fx:id="colModulo" prefWidth="106.0" text="Modulo" />
-                            <TableColumn fx:id="colFecha" prefWidth="108.66668701171875" text="Fecha" />
-                            <TableColumn fx:id="colHora" prefWidth="92.0" text="Hora" />
-                        </columns>
-                      </TableView>
-                   </children>
-              </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <Label layoutX="260.0" layoutY="20.0" text="Bitacora del Auditor" />
+                        <Label layoutX="55.0" layoutY="74.0" text="Usuario" />
+                        <Label layoutX="270.0" layoutY="74.0" text="Desde" />
+                        <Label layoutX="558.0" layoutY="74.0" text="Hasta" />
+                        <Label layoutX="813.0" layoutY="74.0" text="Modulo" />
+                        <ComboBox fx:id="cmbusu" layoutX="55.0" layoutY="104.0" prefWidth="150.0" />
+                        <DatePicker fx:id="dtdesde" layoutX="270.0" layoutY="101.0" />
+                        <DatePicker fx:id="dthasta" layoutX="545.0" layoutY="101.0" />
+                        <ComboBox fx:id="cmbmodul" layoutX="813.0" layoutY="104.0" prefWidth="150.0" />
+                        <Button fx:id="btnfiltrar" layoutX="276.0" layoutY="189.0" mnemonicParsing="false" onAction="#filtrar" text="Filtrar" />
+                        <Button fx:id="btndescargarPdf" layoutX="394.0" layoutY="189.0" mnemonicParsing="false" text="Descargar PDF" />
+                        <Button fx:id="btndescargarExcel" layoutX="558.0" layoutY="189.0" mnemonicParsing="false" text="Descargar Excel" />
+                        <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="270.0" prefHeight="291.0" prefWidth="980.0">
+                            <columns>
+                                <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
+                                <TableColumn fx:id="colAccion" prefWidth="248.0" text="Accion Realizada" />
+                                <TableColumn fx:id="colRol" minWidth="0.0" prefWidth="85.0" text="Rol" />
+                                <TableColumn fx:id="colModulo" prefWidth="295.0" text="Modulo" />
+                                <TableColumn fx:id="colFecha" prefWidth="163.0" text="Fecha" />
+                                <TableColumn fx:id="colHora" prefWidth="98.0" text="Hora" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </AnchorPane>
             </items>
-      </SplitPane>
-   </children>
+        </SplitPane>
+    </children>
 </AnchorPane>
