@@ -12,33 +12,29 @@ import java.util.List;
 
 public class BalanceComprobacionDAO {
 
-    /**
-     * Obtiene la balanza de comprobación para un mes y año.
-     * mes: 1-12, anio: 2024, 2025, etc.
-     */
-    public static List<BalanceComprobacion> obtenerBalanceMensual(int mes, int anio) {
+    public static List<BalanceComprobacion> obtenerBalancePorRango(java.time.LocalDate desde,
+                                                                   java.time.LocalDate hasta) {
         List<BalanceComprobacion> lista = new ArrayList<>();
 
         String sql = """
-                SELECT c.codigo,
-                       c.nombre AS cuenta,
-                       COALESCE(SUM(d.debe), 0) AS debe,
-                       COALESCE(SUM(d.haber), 0) AS haber
-                FROM tbl_cntaContables c
-                JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
-                JOIN tbl_partidas p ON d.id_partida = p.id_partida
-                WHERE EXTRACT(MONTH FROM p.fecha) = ? 
-                  AND EXTRACT(YEAR  FROM p.fecha) = ?
-                GROUP BY c.codigo, c.nombre
-                HAVING COALESCE(SUM(d.debe),0) <> 0 OR COALESCE(SUM(d.haber),0) <> 0
-                ORDER BY c.codigo;
-                """;
+            SELECT c.codigo,
+                   c.nombre AS cuenta,
+                   COALESCE(SUM(d.debe), 0) AS debe,
+                   COALESCE(SUM(d.haber), 0) AS haber
+            FROM tbl_cntaContables c
+            JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
+            JOIN tbl_partidas p ON d.id_partida = p.id_partida
+            WHERE p.fecha BETWEEN ? AND ?
+            GROUP BY c.codigo, c.nombre
+            HAVING COALESCE(SUM(d.debe),0) <> 0 OR COALESCE(SUM(d.haber),0) <> 0
+            ORDER BY c.codigo;
+            """;
 
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, mes);
-            ps.setInt(2, anio);
+            ps.setDate(1, java.sql.Date.valueOf(desde));
+            ps.setDate(2, java.sql.Date.valueOf(hasta));
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -52,9 +48,10 @@ public class BalanceComprobacionDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error obteniendo balanza: " + e.getMessage());
+            System.out.println("Error obteniendo balanza por rango: " + e.getMessage());
         }
 
         return lista;
     }
+
 }

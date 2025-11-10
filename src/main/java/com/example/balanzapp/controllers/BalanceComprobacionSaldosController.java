@@ -1,6 +1,5 @@
 package com.example.balanzapp.controllers;
 
-import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.dao.BalanceComprobacionDAO;
 import com.example.balanzapp.models.BalanceComprobacion;
 import com.itextpdf.text.*;
@@ -24,12 +23,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 public class BalanceComprobacionSaldosController extends BaseController {
@@ -47,12 +43,16 @@ public class BalanceComprobacionSaldosController extends BaseController {
     @FXML private Button btnlibromayor;
     @FXML private Button btnusuario;
 
-    @FXML private ComboBox<Integer> cmbAño;
-    @FXML private ComboBox<Integer> cmbPeriodo; // mes 1-12
     @FXML private ComboBox<String> cmbbalances;
 
     @FXML private Label lblUs;
     @FXML private Label lblad;
+    @FXML private Label lblTotalDebe;
+    @FXML private Label lblTotalHaber;
+
+
+    @FXML private DatePicker dateDesde;
+    @FXML private DatePicker dateHasta;
 
     @FXML private TableView<BalanceComprobacion> tblComprobacionSaldos;
     @FXML private TableColumn<BalanceComprobacion, String> colCodigo;
@@ -77,48 +77,15 @@ public class BalanceComprobacionSaldosController extends BaseController {
         colDebe.setCellValueFactory(new PropertyValueFactory<>("debe"));
         colHaber.setCellValueFactory(new PropertyValueFactory<>("haber"));
 
-        // Llenar combos de periodo (mes) y año
-        cargarMeses();
-        cargarAniosDesdeBD();
-
-        // Seleccionar por defecto mes/año actual si existen
-        if (!cmbPeriodo.getItems().isEmpty()) {
-            int mesActual = LocalDate.now().getMonthValue();
-            if (cmbPeriodo.getItems().contains(mesActual)) {
-                cmbPeriodo.setValue(mesActual);
-            }
-        }
-        if (!cmbAño.getItems().isEmpty()) {
-            cmbAño.getSelectionModel().selectFirst();
-        }
+        // Rango por defecto = mes actual
+        YearMonth ym = YearMonth.now();
+        dateDesde.setValue(ym.atDay(1));
+        dateHasta.setValue(ym.atEndOfMonth());
 
         // Acciones
         btnDecargarPdf.setOnAction(e -> descargarpdf());
         btnDescargarExcel.setOnAction(e -> descargarexcel());
         btnbuscar.setOnAction(this::Buscar);
-    }
-
-    // ====== CARGA DE COMBOS ======
-
-    private void cargarMeses() {
-        for (int m = 1; m <= 12; m++) {
-            cmbPeriodo.getItems().add(m);
-        }
-    }
-
-    private void cargarAniosDesdeBD() {
-        String sql = "SELECT DISTINCT EXTRACT(YEAR FROM fecha) AS anio FROM tbl_partidas ORDER BY anio DESC";
-
-        try (Connection conn = ConexionDB.connection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                cmbAño.getItems().add(rs.getInt("anio"));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error cargando años: " + e.getMessage());
-        }
     }
 
     // ====== NAVEGACIÓN BALANCES ======
@@ -148,17 +115,38 @@ public class BalanceComprobacionSaldosController extends BaseController {
 
     @FXML
     void Buscar(ActionEvent event) {
-        Integer mes = cmbPeriodo.getValue();
-        Integer anio = cmbAño.getValue();
+        LocalDate desde = dateDesde.getValue();
+        LocalDate hasta = dateHasta.getValue();
 
-        if (mes == null || anio == null) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Selecciona un mes y un año.");
+        if (desde == null || hasta == null) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Selecciona fecha Desde y Hasta.");
             return;
         }
 
-        var lista = BalanceComprobacionDAO.obtenerBalanceMensual(mes, anio);
+        if (hasta.isBefore(desde)) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "La fecha Hasta no puede ser menor que Desde.");
+            return;
+        }
+
+        var lista = BalanceComprobacionDAO.obtenerBalancePorRango(desde, hasta);
         tblComprobacionSaldos.setItems(FXCollections.observableArrayList(lista));
+
+        if (lista.isEmpty()) {
+            lblTotalDebe.setText("$0.00");
+            lblTotalHaber.setText("$0.00");
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Información",
+                    "No hay movimientos en ese rango de fechas.");
+            return;
+        }
+
+        // Calcular totales
+        double totalDebe = lista.stream().mapToDouble(BalanceComprobacion::getDebe).sum();
+        double totalHaber = lista.stream().mapToDouble(BalanceComprobacion::getHaber).sum();
+
+        lblTotalDebe.setText(String.format("$%.2f", totalDebe));
+        lblTotalHaber.setText(String.format("$%.2f", totalHaber));
     }
+
 
     // ====== NAVEGACIÓN GENERAL ======
 
@@ -237,7 +225,7 @@ public class BalanceComprobacionSaldosController extends BaseController {
             documento.open();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String fecha = LocalDateTime.now().format(formatter);
+            String fechaGen = LocalDateTime.now().format(formatter);
 
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Paragraph titulo = new Paragraph("COMPROBACION DE SALDOS", fontTitulo);
@@ -245,7 +233,11 @@ public class BalanceComprobacionSaldosController extends BaseController {
             titulo.setSpacingAfter(5);
 
             Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
-            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            String rango = "";
+            if (dateDesde.getValue() != null && dateHasta.getValue() != null) {
+                rango = "  (Desde " + dateDesde.getValue() + " Hasta " + dateHasta.getValue() + ")";
+            }
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fechaGen + rango, fontFecha);
             fechaParrafo.setAlignment(Element.ALIGN_CENTER);
             fechaParrafo.setSpacingAfter(20);
 
@@ -255,7 +247,6 @@ public class BalanceComprobacionSaldosController extends BaseController {
             PdfPTable tablaPDF = new PdfPTable(4); // Codigo, Cuenta, Debe, Haber
             tablaPDF.setWidthPercentage(100);
 
-            // encabezados
             String[] headers = {"Codigo", "Cuenta", "Debe", "Haber"};
             for (String h : headers) {
                 PdfPCell celda = new PdfPCell(new Phrase(h));
@@ -307,14 +298,12 @@ public class BalanceComprobacionSaldosController extends BaseController {
             XSSFSheet hoja = workbook.createSheet("Balance Comprobacion");
             int filaIndex = 0;
 
-            // cabecera
             Row filaCabecera = hoja.createRow(filaIndex++);
             filaCabecera.createCell(0).setCellValue("Codigo");
             filaCabecera.createCell(1).setCellValue("Cuenta");
             filaCabecera.createCell(2).setCellValue("Debe");
             filaCabecera.createCell(3).setCellValue("Haber");
 
-            // datos
             for (BalanceComprobacion b : tblComprobacionSaldos.getItems()) {
                 Row fila = hoja.createRow(filaIndex++);
                 fila.createCell(0).setCellValue(b.getCodigo());
