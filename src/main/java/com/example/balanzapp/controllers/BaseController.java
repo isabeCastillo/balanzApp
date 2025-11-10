@@ -28,20 +28,23 @@ public class BaseController {
 
     public void cargarDatosUsuario() {
         Usuario usuario = sessionUsu.getUsuarioActivo();
-
         if (usuario == null) return;
 
-        lblUs.setText(usuario.getNombre());
-        lblad.setText(usuario.getRol().getNombre_rol());
+        if (lblUs != null) {
+            lblUs.setText(usuario.getNombre());
+        }
+        if (lblad != null && usuario.getRol() != null) {
+            lblad.setText(usuario.getRol().getNombre_rol());
+        }
 
-        int nivel = usuario.getRol().getNivel_acceso();
+        int nivel = usuario.getRol() != null ? usuario.getRol().getNivel_acceso() : 3;
 
-        // Permisos
-        btnusuario.setVisible(nivel == 1);
-        btnbitacora.setVisible(nivel == 1 || nivel == 3);
-        btndoc.setVisible(nivel <= 2);
-        btnlibrodiario.setVisible(nivel <= 2);
-        btnlibromayor.setVisible(nivel <= 2);
-        btncatalogo.setVisible(nivel <= 2);
+        if (btnusuario != null)   btnusuario.setVisible(nivel == 1);
+        if (btnbitacora != null)  btnbitacora.setVisible(nivel == 1 || nivel == 3);
+        if (btndoc != null)       btndoc.setVisible(nivel <= 2);
+        if (btnlibrodiario != null) btnlibrodiario.setVisible(nivel <= 2);
+        if (btnlibromayor != null)  btnlibromayor.setVisible(nivel <= 2);
+        if (btncatalogo != null)    btncatalogo.setVisible(nivel <= 2);
     }
+
 }

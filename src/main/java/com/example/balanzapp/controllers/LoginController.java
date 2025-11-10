@@ -40,13 +40,11 @@ public class LoginController {
 
         if (usuarioLogueado != null) {
             try {
-                // Cargar la vista de inicio
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/inicio.fxml"));
-                Parent root = loader.load();
-
-                // Pasar los datos del usuario al InicioController
                 sessionUsu.setUsuarioActivo(usuarioLogueado);
 
+                // Luego cargar la vista de inicio
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/inicio.fxml"));
+                Parent root = loader.load();
 
                 Stage stage = (Stage) txtUsuario.getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -60,6 +58,7 @@ public class LoginController {
             mostrarError("Usuario o contraseña incorrectos.");
         }
     }
+
 
     private Usuario autenticarUsuario(String usuarioTxt, String contrasenaTxt) {
         Usuario usuario = null;

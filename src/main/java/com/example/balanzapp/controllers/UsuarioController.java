@@ -23,7 +23,7 @@ import java.sql.*;
 import java.time.LocalDate;
 
 
-public class UsuarioController {
+public class UsuarioController extends BaseController {
 
     @FXML private TextField txtNombre;
     @FXML private ComboBox<String> cmbGenero;
@@ -66,7 +66,7 @@ public class UsuarioController {
             mostrarAlerta("Acceso denegado", "Solo el Administrador puede gestionar usuarios.");
             return;
         }
-
+        cargarDatosUsuario();
         configurarTabla();
         cargarRoles();
         cargarUsuarios();
