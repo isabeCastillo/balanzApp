@@ -18,6 +18,10 @@ public class MainApp extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("BalanzApp");
         stage.setScene(scene);
+
+
+        stage.setMaximized(true);
+
         stage.show();
     }
 
