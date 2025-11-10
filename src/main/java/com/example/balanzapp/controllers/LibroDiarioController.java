@@ -37,6 +37,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class LibroDiarioController extends BaseController{
@@ -375,10 +376,40 @@ public class LibroDiarioController extends BaseController{
             limpiarFormulario();
             cargarTablaHistorial();
 
+            Connection conn = ConexionDB.connection();
+
+            // Traer detalle completo de líneas del asiento
+            StringBuilder detalleCompleto = new StringBuilder();
+            for (DetallePartidaTemp linea : detalles ) {  // tú ya tienes este array o lista en tu controlador
+                detalleCompleto.append("Cuenta: ")
+                        .append(linea.getCuenta())
+                        .append(" - Debe: ").append(linea.getDebe())
+                        .append(" - Haber: ").append(linea.getHaber())
+                        .append("\n");
+            }
+
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+
+            String accion = "Registros ";
+            PreparedStatement psBitacora = conn.prepareStatement(
+                    "INSERT INTO tbl_bitacaud (id_usuario, accion, modulo, detalles, fecha, hora) VALUES (?, ?, ?, ?, ?, ?)"
+            );
+
+            psBitacora.setInt(1, usuario.getId_usuario()); // este es el usuario logueado (ya lo tienes guardado en sesión)
+            psBitacora.setString(2, accion); // concepto de partida
+            psBitacora.setString(3, "Libro Diario");
+            psBitacora.setString(4, detalleCompleto.toString()); // opción C
+            psBitacora.setDate(5, java.sql.Date.valueOf(fechaActual));
+            psBitacora.setTime(6, java.sql.Time.valueOf(horaActual));
+
+            psBitacora.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
             mostrarError("Error al guardar la partida: " + e.getMessage());
         }
+
     }
 
     // ================== DOCUMENTO FUENTE ==================

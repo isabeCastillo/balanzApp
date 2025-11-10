@@ -103,7 +103,7 @@
                       <Label layoutX="296.0" layoutY="74.0" text="Desde" />
                       <Label layoutX="516.0" layoutY="74.0" text="Hasta" />
                       <Label layoutX="296.0" layoutY="167.0" text="Modulo" />
-                      <ComboBox layoutX="20.0" layoutY="104.0" prefWidth="150.0" />
+                      <ComboBox fx:id="cmbusu" layoutX="20.0" layoutY="104.0" prefWidth="150.0" />
                       <DatePicker layoutX="226.0" layoutY="104.0" />
                       <DatePicker layoutX="444.0" layoutY="104.0" />
                       <ComboBox layoutX="242.0" layoutY="184.0" prefWidth="150.0" />
@@ -112,12 +112,12 @@
                       <Button fx:id="btndescargarExcel" layoutX="401.0" layoutY="243.0" mnemonicParsing="false" text="Descargar Excel" />
                       <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="307.0" prefHeight="200.0" prefWidth="573.0">
                         <columns>
-                          <TableColumn prefWidth="75.0" text="Usuario" />
-                          <TableColumn prefWidth="113.3333740234375" text="Accion Realizada" />
-                            <TableColumn prefWidth="77.333251953125" text="Rol" />
-                            <TableColumn prefWidth="106.0" text="Modulo" />
-                            <TableColumn prefWidth="108.66668701171875" text="Fecha" />
-                            <TableColumn prefWidth="92.0" text="Hora" />
+                          <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
+                          <TableColumn fx:id="colAccion" prefWidth="113.3333740234375" text="Accion Realizada" />
+                            <TableColumn fx:id="colRol" prefWidth="77.333251953125" text="Rol" />
+                            <TableColumn fx:id="colModulo" prefWidth="106.0" text="Modulo" />
+                            <TableColumn fx:id="colFecha" prefWidth="108.66668701171875" text="Fecha" />
+                            <TableColumn fx:id="colHora" prefWidth="92.0" text="Hora" />
                         </columns>
                       </TableView>
                    </children>

@@ -1,10 +1,16 @@
 package com.example.balanzapp.controllers;
 
+import com.example.balanzapp.Conexion.ConexionDB;
+import com.example.balanzapp.models.Bitacora;
+import com.example.balanzapp.models.Usuario;
+import com.example.balanzapp.utils.sessionUsu;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -22,6 +29,10 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -63,7 +74,7 @@ public class BitacoraController extends BaseController {
     private Label lblad;
 
     @FXML
-    private TableView<?> tblbitacora;
+    private TableView<Bitacora> tblbitacora;
 
     @FXML
     private Button btndescargarExcel;
@@ -72,7 +83,28 @@ public class BitacoraController extends BaseController {
     private Button btndescargarPdf;
 
     @FXML
-    private void initialize(){
+    private TableColumn<Bitacora, String> colAccion;
+
+    @FXML
+    private TableColumn<Bitacora, String> colFecha;
+
+    @FXML
+    private TableColumn<Bitacora, String> colHora;
+
+    @FXML
+    private TableColumn<Bitacora, String> colModulo;
+
+    @FXML
+    private TableColumn<Bitacora, String> colRol;
+
+    @FXML
+    private ComboBox<String> cmbusu;
+
+    @FXML
+    private TableColumn<Bitacora, String> colUsuario;
+
+    @FXML
+    public void initialize() {
         cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
@@ -80,8 +112,17 @@ public class BitacoraController extends BaseController {
         );
         cmbbalances.setOnAction(event -> balanceSelec());
         btndescargarPdf.setOnAction(event -> descargarpdf());
-        btndescargarExcel.setOnAction(e -> descargarexcel());
+        btndescargarExcel.setOnAction(event -> descargarexcel());
 
+        tblbitacora.setItems(obtenerBitacora());
+        colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        colAccion.setCellValueFactory(new PropertyValueFactory<>("accionRealizada"));
+        colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+        colModulo.setCellValueFactory(new PropertyValueFactory<>("modulo"));
+        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
+
+        cargarUsuariosCombo();
     }
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
@@ -340,4 +381,53 @@ public class BitacoraController extends BaseController {
         }
     }
 
+    public ObservableList<Bitacora> obtenerBitacora() {
+        ObservableList<Bitacora> lista = FXCollections.observableArrayList();
+        Connection conn = ConexionDB.connection();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT u.nombre AS usuario," +
+                            " b.accion AS accionRealizada, r.nombre_rol AS rol, b.modulo, b.fecha, b.hora " +
+                            "FROM tbl_bitacaud b " +
+                            "INNER JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario " +
+                            "INNER JOIN tbl_roles r ON u.id_rol = r.id_rol " +
+                            "ORDER BY b.fecha DESC, b.hora DESC"
+            );
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                lista.add(new Bitacora(
+                        rs.getString("usuario"),
+                        rs.getString("accionRealizada"),
+                        rs.getString("rol"),
+                        rs.getString("modulo"),
+                        rs.getDate("fecha").toString(),
+                        rs.getTime("hora").toString()
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+    public void cargarUsuariosCombo() {
+        ObservableList<String> listaUsuarios = FXCollections.observableArrayList();
+
+        try {
+            Connection conn = ConexionDB.connection();
+            PreparedStatement ps = conn.prepareStatement("SELECT nombre FROM tbl_usuarios");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaUsuarios.add(rs.getString("nombre"));
+            }
+
+            cmbusu.setItems(listaUsuarios);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
