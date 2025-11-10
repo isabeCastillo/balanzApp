@@ -207,11 +207,10 @@ public class BalanceComprobacionSaldosController extends BaseController {
     }
 
     // ====== EXPORTAR PDF ======
-
     @FXML
     private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Balance De Comprobación como PDF");
+        fileChooser.setTitle("Guardar Balance de Comprobación como PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
         fileChooser.setInitialFileName("Comprobacion_Saldos.pdf");
 
@@ -225,29 +224,27 @@ public class BalanceComprobacionSaldosController extends BaseController {
             documento.open();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String fechaGen = LocalDateTime.now().format(formatter);
+            String fecha = LocalDateTime.now().format(formatter);
 
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
-            Paragraph titulo = new Paragraph("COMPROBACION DE SALDOS", fontTitulo);
+            Paragraph titulo = new Paragraph("BALANZA DE COMPROBACIÓN DE SALDOS", fontTitulo);
             titulo.setAlignment(Element.ALIGN_CENTER);
             titulo.setSpacingAfter(5);
 
             Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
-            String rango = "";
-            if (dateDesde.getValue() != null && dateHasta.getValue() != null) {
-                rango = "  (Desde " + dateDesde.getValue() + " Hasta " + dateHasta.getValue() + ")";
-            }
-            Paragraph fechaParrafo = new Paragraph("Generado el: " + fechaGen + rango, fontFecha);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
             fechaParrafo.setAlignment(Element.ALIGN_CENTER);
             fechaParrafo.setSpacingAfter(20);
 
             documento.add(titulo);
             documento.add(fechaParrafo);
 
-            PdfPTable tablaPDF = new PdfPTable(4); // Codigo, Cuenta, Debe, Haber
+            // Tabla con 4 columnas: Código, Cuenta, Debe, Haber
+            PdfPTable tablaPDF = new PdfPTable(4);
             tablaPDF.setWidthPercentage(100);
 
-            String[] headers = {"Codigo", "Cuenta", "Debe", "Haber"};
+            // Encabezados
+            String[] headers = {"Código", "Cuenta", "Debe", "Haber"};
             for (String h : headers) {
                 PdfPCell celda = new PdfPCell(new Phrase(h));
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -261,12 +258,33 @@ public class BalanceComprobacionSaldosController extends BaseController {
                 celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablaPDF.addCell(celdaVacia);
             } else {
-                for (BalanceComprobacion b : tblComprobacionSaldos.getItems()) {
-                    tablaPDF.addCell(b.getCodigo());
-                    tablaPDF.addCell(b.getCuenta());
-                    tablaPDF.addCell(String.format("%.2f", b.getDebe()));
-                    tablaPDF.addCell(String.format("%.2f", b.getHaber()));
+
+                double totalDebe = 0.0;
+                double totalHaber = 0.0;
+
+                for (BalanceComprobacion fila : tblComprobacionSaldos.getItems()) {
+                    tablaPDF.addCell(fila.getCodigo());
+                    tablaPDF.addCell(fila.getCuenta());
+                    tablaPDF.addCell(String.format("%.2f", fila.getDebe()));
+                    tablaPDF.addCell(String.format("%.2f", fila.getHaber()));
+
+                    totalDebe += fila.getDebe();
+                    totalHaber += fila.getHaber();
                 }
+
+                // Fila de totales
+                PdfPCell celdaTot = new PdfPCell(new Phrase("TOTALES:"));
+                celdaTot.setColspan(2);
+                celdaTot.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                celdaTot.setBackgroundColor(BaseColor.YELLOW);
+                tablaPDF.addCell(celdaTot);
+
+                PdfPCell celdaTotDebe = new PdfPCell(new Phrase(String.format("%.2f", totalDebe)));
+                PdfPCell celdaTotHaber = new PdfPCell(new Phrase(String.format("%.2f", totalHaber)));
+                celdaTotDebe.setBackgroundColor(BaseColor.YELLOW);
+                celdaTotHaber.setBackgroundColor(BaseColor.YELLOW);
+                tablaPDF.addCell(celdaTotDebe);
+                tablaPDF.addCell(celdaTotHaber);
             }
 
             documento.add(tablaPDF);
@@ -279,13 +297,13 @@ public class BalanceComprobacionSaldosController extends BaseController {
         }
     }
 
-    // ====== EXPORTAR EXCEL ======
 
+    // ====== EXPORTAR EXCEL ======
     @FXML
     private void descargarexcel() {
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Balance Comprobacion De Saldos en Excel");
+        fileChooser.setTitle("Guardar Balance Comprobación de Saldos en Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
         fileChooser.setInitialFileName("Comprobacion_de_Saldos.xlsx");
 
@@ -295,23 +313,38 @@ public class BalanceComprobacionSaldosController extends BaseController {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
-            XSSFSheet hoja = workbook.createSheet("Balance Comprobacion");
+            XSSFSheet hoja = workbook.createSheet("Balance Comprobación");
             int filaIndex = 0;
 
+            // Encabezados
             Row filaCabecera = hoja.createRow(filaIndex++);
-            filaCabecera.createCell(0).setCellValue("Codigo");
+            filaCabecera.createCell(0).setCellValue("Código");
             filaCabecera.createCell(1).setCellValue("Cuenta");
             filaCabecera.createCell(2).setCellValue("Debe");
             filaCabecera.createCell(3).setCellValue("Haber");
 
-            for (BalanceComprobacion b : tblComprobacionSaldos.getItems()) {
+            double totalDebe = 0.0;
+            double totalHaber = 0.0;
+
+            for (BalanceComprobacion item : tblComprobacionSaldos.getItems()) {
                 Row fila = hoja.createRow(filaIndex++);
-                fila.createCell(0).setCellValue(b.getCodigo());
-                fila.createCell(1).setCellValue(b.getCuenta());
-                fila.createCell(2).setCellValue(b.getDebe());
-                fila.createCell(3).setCellValue(b.getHaber());
+                fila.createCell(0).setCellValue(item.getCodigo());
+                fila.createCell(1).setCellValue(item.getCuenta());
+                fila.createCell(2).setCellValue(item.getDebe());
+                fila.createCell(3).setCellValue(item.getHaber());
+
+                totalDebe += item.getDebe();
+                totalHaber += item.getHaber();
             }
 
+            // Fila de totales
+            Row filaTotales = hoja.createRow(filaIndex++);
+            filaTotales.createCell(0).setCellValue("TOTALES:");
+            filaTotales.createCell(1).setCellValue("");
+            filaTotales.createCell(2).setCellValue(totalDebe);
+            filaTotales.createCell(3).setCellValue(totalHaber);
+
+            // Ajustar ancho de columnas
             for (int i = 0; i < 4; i++) {
                 hoja.autoSizeColumn(i);
             }
@@ -320,14 +353,14 @@ public class BalanceComprobacionSaldosController extends BaseController {
                 workbook.write(fileOut);
             }
 
-            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito",
-                    "El archivo Excel se generó correctamente.");
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El archivo Excel se generó correctamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error al generar Excel: " + e.getMessage());
         }
     }
+
 
     // ====== ALERTAS ======
 
