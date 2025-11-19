@@ -67,7 +67,7 @@ public class RegisterController {
             ps.setString(7, txtCorreo.getText());
             ps.setString(8, txtUsuario.getText());
             ps.setString(9, txtContrasena.getText());
-            ps.setInt(10, 2); // Rol por defecto = 2 → Usuario normal
+            ps.setInt(10, 3); // Rol por defecto = 3 → Usuario normal
 
             ps.executeUpdate();
 
