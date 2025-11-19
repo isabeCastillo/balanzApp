@@ -16,134 +16,123 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1358.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.LibroMayorController">
-
+<AnchorPane prefHeight="650.0" prefWidth="1373.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.LibroMayorController">
     <children>
-        <SplitPane dividerPositions="0.14308943089430895" prefHeight="800.0" prefWidth="1373.0">
+        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
             <items>
-
-                <!-- PANEL IZQUIERDO (NAVBAR) -->
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="797.0" prefWidth="221.0" style="-fx-background-color: #5A238A;">
+                <AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
                     <children>
-                        <VBox layoutY="81.0" prefHeight="425.0" prefWidth="219.0">
-                            <children>
-                                <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="47.0" prefWidth="236.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <ComboBox fx:id="cmbbalances" prefHeight="51.0" prefWidth="207.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                    <effect><ColorAdjust brightness="1.0" /></effect>
-                                </ComboBox>
-                                <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                                <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
-                                    <font><Font name="Georgia Bold Italic" size="12.0" /></font>
-                                </Button>
-                            </children>
-                        </VBox>
+                        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
+                            <items>
 
-                        <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
-                            <font><Font name="Georgia Bold" size="12.0" /></font>
-                        </Button>
+                                <!-- LADO IZQUIERDO (SIDEBAR) -->
+                                <AnchorPane styleClass="sidebar" prefWidth="230">
 
-                        <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
-                            <font><Font name="Georgia Bold" size="12.0" /></font>
-                        </Label>
-                        <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
-                            <font><Font name="Georgia Bold" size="12.0" /></font>
-                        </Label>
+                                    <!-- CONTENEDOR PRINCIPAL DEL SIDEBAR -->
+                                    <VBox spacing="20" alignment="TOP_CENTER" prefWidth="230" AnchorPane.topAnchor="20">
 
-                        <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
-                            <image><Image url="@../imagenes/user.png" /></image>
-                        </ImageView>
-                        <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="16.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
-                            <image><Image url="@../imagenes/logout.png" /></image>
-                        </ImageView>
+                                        <!-- SECCIÓN: Usuario -->
+                                        <VBox alignment="CENTER" spacing="4">
+                                            <Label fx:id="lblUs"  text="Nombre" styleClass="user-name"/>
+                                            <Label fx:id="lblad"  text="Rol"     styleClass="user-role"/>
+                                        </VBox>
+
+                                        <!-- SECCIÓN: Menú -->
+                                        <VBox spacing="6" prefWidth="210">
+
+                                            <Button fx:id="btninicio"            text="Inicio"                 onAction="#goToHome"             styleClass="nav-btn"/>
+                                            <Button fx:id="btndoc"               text="Documentos"            onAction="#goToDoc"              styleClass="nav-btn"/>
+                                            <Button fx:id="btnlibrodiario"       text="Libro Diario"          onAction="#goToLibroDiario"      styleClass="nav-btn"/>
+                                            <Button fx:id="btnlibromayor"        text="Libro Mayor"           onAction="#goToLibroMayor"       styleClass="nav-btn"/>
+
+                                            <ComboBox fx:id="cmbbalances" promptText="Balances" styleClass="combo"/>
+
+                                            <Button fx:id="btnestadoderesultados" text="Estado de Resultados" onAction="#goToEstadoResultados" styleClass="nav-btn"/>
+                                            <Button fx:id="btncatalogo"           text="Catálogo de Cuentas"  onAction="#goToCatalogoCuentas"  styleClass="nav-btn"/>
+                                            <Button fx:id="btnusuario"            text="Usuario"              onAction="#goToUsuario"          styleClass="nav-btn"/>
+                                            <Button fx:id="btnbitacora"           text="Bitácora del Auditor" onAction="#goToBitacoraAuditor" styleClass="nav-btn"/>
+
+                                        </VBox>
+
+                                        <!-- ESPACIADOR AUTOMÁTICO -->
+                                        <VBox VBox.vgrow="ALWAYS"></VBox>
+
+                                        <!-- BOTÓN CERRAR SESIÓN (CENTRADO) -->
+                                        <Button fx:id="btncerrar" text="Cerrar Sesión" onAction="#Close" styleClass="logout-btn"/>
+
+                                    </VBox>
+                                </AnchorPane>
+
+
+                                <!-- LADO DERECHO -->
+                                <AnchorPane prefWidth="500.0">
+                                    <children>
+                                        <VBox layoutX="30.0" prefHeight="598.0" prefWidth="1115.0" spacing="15.0">
+                                            <children>
+                                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="1076.0" styleClass="titulo" text="Libro Mayor" />
+
+                                                <!-- FILTROS -->
+                                                <GridPane hgap="3" vgap="3">
+                                                    <children>
+                                                        <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+                                                        <ComboBox fx:id="comboCuenta" minWidth="-Infinity" prefHeight="39.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                        <Label prefHeight="17.0" prefWidth="40.0" text="Desde:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+                                                        <DatePicker fx:id="dateDesde" prefHeight="45.0" prefWidth="172.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                                        <Label text="Hasta:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+                                                        <DatePicker fx:id="dateHasta" prefHeight="45.0" prefWidth="181.0" GridPane.columnIndex="5" />
+                                                    </children>
+                                                    <columnConstraints>
+                                                        <ColumnConstraints maxWidth="145.0" minWidth="42.0" prefWidth="66.0" />
+                                                        <ColumnConstraints maxWidth="193.0" minWidth="90.0" prefWidth="169.0" />
+                                                        <ColumnConstraints maxWidth="111.0" minWidth="37.0" prefWidth="111.0" />
+                                                        <ColumnConstraints maxWidth="219.0" minWidth="114.0" prefWidth="163.0" />
+                                                        <ColumnConstraints maxWidth="146.0" minWidth="36.0" prefWidth="126.0" />
+                                                        <ColumnConstraints maxWidth="163.0" minWidth="28.0" prefWidth="148.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints />
+                                                    </rowConstraints>
+                                                </GridPane>
+
+                                                <!-- BOTONES -->
+                                                <HBox prefHeight="25.0" prefWidth="966.0" spacing="30.0">
+                                                    <children>
+                                                        <Button fx:id="bntbuscar" prefHeight="25.0" prefWidth="171.0" text="Buscar" HBox.hgrow="ALWAYS" />
+                                                        <Button fx:id="btndescargarpdf" prefHeight="25.0" prefWidth="179.0" text="Descargar PDF" />
+                                                        <Button fx:id="btndescargarexcel" prefHeight="25.0" prefWidth="146.0" text="Descargar Excel" />
+                                                    </children>
+                                                </HBox>
+
+                                                <!-- ESQUEMA DE MAYOR: DOS CAJAS + SALDO -->
+                                                <Label fx:id="lblNombreYTipoCuenta" prefHeight="56.0" prefWidth="521.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="NOMBRE DE LA CUENTA - TIPO DE CUENTA" textAlignment="CENTER" />
+                                                <Separator />
+
+                                                <HBox alignment="CENTER" prefHeight="28.0" prefWidth="1082.0" spacing="200">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="DEBE" />
+                                                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="HABER" />
+                                                    </children>
+                                                </HBox>
+
+                                                <HBox alignment="CENTER" prefHeight="293.0" prefWidth="1117.0" spacing="10.0">
+                                                    <children>
+                                                        <ListView fx:id="listDebe" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 1;" HBox.hgrow="ALWAYS" />
+                                                        <ListView fx:id="listHaber" minWidth="-Infinity" prefHeight="293.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 1;" HBox.hgrow="ALWAYS" />
+                                                    </children>
+                                                </HBox>
+
+                                                <Label fx:id="lblSaldo" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="SALDO: $0.00" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
                     </children>
                 </AnchorPane>
-
-                <!-- PANEL DERECHO (CONTENIDO LIBRO MAYOR) -->
-                <AnchorPane prefWidth="500.0">
-                    <children>
-                        <VBox layoutX="30.0" prefHeight="598.0" prefWidth="1115.0" spacing="15.0">
-                            <children>
-                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="1076.0" styleClass="titulo" text="Libro Mayor" />
-
-                                <!-- FILTROS -->
-                                <GridPane hgap="3" vgap="3">
-                                    <children>
-                                        <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
-                                        <ComboBox fx:id="comboCuenta" minWidth="-Infinity" prefHeight="39.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                                        <Label prefHeight="17.0" prefWidth="40.0" text="Desde:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
-                                        <DatePicker fx:id="dateDesde" prefHeight="45.0" prefWidth="172.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-
-                                        <Label text="Hasta:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
-                                        <DatePicker fx:id="dateHasta" prefHeight="45.0" prefWidth="181.0" GridPane.columnIndex="5" />
-                                    </children>
-                                    <columnConstraints>
-                                        <ColumnConstraints maxWidth="145.0" minWidth="42.0" prefWidth="66.0" />
-                                        <ColumnConstraints maxWidth="193.0" minWidth="90.0" prefWidth="169.0" />
-                                        <ColumnConstraints maxWidth="111.0" minWidth="37.0" prefWidth="111.0" />
-                                        <ColumnConstraints maxWidth="219.0" minWidth="114.0" prefWidth="163.0" />
-                                        <ColumnConstraints maxWidth="146.0" minWidth="36.0" prefWidth="126.0" />
-                                        <ColumnConstraints maxWidth="163.0" minWidth="28.0" prefWidth="148.0" />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints />
-                                    </rowConstraints>
-                                </GridPane>
-
-                                <!-- BOTONES -->
-                                <HBox prefHeight="25.0" prefWidth="966.0" spacing="30.0">
-                                    <children>
-                                        <Button fx:id="bntbuscar" prefHeight="25.0" prefWidth="171.0" text="Buscar" HBox.hgrow="ALWAYS" />
-                                        <Button fx:id="btndescargarpdf" prefHeight="25.0" prefWidth="179.0" text="Descargar PDF" />
-                                        <Button fx:id="btndescargarexcel" prefHeight="25.0" prefWidth="146.0" text="Descargar Excel" />
-                                    </children>
-                                </HBox>
-
-                                <!-- ESQUEMA DE MAYOR: DOS CAJAS + SALDO -->
-                                <Label fx:id="lblNombreYTipoCuenta" prefHeight="56.0" prefWidth="521.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="NOMBRE DE LA CUENTA - TIPO DE CUENTA" textAlignment="CENTER" />
-                                <Separator />
-
-                                <HBox alignment="CENTER" prefHeight="28.0" prefWidth="1082.0" spacing="200">
-                                    <children>
-                                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="DEBE" />
-                                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="HABER" />
-                                    </children>
-                                </HBox>
-
-                                <HBox alignment="CENTER" prefHeight="293.0" prefWidth="1117.0" spacing="10.0">
-                                    <children>
-                                        <ListView fx:id="listDebe" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 1;" HBox.hgrow="ALWAYS" />
-                                        <ListView fx:id="listHaber" minWidth="-Infinity" prefHeight="293.0" prefWidth="500.0" style="-fx-border-color: black; -fx-border-width: 1;" HBox.hgrow="ALWAYS" />
-                                    </children>
-                                </HBox>
-
-                                <Label fx:id="lblSaldo" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="SALDO: $0.00" />
-                            </children>
-                        </VBox>
-                    </children>
-                </AnchorPane>
-
             </items>
         </SplitPane>
     </children>

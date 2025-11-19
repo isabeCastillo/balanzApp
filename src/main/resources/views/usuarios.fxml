@@ -9,145 +9,120 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.ColorAdjust?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.UsuarioController">
+<AnchorPane prefHeight="650.0" prefWidth="1373.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.UsuarioController">
     <children>
         <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
             <items>
-                <!-- Menú lateral -->
-                <AnchorPane style="-fx-background-color: #5A238A;">
+                <AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
                     <children>
-                        <VBox layoutY="81.0" prefHeight="425.0" prefWidth="207.0">
-                            <children>
-                                <Button fx:id="btninicio" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToHome" prefHeight="51.0" prefWidth="207.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Inicio                         " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <Button fx:id="btndoc" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToDoc" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Documentos               " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <Button fx:id="btnlibrodiario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroDiario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Diario                " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <Button fx:id="btnlibromayor" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToLibroMayor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Libro Mayor                 " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <ComboBox fx:id="cmbbalances" prefHeight="51.0" prefWidth="207.0" promptText=" Balances" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                    <effect>
-                                        <ColorAdjust brightness="1.0" />
-                                    </effect>
-                                </ComboBox>
-                                <Button fx:id="btnestadoderesultados" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToEstadoResultados" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Estado De Resultados " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <Button fx:id="btncatalogo" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToCatalogoCuentas" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Catalogo de cuentas    " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <Button fx:id="btnusuario" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToUsuario" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Usuario                       " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                                <Button fx:id="btnbitacora" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#goToBitacoraAuditor" prefHeight="51.0" prefWidth="207.0" style="-fx-background-color: transparent;" text="Bitacora del Auditor    " textFill="WHITE">
-                                    <font>
-                                        <Font name="Georgia Bold Italic" size="12.0" />
-                                    </font></Button>
-                            </children>
-                        </VBox>
-                        <Button fx:id="btncerrar" alignment="BASELINE_LEFT" layoutX="48.0" layoutY="523.0" mnemonicParsing="false" onAction="#Close" prefHeight="38.0" prefWidth="121.0" style="-fx-background-color: transparent;" text="Cerrar Sesion" textFill="WHITE">
-                            <font>
-                                <Font name="Georgia Bold" size="12.0" />
-                            </font></Button>
-                        <Label fx:id="lblUs" layoutX="52.0" layoutY="29.0" prefHeight="17.0" prefWidth="102.0" text="Nombre" textFill="#fdfdfd">
-                            <font>
-                                <Font name="Georgia Bold" size="12.0" />
-                            </font></Label>
-                        <Label fx:id="lblad" layoutX="51.0" layoutY="52.0" text="Rol" textFill="WHITE">
-                            <font>
-                                <Font name="Georgia Bold" size="12.0" />
-                            </font></Label>
-                        <ImageView fitHeight="38.0" fitWidth="34.0" layoutX="15.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../imagenes/user.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="16.0" layoutY="529.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../imagenes/logout.png" />
-                            </image>
-                        </ImageView>
+                        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
+                            <items>
+
+                                <!-- LADO IZQUIERDO (SIDEBAR) -->
+                                <AnchorPane styleClass="sidebar" prefWidth="230">
+
+                                    <!-- CONTENEDOR PRINCIPAL DEL SIDEBAR -->
+                                    <VBox spacing="20" alignment="TOP_CENTER" prefWidth="230" AnchorPane.topAnchor="20">
+
+                                        <!-- SECCIÓN: Usuario -->
+                                        <VBox alignment="CENTER" spacing="4">
+                                            <Label fx:id="lblUs"  text="Nombre" styleClass="user-name"/>
+                                            <Label fx:id="lblad"  text="Rol"     styleClass="user-role"/>
+                                        </VBox>
+
+                                        <!-- SECCIÓN: Menú -->
+                                        <VBox spacing="6" prefWidth="210">
+
+                                            <Button fx:id="btninicio"            text="Inicio"                 onAction="#goToHome"             styleClass="nav-btn"/>
+                                            <Button fx:id="btndoc"               text="Documentos"            onAction="#goToDoc"              styleClass="nav-btn"/>
+                                            <Button fx:id="btnlibrodiario"       text="Libro Diario"          onAction="#goToLibroDiario"      styleClass="nav-btn"/>
+                                            <Button fx:id="btnlibromayor"        text="Libro Mayor"           onAction="#goToLibroMayor"       styleClass="nav-btn"/>
+
+                                            <ComboBox fx:id="cmbbalances" promptText="Balances" styleClass="combo"/>
+
+                                            <Button fx:id="btnestadoderesultados" text="Estado de Resultados" onAction="#goToEstadoResultados" styleClass="nav-btn"/>
+                                            <Button fx:id="btncatalogo"           text="Catálogo de Cuentas"  onAction="#goToCatalogoCuentas"  styleClass="nav-btn"/>
+                                            <Button fx:id="btnusuario"            text="Usuario"              onAction="#goToUsuario"          styleClass="nav-btn"/>
+                                            <Button fx:id="btnbitacora"           text="Bitácora del Auditor" onAction="#goToBitacoraAuditor" styleClass="nav-btn"/>
+
+                                        </VBox>
+
+                                        <!-- ESPACIADOR AUTOMÁTICO -->
+                                        <VBox VBox.vgrow="ALWAYS"></VBox>
+
+                                        <!-- BOTÓN CERRAR SESIÓN (CENTRADO) -->
+                                        <Button fx:id="btncerrar" text="Cerrar Sesión" onAction="#Close" styleClass="logout-btn"/>
+
+                                    </VBox>
+                                </AnchorPane>
+
+
+                                <!-- LADO DERECHO -->
+                                <AnchorPane>
+                                    <children>
+                                        <Label layoutX="290.0" layoutY="31.0" text="Usuarios" textFill="#5a238a">
+                                            <font>
+                                                <Font size="24.0" />
+                                            </font></Label>
+
+                                        <Label layoutX="50.0" layoutY="95.0" text="Nombre Completo" />
+                                        <TextField fx:id="txtNombre" layoutX="50.0" layoutY="120.0" promptText="Nombre completo" />
+
+                                        <Label layoutX="296.0" layoutY="95.0" text="Género" />
+                                        <ComboBox fx:id="cmbGenero" layoutX="280.0" layoutY="116.0" promptText="Seleccione género" />
+
+                                        <Label layoutX="520.0" layoutY="95.0" text="Fecha Nacimiento" />
+                                        <DatePicker fx:id="dpFechaNacimiento" layoutX="507.0" layoutY="113.0" />
+
+                                        <Label layoutX="50.0" layoutY="170.0" text="DUI" />
+                                        <TextField fx:id="txtDUI" layoutX="50.0" layoutY="195.0" />
+
+                                        <Label layoutX="200.0" layoutY="170.0" text="Teléfono" />
+                                        <TextField fx:id="txtTelefono" layoutX="200.0" layoutY="195.0" />
+
+                                        <Label layoutX="350.0" layoutY="170.0" text="Dirección" />
+                                        <TextField fx:id="txtDireccion" layoutX="350.0" layoutY="195.0" />
+
+                                        <Label layoutX="500.0" layoutY="170.0" text="Correo" />
+                                        <TextField fx:id="txtCorreo" layoutX="500.0" layoutY="195.0" />
+
+                                        <Label layoutX="675.0" layoutY="170.0" text="Usuario" />
+                                        <TextField fx:id="txtNombreUsuario" layoutX="668.0" layoutY="195.0" promptText="Usuario" />
+
+                                        <Label layoutX="825.0" layoutY="170.0" text="Contraseña" />
+                                        <PasswordField fx:id="txtContraseña" layoutX="825.0" layoutY="195.0" />
+
+                                        <Label layoutX="787.0" layoutY="95.0" text="Rol" />
+                                        <ComboBox fx:id="cmbRoles" layoutX="774.0" layoutY="116.0" promptText="Seleccione rol" />
+
+                                        <Button fx:id="btnAgregarUsuario" layoutX="193.0" layoutY="260.0" mnemonicParsing="false" onAction="#agregarUsuario" text="Agregar" />
+                                        <Button fx:id="btnEditar" layoutX="476.0" layoutY="260.0" mnemonicParsing="false" onAction="#editarUsuario" text="Editar" />
+                                        <Button fx:id="btnEliminar" layoutX="713.0" layoutY="260.0" mnemonicParsing="false" onAction="#eliminarUsuario" text="Eliminar" />
+
+                                        <TableView fx:id="tblUsuarios" layoutX="50.0" layoutY="350.0" prefHeight="254.0" prefWidth="959.0">
+                                            <columns>
+                                                <TableColumn fx:id="colNombre" prefWidth="152.0" text="Nombre" />
+                                                <TableColumn fx:id="colGenero" minWidth="8.0" prefWidth="75.0" text="Género" />
+                                                <TableColumn fx:id="colFechaNacimiento" minWidth="5.0" prefWidth="100.0" text="Fecha Nacimiento" />
+                                                <TableColumn fx:id="colDUI" minWidth="0.0" prefWidth="94.0" text="DUI" />
+                                                <TableColumn fx:id="colTelefono" prefWidth="68.0" text="Teléfono" />
+                                                <TableColumn fx:id="colDireccion" prefWidth="120.0" text="Dirección" />
+                                                <TableColumn fx:id="colCorreo" prefWidth="150.0" text="Correo" />
+                                                <TableColumn fx:id="colUsuario" prefWidth="88.0" text="Usuario" />
+                                                <TableColumn fx:id="colRol" prefWidth="98.0" text="Rol" />
+                                            </columns>
+                                        </TableView>
+
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
                     </children>
                 </AnchorPane>
-
-                <!-- Formulario de usuario -->
-                <AnchorPane>
-                    <children>
-                        <Label layoutX="290.0" layoutY="31.0" text="Usuarios" textFill="#5a238a">
-                     <font>
-                        <Font size="24.0" />
-                     </font></Label>
-
-                        <Label layoutX="50.0" layoutY="95.0" text="Nombre Completo" />
-                        <TextField fx:id="txtNombre" layoutX="50.0" layoutY="120.0" promptText="Nombre completo" />
-
-                        <Label layoutX="296.0" layoutY="95.0" text="Género" />
-                        <ComboBox fx:id="cmbGenero" layoutX="280.0" layoutY="116.0" promptText="Seleccione género" />
-
-                        <Label layoutX="520.0" layoutY="95.0" text="Fecha Nacimiento" />
-                        <DatePicker fx:id="dpFechaNacimiento" layoutX="507.0" layoutY="113.0" />
-
-                        <Label layoutX="50.0" layoutY="170.0" text="DUI" />
-                        <TextField fx:id="txtDUI" layoutX="50.0" layoutY="195.0" />
-
-                        <Label layoutX="200.0" layoutY="170.0" text="Teléfono" />
-                        <TextField fx:id="txtTelefono" layoutX="200.0" layoutY="195.0" />
-
-                        <Label layoutX="350.0" layoutY="170.0" text="Dirección" />
-                        <TextField fx:id="txtDireccion" layoutX="350.0" layoutY="195.0" />
-
-                        <Label layoutX="500.0" layoutY="170.0" text="Correo" />
-                        <TextField fx:id="txtCorreo" layoutX="500.0" layoutY="195.0" />
-
-                        <Label layoutX="675.0" layoutY="170.0" text="Usuario" />
-                        <TextField fx:id="txtNombreUsuario" layoutX="668.0" layoutY="195.0" promptText="Usuario" />
-
-                        <Label layoutX="825.0" layoutY="170.0" text="Contraseña" />
-                        <PasswordField fx:id="txtContraseña" layoutX="825.0" layoutY="195.0" />
-
-                        <Label layoutX="787.0" layoutY="95.0" text="Rol" />
-                        <ComboBox fx:id="cmbRoles" layoutX="774.0" layoutY="116.0" promptText="Seleccione rol" />
-
-                        <Button fx:id="btnAgregarUsuario" layoutX="193.0" layoutY="260.0" mnemonicParsing="false" onAction="#agregarUsuario" text="Agregar" />
-                        <Button fx:id="btnEditar" layoutX="476.0" layoutY="260.0" mnemonicParsing="false" onAction="#editarUsuario" text="Editar" />
-                        <Button fx:id="btnEliminar" layoutX="713.0" layoutY="260.0" mnemonicParsing="false" onAction="#eliminarUsuario" text="Eliminar" />
-
-                        <TableView fx:id="tblUsuarios" layoutX="50.0" layoutY="350.0" prefHeight="254.0" prefWidth="959.0">
-                            <columns>
-                                <TableColumn fx:id="colNombre" prefWidth="152.0" text="Nombre" />
-                                <TableColumn fx:id="colGenero" minWidth="8.0" prefWidth="75.0" text="Género" />
-                                <TableColumn fx:id="colFechaNacimiento" minWidth="5.0" prefWidth="100.0" text="Fecha Nacimiento" />
-                                <TableColumn fx:id="colDUI" minWidth="0.0" prefWidth="94.0" text="DUI" />
-                                <TableColumn fx:id="colTelefono" prefWidth="68.0" text="Teléfono" />
-                                <TableColumn fx:id="colDireccion" prefWidth="120.0" text="Dirección" />
-                                <TableColumn fx:id="colCorreo" prefWidth="150.0" text="Correo" />
-                                <TableColumn fx:id="colUsuario" prefWidth="88.0" text="Usuario" />
-                                <TableColumn fx:id="colRol" prefWidth="98.0" text="Rol" />
-                            </columns>
-                        </TableView>
-
-                    </children>
-                </AnchorPane>
-
             </items>
         </SplitPane>
     </children>

@@ -1,100 +1,223 @@
 /* Fuente Cuprum desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cuprum&display=swap');
 
-.root {
-    -fx-font-family: 'Cuprum', sans-serif;
-}
-#fondo {
-    -fx-background-image: url("../imagenes/fondo.jpg");
-}
-/*LOGIN*/
-/* Panel izquierdo */
-#leftPanel {
-    -fx-background-image: url("../imagenes/fondo.jpg");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
-    -fx-background-position: center center;
-    -fx-pref-width: 260;
-    -fx-padding: 30;
+/* ====== SIDEBAR GENERAL ====== */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #3B0B68, #2A0F4A);
+    -fx-padding: 24 18 24 18;
 }
 
-#welcomeTitle {
-    -fx-text-fill: white;
+/* ====== DATOS DE USUARIO ====== */
+.user-name {
+    -fx-text-fill: #FDFDFD;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "System";
+}
+
+.user-role {
+    -fx-text-fill: #CDB7E3;
+    -fx-font-size: 12px;
+    -fx-font-family: "Segoe UI", "System";
+}
+
+/* Línea separadora */
+.user-separator {
+    -fx-background-color: #4B1B7A;
+    -fx-min-height: 1;
+}
+
+/* ====== BOTONES DE NAVEGACIÓN ====== */
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #EAE0F5;
+    -fx-font-family: "Segoe UI Semibold", "System";
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 14;
+    -fx-background-radius: 6;
+
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0), 0, 0, 0, 0);
+}
+
+.nav-btn:hover {
+    -fx-background-color: #4B1B7A;
+    -fx-text-fill: #FFFFFF;
+
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 12, 0.2, 0, 2);
+}
+
+/* Si quieres botón activo */
+.nav-btn-active {
+    -fx-background-color: #9D4EDD;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+}
+
+/* ====== COMBOBOX ====== */
+.combo {
+    -fx-background-color: #3B0B68;
+    -fx-border-color: #9D4EDD;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: #EAE0F5;
+    -fx-font-size: 13px;
+    -fx-padding: 4 8;
+    -fx-pref-width: 190;
+}
+
+.combo:hover {
+    -fx-border-color: #C77DFF;
+}
+
+/* ====== BOTÓN CERRAR SESIÓN ====== */
+.logout-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E0567A;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI Semibold", "System";
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 0;
+    -fx-alignment: CENTER;
+}
+
+.logout-btn:hover {
+    -fx-text-fill: #D61F69;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+/* ====== LOGIN LAYOUT GENERAL ====== */
+.login-root {
+    -fx-background-color: #F8F5FF;
+}
+
+/* PANEL IZQUIERDO CON DEGRADADO MORADO */
+.login-left {
+    -fx-background-color: linear-gradient(to bottom, #7B2FF7, #A855F7, #6D28D9);
+    -fx-padding: 40 32;
+}
+
+/* Textos del panel izquierdo */
+.welcome-title {
+    -fx-text-fill: #FFFFFF;
     -fx-font-size: 26px;
     -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "System";
 }
 
-#welcomeMessage {
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-wrap-text: true;
-}
-
-#noAccountLabel {
-    -fx-text-fill: white;
+.welcome-message {
+    -fx-text-fill: #F3E8FF;
     -fx-font-size: 13px;
-    -fx-padding: 10px;
+    -fx-font-family: "Segoe UI", "System";
 }
 
-#btnRegistro {
-    -fx-background-color: white;
-    -fx-text-fill: #5A008A;
-    -fx-font-weight: bold;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
+.small-text {
+    -fx-text-fill: #E5D9FF;
+    -fx-font-size: 12px;
 }
 
-/* Panel central */
-#centerPanel {
-    -fx-background-color: white;
-    -fx-padding: 30;
-}
-
-#userLabel, #passLabel {
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-}
-
-#btnIngresar {
-    -fx-background-color: #5A008A;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-}
-
-/*REGISTRO*/
-/* Panel izquierdo */
-#leftPanel {
-    -fx-background-color: #5A008A;
-    -fx-pref-width: 260;
-    -fx-padding: 30;
-}
-
-#registerTitle {
-    -fx-text-fill: white;
-    -fx-font-size: 26px;
-    -fx-font-weight: bold;
-}
-
-#registerMessage {
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-}
-
-#alreadyAccountLabel {
-    -fx-text-fill: white;
+/* Botón de registro (outline blanco) */
+.outline-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #FFFFFF;
+    -fx-border-radius: 999;
+    -fx-background-radius: 999;
+    -fx-padding: 6 20;
+    -fx-font-family: "Segoe UI Semibold", "System";
     -fx-font-size: 13px;
-}
-
-#btnLogin {
-    -fx-background-color: white;
-    -fx-text-fill: #5A008A;
-    -fx-font-weight: bold;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
     -fx-cursor: hand;
 }
+
+.outline-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.16);
+}
+
+/* ====== PANEL CENTRAL ====== */
+/* ====== PANEL CENTRAL LOGIN / REGISTRO ====== */
+/* Antes lo tenías con 0 120 0 120, que hace todo muy ancho */
+.login-center {
+    -fx-padding: 30 80 30 80;   /* arriba, derecha, abajo, izquierda */
+}
+
+/* ====== LABELS DEL FORMULARIO DE REGISTRO ====== */
+.register-label {
+    -fx-text-fill: #4C1D95;              /* morado oscuro */
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "System";
+}
+
+/* ====== CAMPOS DE TEXTO / COMBO / DATEPICKER DEL REGISTRO ====== */
+.register-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", "System";
+}
+
+/* Efecto focus bonito */
+.register-field:focused {
+    -fx-border-color: #7C3AED;
+    -fx-effect: dropshadow(gaussian, rgba(124,58,237,0.35), 15, 0.3, 0, 2);
+}
+
+
+/* Logo */
+.login-logo {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 15, 0.2, 0, 3);
+}
+
+/* Etiquetas de campos */
+.field-label {
+    -fx-text-fill: #5B21B6;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "System";
+}
+
+/* Campos de texto */
+.login-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", "System";
+}
+
+.login-field:focused {
+    -fx-border-color: #7C3AED;
+    -fx-effect: dropshadow(gaussian, rgba(124,58,237,0.35), 15, 0.3, 0, 2);
+}
+
+/* Botón principal Ingresar */
+.primary-btn {
+    -fx-background-color: #7C3AED;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 8 32;
+    -fx-background-radius: 999;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI Semibold", "System";
+    -fx-cursor: hand;
+}
+
+.primary-btn:hover {
+    -fx-background-color: #6D28D9;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
 
 /* Panel central */
 #centerPanel {
