@@ -66,6 +66,7 @@
                         AnchorPane.bottomAnchor="20.0"
                         AnchorPane.leftAnchor="40.0"
                         AnchorPane.rightAnchor="40.0">
+                     <Label styleClass="titulo" text="Documentos" />
                      <TableView fx:id="tablaDocumentos" layoutX="20.0" layoutY="78.0" prefHeight="491.0" prefWidth="1005.0">
                         <columns>
                            <TableColumn fx:id="colNombreArchivo" prefWidth="237.0" text="Nombre Del Archivo" />

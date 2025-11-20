@@ -66,7 +66,7 @@
                               AnchorPane.bottomAnchor="20.0"
                               AnchorPane.leftAnchor="40.0"
                               AnchorPane.rightAnchor="40.0">
-                            <Label styleClass="title-label" text="Estado de Resultados" />
+                            <Label styleClass="titulo" text="Estado de Resultados" />
 
                             <!-- Filtros: Desde / Hasta -->
                             <GridPane hgap="10" vgap="10">

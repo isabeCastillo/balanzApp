@@ -67,11 +67,7 @@
                               AnchorPane.leftAnchor="40.0"
                               AnchorPane.rightAnchor="40.0">
 
-                            <Label layoutX="498.0" layoutY="21.0" text="Balance General">
-                                <font>
-                                    <Font name="Georgia" size="19.0" />
-                                </font>
-                            </Label>
+                            <Label styleClass="titulo" text="Balance General"/>
 
                             <!-- Filtros de fechas -->
                             <Label layoutX="198.0" layoutY="80.0" text="Desde:" />

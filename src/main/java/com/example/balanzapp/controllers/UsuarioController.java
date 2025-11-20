@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.ZoneId;           // 👈 importante para convertir a LocalDate
+import java.time.ZoneId;
 
 public class UsuarioController extends BaseController {
 
@@ -36,6 +36,7 @@ public class UsuarioController extends BaseController {
     @FXML private TextField txtNombreUsuario;
     @FXML private PasswordField txtContraseña;
     @FXML private ComboBox<Rol> cmbRoles;
+    @FXML private ComboBox<String> cmbbalances;
 
     @FXML private TableView<Usuario> tblUsuarios;
     @FXML private TableColumn<Usuario, String> colNombre;
@@ -64,7 +65,11 @@ public class UsuarioController extends BaseController {
             mostrarAlerta("Acceso denegado", "Solo el Administrador puede gestionar usuarios.");
             return;
         }
-
+        cmbbalances.getItems().addAll(
+                "Balance de comprobación de saldos",
+                "Balance general"
+        );
+        cmbbalances.setOnAction(event -> balanceSelec());
         cargarDatosUsuario();
         configurarTabla();
         cargarRoles();
@@ -99,6 +104,27 @@ public class UsuarioController extends BaseController {
                                 ? data.getValue().getRol().getNombre_rol()
                                 : ""
                 ));
+    }
+
+    private void balanceSelec() {
+        String seleccion = cmbbalances.getValue();
+        String rutaFXML = null;
+
+        if ("Balance de comprobación de saldos".equals(seleccion)) {
+            rutaFXML = "/views/balanceSaldos.fxml";
+        } else if ("Balance general".equals(seleccion)) {
+            rutaFXML = "/views/balanceGeneral.fxml";
+        }
+
+        if (rutaFXML != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
+                Stage stage = (Stage) cmbbalances.getScene().getWindow();
+                stage.getScene().setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void cargarUsuarios() {

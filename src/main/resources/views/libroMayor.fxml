@@ -66,7 +66,7 @@
                               AnchorPane.bottomAnchor="20.0"
                               AnchorPane.leftAnchor="40.0"
                               AnchorPane.rightAnchor="40.0">
-                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="1076.0" styleClass="titulo" text="Libro Mayor" />
+                            <Label styleClass="titulo" text="Libro Mayor" />
 
                             <!-- FILTROS -->
                             <GridPane hgap="3" vgap="3">

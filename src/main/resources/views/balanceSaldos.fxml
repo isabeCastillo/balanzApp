@@ -66,11 +66,7 @@
                         AnchorPane.bottomAnchor="20.0"
                         AnchorPane.leftAnchor="40.0"
                         AnchorPane.rightAnchor="40.0">
-                     <Label layoutX="372.0" layoutY="31.0" text="Balanza De Comprobación De Saldos">
-                        <font>
-                           <Font name="Georgia" size="19.0" />
-                        </font>
-                     </Label>
+                     <Label text="Balanza De Comprobación De Saldos" styleClass="titulo"/>
 
                      <Label layoutX="212.0" layoutY="84.0" text="Desde:" />
                      <DatePicker fx:id="dateDesde" layoutX="262.0" layoutY="70.0" prefWidth="150.0" />

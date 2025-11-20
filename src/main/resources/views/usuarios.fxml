@@ -72,11 +72,7 @@
                               AnchorPane.rightAnchor="40.0">
 
                             <!-- Título -->
-                            <Label text="Usuarios" textFill="#5a238a">
-                                <font>
-                                    <Font size="24.0"/>
-                                </font>
-                            </Label>
+                            <Label text="Usuarios" styleClass="titulo"/>
 
                             <!-- FORMULARIO EN GRID -->
                             <GridPane hgap="20" vgap="10">

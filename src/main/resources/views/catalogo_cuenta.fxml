@@ -67,14 +67,14 @@
                               AnchorPane.bottomAnchor="20.0"
                               AnchorPane.leftAnchor="40.0"
                               AnchorPane.rightAnchor="40.0">
-                            <Label prefHeight="22.0" prefWidth="100.0" styleClass="title-label" text="Catálogo de cuenta" textAlignment="CENTER" textFill="#5a238a" />
+                            <Label text="Catálogo de cuenta" styleClass="titulo"/>
                             <GridPane hgap="10" prefHeight="195.0" prefWidth="412.0" vgap="10">
                                 <columnConstraints>
                                     <ColumnConstraints halignment="RIGHT" />
                                     <ColumnConstraints prefWidth="150" />
                                 </columnConstraints>
                                 <Label text="Código:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                <TextField fx:id="txtCodigo" alignment="CENTER" prefHeight="31.0" prefWidth="897.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+                                <TextField fx:id="txtCodigo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
                                 <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                                 <TextField fx:id="txtCuenta" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                 <Label text="Tipo:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
