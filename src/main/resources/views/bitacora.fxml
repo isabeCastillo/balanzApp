@@ -1,92 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1373.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BitacoraController">
+<AnchorPane prefHeight="650.0" prefWidth="1373.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.balanzapp.controllers.BitacoraController"
+            stylesheets="@../styles/style.css">
+
     <children>
-        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
+        <!-- SplitPane ocupa toda la ventana -->
+        <SplitPane dividerPositions="0.18"
+                   AnchorPane.topAnchor="0.0"
+                   AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0">
             <items>
-                <AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+                <!-- ========== SIDEBAR IZQUIERDO ========== -->
+                <AnchorPane prefWidth="230" styleClass="sidebar">
                     <children>
-                        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
-                            <items>
+                        <VBox alignment="TOP_CENTER"
+                              prefWidth="230"
+                              spacing="20"
+                              AnchorPane.topAnchor="20.0"
+                              AnchorPane.bottomAnchor="20.0"
+                              AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0">
 
-                                <!-- LADO IZQUIERDO (SIDEBAR) -->
-                                <AnchorPane styleClass="sidebar" prefWidth="230">
+                            <!-- Usuario activo -->
+                            <VBox alignment="CENTER" spacing="4">
+                                <Label fx:id="lblUs"  text="Nombre" styleClass="user-name"/>
+                                <Label fx:id="lblad"  text="Rol"     styleClass="user-role"/>
+                            </VBox>
 
-                                    <!-- CONTENEDOR PRINCIPAL DEL SIDEBAR -->
-                                    <VBox spacing="20" alignment="TOP_CENTER" prefWidth="230" AnchorPane.topAnchor="20">
+                            <!-- Menú -->
+                            <VBox spacing="6" prefWidth="210">
+                                <Button fx:id="btninicio"            text="Inicio"                 onAction="#goToHome"             styleClass="nav-btn"/>
+                                <Button fx:id="btndoc"               text="Documentos"            onAction="#goToDoc"              styleClass="nav-btn"/>
+                                <Button fx:id="btnlibrodiario"       text="Libro Diario"          onAction="#goToLibroDiario"      styleClass="nav-btn"/>
+                                <Button fx:id="btnlibromayor"        text="Libro Mayor"           onAction="#goToLibroMayor"       styleClass="nav-btn"/>
 
-                                        <!-- SECCIÓN: Usuario -->
-                                        <VBox alignment="CENTER" spacing="4">
-                                            <Label fx:id="lblUs"  text="Nombre" styleClass="user-name"/>
-                                            <Label fx:id="lblad"  text="Rol"     styleClass="user-role"/>
-                                        </VBox>
+                                <ComboBox fx:id="cmbbalances" promptText="Balances" styleClass="combo"/>
 
-                                        <!-- SECCIÓN: Menú -->
-                                        <VBox spacing="6" prefWidth="210">
+                                <Button fx:id="btnestadoderesultados" text="Estado de Resultados" onAction="#goToEstadoResultados" styleClass="nav-btn"/>
+                                <Button fx:id="btncatalogo"           text="Catálogo de Cuentas"  onAction="#goToCatalogoCuentas"  styleClass="nav-btn"/>
+                                <Button fx:id="btnusuario"            text="Usuario"              onAction="#goToUsuario"          styleClass="nav-btn"/>
+                                <Button fx:id="btnbitacora"           text="Bitácora del Auditor" onAction="#goToBitacoraAuditor"  styleClass="nav-btn"/>
+                            </VBox>
 
-                                            <Button fx:id="btninicio"            text="Inicio"                 onAction="#goToHome"             styleClass="nav-btn"/>
-                                            <Button fx:id="btndoc"               text="Documentos"            onAction="#goToDoc"              styleClass="nav-btn"/>
-                                            <Button fx:id="btnlibrodiario"       text="Libro Diario"          onAction="#goToLibroDiario"      styleClass="nav-btn"/>
-                                            <Button fx:id="btnlibromayor"        text="Libro Mayor"           onAction="#goToLibroMayor"       styleClass="nav-btn"/>
+                            <!-- Espaciador -->
+                            <VBox VBox.vgrow="ALWAYS"/>
 
-                                            <ComboBox fx:id="cmbbalances" promptText="Balances" styleClass="combo"/>
+                            <!-- Cerrar sesión -->
+                            <Button fx:id="btncerrar" text="Cerrar Sesión" onAction="#Close" styleClass="logout-btn"/>
+                        </VBox>
+                    </children>
+                </AnchorPane>
 
-                                            <Button fx:id="btnestadoderesultados" text="Estado de Resultados" onAction="#goToEstadoResultados" styleClass="nav-btn"/>
-                                            <Button fx:id="btncatalogo"           text="Catálogo de Cuentas"  onAction="#goToCatalogoCuentas"  styleClass="nav-btn"/>
-                                            <Button fx:id="btnusuario"            text="Usuario"              onAction="#goToUsuario"          styleClass="nav-btn"/>
-                                            <Button fx:id="btnbitacora"           text="Bitácora del Auditor" onAction="#goToBitacoraAuditor" styleClass="nav-btn"/>
-
-                                        </VBox>
-
-                                        <!-- ESPACIADOR AUTOMÁTICO -->
-                                        <VBox VBox.vgrow="ALWAYS"></VBox>
-
-                                        <!-- BOTÓN CERRAR SESIÓN (CENTRADO) -->
-                                        <Button fx:id="btncerrar" text="Cerrar Sesión" onAction="#Close" styleClass="logout-btn"/>
-
-                                    </VBox>
-                                </AnchorPane>
-
-
-                                <!-- LADO DERECHO -->
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                    <children>
-                                        <Label layoutX="260.0" layoutY="20.0" text="Bitacora del Auditor" />
-                                        <Label layoutX="55.0" layoutY="74.0" text="Usuario" />
-                                        <Label layoutX="270.0" layoutY="74.0" text="Desde" />
-                                        <Label layoutX="558.0" layoutY="74.0" text="Hasta" />
-                                        <Label layoutX="813.0" layoutY="74.0" text="Modulo" />
-                                        <ComboBox fx:id="cmbusu" layoutX="55.0" layoutY="104.0" prefWidth="150.0" />
-                                        <DatePicker fx:id="dtdesde" layoutX="270.0" layoutY="101.0" />
-                                        <DatePicker fx:id="dthasta" layoutX="545.0" layoutY="101.0" />
-                                        <ComboBox fx:id="cmbmodul" layoutX="813.0" layoutY="104.0" prefWidth="150.0" />
-                                        <Button fx:id="btnfiltrar" layoutX="276.0" layoutY="189.0" mnemonicParsing="false" onAction="#filtrar" text="Filtrar" />
-                                        <Button fx:id="btndescargarPdf" layoutX="394.0" layoutY="189.0" mnemonicParsing="false" text="Descargar PDF" />
-                                        <Button fx:id="btndescargarExcel" layoutX="558.0" layoutY="189.0" mnemonicParsing="false" text="Descargar Excel" />
-                                        <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="270.0" prefHeight="291.0" prefWidth="980.0">
-                                            <columns>
-                                                <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
-                                                <TableColumn fx:id="colAccion" prefWidth="248.0" text="Accion Realizada" />
-                                                <TableColumn fx:id="colRol" minWidth="0.0" prefWidth="85.0" text="Rol" />
-                                                <TableColumn fx:id="colModulo" prefWidth="295.0" text="Modulo" />
-                                                <TableColumn fx:id="colFecha" prefWidth="163.0" text="Fecha" />
-                                                <TableColumn fx:id="colHora" prefWidth="98.0" text="Hora" />
-                                            </columns>
-                                        </TableView>
-                                    </children>
-                                </AnchorPane>
-                            </items>
-                        </SplitPane>
+                <!-- ========== CONTENIDO DERECHO ========== -->
+                <AnchorPane>
+                    <children>
+                        <VBox spacing="20" AnchorPane.topAnchor="20.0"
+                              AnchorPane.bottomAnchor="20.0"
+                              AnchorPane.leftAnchor="40.0"
+                              AnchorPane.rightAnchor="40.0">
+                            <Label layoutX="260.0" layoutY="20.0" text="Bitacora del Auditor" />
+                            <Label layoutX="55.0" layoutY="74.0" text="Usuario" />
+                            <Label layoutX="270.0" layoutY="74.0" text="Desde" />
+                            <Label layoutX="558.0" layoutY="74.0" text="Hasta" />
+                            <Label layoutX="813.0" layoutY="74.0" text="Modulo" />
+                            <ComboBox fx:id="cmbusu" layoutX="55.0" layoutY="104.0" prefWidth="150.0" />
+                            <DatePicker fx:id="dtdesde" layoutX="270.0" layoutY="101.0" />
+                            <DatePicker fx:id="dthasta" layoutX="545.0" layoutY="101.0" />
+                            <ComboBox fx:id="cmbmodul" layoutX="813.0" layoutY="104.0" prefWidth="150.0" />
+                            <Button fx:id="btnfiltrar" layoutX="276.0" layoutY="189.0" mnemonicParsing="false" onAction="#filtrar" text="Filtrar" />
+                            <Button fx:id="btndescargarPdf" layoutX="394.0" layoutY="189.0" mnemonicParsing="false" text="Descargar PDF" />
+                            <Button fx:id="btndescargarExcel" layoutX="558.0" layoutY="189.0" mnemonicParsing="false" text="Descargar Excel" />
+                            <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="270.0" prefHeight="291.0" prefWidth="980.0">
+                                <columns>
+                                    <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
+                                    <TableColumn fx:id="colAccion" prefWidth="248.0" text="Accion Realizada" />
+                                    <TableColumn fx:id="colRol" minWidth="0.0" prefWidth="85.0" text="Rol" />
+                                    <TableColumn fx:id="colModulo" prefWidth="295.0" text="Modulo" />
+                                    <TableColumn fx:id="colFecha" prefWidth="163.0" text="Fecha" />
+                                    <TableColumn fx:id="colHora" prefWidth="98.0" text="Hora" />
+                                </columns>
+                            </TableView>
+                        </VBox>
                     </children>
                 </AnchorPane>
             </items>

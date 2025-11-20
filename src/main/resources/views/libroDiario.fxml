@@ -1,241 +1,247 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1373.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.LibroDiarioController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="650.0" prefWidth="1373.0"
+            xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.balanzapp.controllers.LibroDiarioController"
+            stylesheets="@../styles/style.css">
+
     <children>
-        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
+        <!-- SplitPane ocupa toda la ventana -->
+        <SplitPane dividerPositions="0.18"
+                   AnchorPane.topAnchor="0.0"
+                   AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0">
+
             <items>
-                <AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+                <!-- ========== SIDEBAR IZQUIERDO ========== -->
+                <AnchorPane prefWidth="230" styleClass="sidebar">
                     <children>
-                        <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
-                            <items>
+                        <VBox alignment="TOP_CENTER"
+                              prefWidth="230"
+                              spacing="20"
+                              AnchorPane.topAnchor="20.0"
+                              AnchorPane.bottomAnchor="20.0"
+                              AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0">
 
-                                <!-- LADO IZQUIERDO (SIDEBAR) -->
-                                <AnchorPane styleClass="sidebar" prefWidth="230">
+                            <!-- Usuario -->
+                            <VBox alignment="CENTER" spacing="4">
+                                <Label fx:id="lblUs"  text="Nombre" styleClass="user-name"/>
+                                <Label fx:id="lblad"  text="Rol"     styleClass="user-role"/>
+                            </VBox>
 
-                                    <!-- CONTENEDOR PRINCIPAL DEL SIDEBAR -->
-                                    <VBox spacing="20" alignment="TOP_CENTER" prefWidth="230" AnchorPane.topAnchor="20">
+                            <!-- Menú -->
+                            <VBox spacing="6" prefWidth="210">
+                                <Button fx:id="btninicio"            text="Inicio"                 onAction="#goToHome"             styleClass="nav-btn"/>
+                                <Button fx:id="btndoc"               text="Documentos"            onAction="#goToDoc"              styleClass="nav-btn"/>
+                                <Button fx:id="btnlibrodiario"       text="Libro Diario"          onAction="#goToLibroDiario"      styleClass="nav-btn"/>
+                                <Button fx:id="btnlibromayor"        text="Libro Mayor"           onAction="#goToLibroMayor"       styleClass="nav-btn"/>
 
-                                        <!-- SECCIÓN: Usuario -->
-                                        <VBox alignment="CENTER" spacing="4">
-                                            <Label fx:id="lblUs"  text="Nombre" styleClass="user-name"/>
-                                            <Label fx:id="lblad"  text="Rol"     styleClass="user-role"/>
-                                        </VBox>
+                                <ComboBox fx:id="cmbbalances" promptText="Balances" styleClass="combo"/>
 
-                                        <!-- SECCIÓN: Menú -->
-                                        <VBox spacing="6" prefWidth="210">
+                                <Button fx:id="btnestadoderesultados" text="Estado de Resultados" onAction="#goToEstadoResultados" styleClass="nav-btn"/>
+                                <Button fx:id="btncatalogo"           text="Catálogo de Cuentas"  onAction="#goToCatalogoCuentas"  styleClass="nav-btn"/>
+                                <Button fx:id="btnusuario"            text="Usuario"              onAction="#goToUsuario"          styleClass="nav-btn"/>
+                                <Button fx:id="btnbitacora"           text="Bitácora del Auditor" onAction="#goToBitacoraAuditor"  styleClass="nav-btn"/>
+                            </VBox>
 
-                                            <Button fx:id="btninicio"            text="Inicio"                 onAction="#goToHome"             styleClass="nav-btn"/>
-                                            <Button fx:id="btndoc"               text="Documentos"            onAction="#goToDoc"              styleClass="nav-btn"/>
-                                            <Button fx:id="btnlibrodiario"       text="Libro Diario"          onAction="#goToLibroDiario"      styleClass="nav-btn"/>
-                                            <Button fx:id="btnlibromayor"        text="Libro Mayor"           onAction="#goToLibroMayor"       styleClass="nav-btn"/>
+                            <!-- Espaciador -->
+                            <VBox VBox.vgrow="ALWAYS"/>
 
-                                            <ComboBox fx:id="cmbbalances" promptText="Balances" styleClass="combo"/>
-
-                                            <Button fx:id="btnestadoderesultados" text="Estado de Resultados" onAction="#goToEstadoResultados" styleClass="nav-btn"/>
-                                            <Button fx:id="btncatalogo"           text="Catálogo de Cuentas"  onAction="#goToCatalogoCuentas"  styleClass="nav-btn"/>
-                                            <Button fx:id="btnusuario"            text="Usuario"              onAction="#goToUsuario"          styleClass="nav-btn"/>
-                                            <Button fx:id="btnbitacora"           text="Bitácora del Auditor" onAction="#goToBitacoraAuditor" styleClass="nav-btn"/>
-
-                                        </VBox>
-
-                                        <!-- ESPACIADOR AUTOMÁTICO -->
-                                        <VBox VBox.vgrow="ALWAYS"></VBox>
-
-                                        <!-- BOTÓN CERRAR SESIÓN (CENTRADO) -->
-                                        <Button fx:id="btncerrar" text="Cerrar Sesión" onAction="#Close" styleClass="logout-btn"/>
-
-                                    </VBox>
-                                </AnchorPane>
-
-
-                                <!-- LADO DERECHO -->
-                                <AnchorPane prefHeight="650.0" prefWidth="1048.0">
-                                    <children>
-                                        <VBox alignment="CENTER" layoutX="24.0" layoutY="14.0" prefHeight="700.0" prefWidth="1006.0" spacing="10.0">
-                                            <children>
-
-                                                <!-- TÍTULO -->
-                                                <Label styleClass="titulo" text="Libro Diario" />
-
-                                                <!-- ENCABEZADO DE PARTIDA -->
-                                                <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
-                                                    <columnConstraints>
-                                                        <ColumnConstraints maxWidth="75.0" minWidth="55.0" prefWidth="75.0" />
-                                                        <ColumnConstraints maxWidth="205.0" minWidth="153.0" prefWidth="205.0" />
-                                                        <ColumnConstraints maxWidth="128.0" minWidth="47.0" prefWidth="128.0" />
-                                                        <ColumnConstraints maxWidth="145.0" minWidth="45.0" prefWidth="71.0" />
-                                                        <ColumnConstraints maxWidth="68.0" minWidth="0.0" prefWidth="0.0" />
-                                                    </columnConstraints>
-                                                    <rowConstraints>
-                                                        <RowConstraints />
-                                                        <RowConstraints />
-                                                    </rowConstraints>
-
-                                                    <children>
-                                                        <Label text="Fecha:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
-                                                        <DatePicker fx:id="dateFecha" prefWidth="150" style="-fx-font-size: 10pt;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                                                        <Label text="Concepto:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                                                        <TextField fx:id="txtConcepto" prefWidth="300" style="-fx-font-size: 10pt;" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
-
-                                                        <Label text="Tipo de partida:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
-                                                        <ComboBox fx:id="comboTipoPartida" prefHeight="40.0" prefWidth="116.0" style="-fx-font-size: 10pt;" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
-
-                                                        <Label minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="N° Partida:" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-                                                        <Label fx:id="lblNumeroPartida" minWidth="-Infinity" prefWidth="70.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                                                    </children>
-                                                </GridPane>
-
-                                                <Separator />
-
-                                                <!-- DETALLE DE LA PARTIDA (FORMULARIO DE LÍNEA) -->
-                                                <GridPane hgap="10" vgap="10">
-                                                    <columnConstraints>
-                                                        <ColumnConstraints maxWidth="72.0" minWidth="42.0" prefWidth="72.0" />
-                                                        <ColumnConstraints maxWidth="145.0" minWidth="115.0" prefWidth="142.0" />
-                                                        <ColumnConstraints maxWidth="117.0" minWidth="59.0" prefWidth="111.0" />
-                                                        <ColumnConstraints maxWidth="147.0" minWidth="0.0" prefWidth="59.0" />
-                                                        <ColumnConstraints maxWidth="185.0" minWidth="43.0" prefWidth="131.0" />
-                                                    </columnConstraints>
-                                                    <rowConstraints>
-                                                        <RowConstraints maxHeight="39.0" minHeight="39.0" prefHeight="39.0" />
-                                                        <RowConstraints maxHeight="33.0" minHeight="33.0" prefHeight="33.0" />
-                                                    </rowConstraints>
-
-                                                    <children>
-                                                        <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                        <ComboBox fx:id="comboCuenta" prefHeight="40.0" prefWidth="208.0" style="-fx-font-size: 10pt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0" />
-
-                                                        <Label text="Tipo:" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                                                        <HBox spacing="10.0" GridPane.columnIndex="4" GridPane.rowIndex="0">
-                                                            <children>
-                                                                <RadioButton fx:id="radioDebe" style="-fx-font-size: 11pt;" text="Debe" />
-                                                                <RadioButton fx:id="radioHaber" style="-fx-font-size: 11pt;" text="Haber" />
-                                                            </children>
-                                                        </HBox>
-
-                                                        <Label text="Monto:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                                        <TextField fx:id="txtMonto" prefWidth="150" style="-fx-font-size:10pt;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                                                        <Label text="Descripción línea:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                        <TextField fx:id="txtDescripcionLinea" prefWidth="200" style="-fx-font-size:10pt;" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                                                    </children>
-                                                </GridPane>
-
-                                                <!-- BOTONES PARA LAS LÍNEAS DEL DETALLE -->
-                                                <HBox prefHeight="26.0" prefWidth="976.0" spacing="10.0">
-                                                    <children>
-                                                        <Button fx:id="btnagregar" prefWidth="110" style="-fx-font-size: 10pt;" text="Agregar línea" />
-                                                        <Button fx:id="btneditar" prefWidth="110" style="-fx-font-size: 10pt;" text="Editar línea" />
-                                                        <Button fx:id="btneliminar" prefWidth="110" style="-fx-font-size: 10pt;" text="Eliminar línea" />
-                                                        <Button fx:id="btnSubirdoc" prefWidth="140" style="-fx-font-size: 10pt;" text="Subir documento" />
-                                                    </children>
-                                                </HBox>
-
-                                                <!-- TABLA DETALLE DE PARTIDA -->
-                                                <TableView fx:id="tablaDetalle" prefHeight="180.0">
-                                                    <columns>
-                                                        <TableColumn fx:id="colCuentaDetalle" prefWidth="200.0" text="Cuenta" />
-                                                        <TableColumn fx:id="colDescripcionDetalle" prefWidth="200.0" text="Descripción" />
-                                                        <TableColumn fx:id="colDebeDetalle" prefWidth="100.0" text="Debe" />
-                                                        <TableColumn fx:id="colHaberDetalle" prefWidth="100.0" text="Haber" />
-                                                    </columns>
-                                                </TableView>
-
-                                                <!-- TOTALES Y GUARDADO DE PARTIDA -->
-                                                <HBox spacing="20.0">
-                                                    <children>
-                                                        <Label text="Total Debe:" />
-                                                        <Label fx:id="lblTotalDebe" text="0.00" />
-                                                        <Label text="Total Haber:" />
-                                                        <Label fx:id="lblTotalHaber" text="0.00" />
-                                                    </children>
-                                                </HBox>
-
-                                                <HBox spacing="10.0">
-                                                    <children>
-                                                        <Button fx:id="btnGuardarPartida" prefWidth="140" style="-fx-font-size: 10pt;" text="Guardar Partida" />
-                                                        <Button fx:id="btnNuevaPartida" prefWidth="140" style="-fx-font-size: 10pt;" text="Nueva Partida" />
-                                                    </children>
-                                                </HBox>
-
-                                                <Separator />
-
-                                                <!-- HISTORIAL DEL LIBRO DIARIO -->
-                                                <TitledPane expanded="false" minHeight="-Infinity" prefHeight="217.0" prefWidth="1006.0" text="Historial de partidas" VBox.vgrow="ALWAYS">
-                                                    <content>
-                                                        <VBox prefHeight="186.0" prefWidth="1004.0" spacing="10.0">
-                                                            <children>
-
-                                                                <GridPane hgap="10" vgap="10">
-                                                                    <columnConstraints>
-                                                                        <ColumnConstraints />
-                                                                        <ColumnConstraints />
-                                                                        <ColumnConstraints />
-                                                                        <ColumnConstraints />
-                                                                        <ColumnConstraints />
-                                                                        <ColumnConstraints />
-                                                                        <ColumnConstraints />
-                                                                    </columnConstraints>
-                                                                    <rowConstraints>
-                                                                        <RowConstraints />
-                                                                    </rowConstraints>
-
-                                                                    <children>
-                                                                        <Label text="Año:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                                        <ComboBox fx:id="comboAnio" prefWidth="90" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                                                                        <Label text="Mes:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                                                                        <ComboBox fx:id="comboMes" prefWidth="90" style="-fx-font-size:8pt;" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-
-                                                                        <Button fx:id="btndescargarpdf" prefWidth="105" style="-fx-font-size: 10pt;" text="Descargar PDF" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-
-                                                                        <Button fx:id="btndescargarexcel" prefWidth="105" style="-fx-font-size: 10pt;" text="Descargar Excel" GridPane.columnIndex="5" GridPane.rowIndex="0" />
-
-                                                                        <Button fx:id="btnbuscar" prefWidth="100" style="-fx-font-size: 10pt;" text="Buscar" GridPane.columnIndex="6" GridPane.rowIndex="0" />
-                                                                    </children>
-                                                                </GridPane>
-
-                                                                <TableView fx:id="tablaDiario" prefHeight="300.0" prefWidth="984.0">
-                                                                    <columns>
-                                                                        <TableColumn fx:id="colFecha" text="Fecha" />
-                                                                        <TableColumn fx:id="colNumeroPartida" text="N° de Partida" />
-                                                                        <TableColumn fx:id="colConcepto" prefWidth="259.0" text="Concepto" />
-                                                                        <TableColumn fx:id="colCuenta" minWidth="0.0" prefWidth="166.0" text="Cuenta" />
-                                                                        <TableColumn fx:id="colDebe" minWidth="0.0" prefWidth="110.0" text="Debe" />
-                                                                        <TableColumn fx:id="colHaber" minWidth="0.0" prefWidth="95.0" text="Haber" />
-                                                                        <TableColumn fx:id="colDocumento" minWidth="0.0" prefWidth="142.0" text="Documento" />
-                                                                    </columns>
-                                                                </TableView>
-                                                            </children>
-                                                        </VBox>
-                                                    </content>
-                                                </TitledPane>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </AnchorPane>
-                            </items>
-                        </SplitPane>
+                            <!-- Cerrar sesión -->
+                            <Button fx:id="btncerrar" text="Cerrar Sesión" onAction="#Close" styleClass="logout-btn"/>
+                        </VBox>
                     </children>
                 </AnchorPane>
+
+                <!-- ========== LADO DERECHO: LIBRO DIARIO ========== -->
+                <AnchorPane>
+                    <children>
+                        <!-- VBox principal que se estira -->
+                        <VBox spacing="10.0"
+                              AnchorPane.topAnchor="20.0"
+                              AnchorPane.bottomAnchor="20.0"
+                              AnchorPane.leftAnchor="40.0"
+                              AnchorPane.rightAnchor="40.0">
+
+                            <!-- Título -->
+                            <Label styleClass="titulo" text="Libro Diario"/>
+
+                            <!-- PARTIDA ACTUAL -->
+                            <TitledPane expanded="true" text="Partida actual" VBox.vgrow="ALWAYS">
+                                <content>
+                                    <VBox spacing="10.0">
+
+                                        <!-- ENCABEZADO DE PARTIDA -->
+                                        <GridPane hgap="10" vgap="10">
+                                            <columnConstraints>
+                                                <ColumnConstraints maxWidth="75.0"  minWidth="55.0" prefWidth="75.0" />
+                                                <ColumnConstraints maxWidth="205.0" minWidth="153.0" prefWidth="205.0" />
+                                                <ColumnConstraints maxWidth="128.0" minWidth="47.0"  prefWidth="128.0" />
+                                                <ColumnConstraints maxWidth="145.0" minWidth="45.0"  prefWidth="145.0" />
+                                                <ColumnConstraints maxWidth="80.0"  minWidth="60.0"  prefWidth="80.0" />
+                                            </columnConstraints>
+
+                                            <children>
+                                                <Label text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                <DatePicker fx:id="dateFecha" prefWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <Label text="Tipo de partida:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                                <ComboBox fx:id="comboTipoPartida" prefHeight="32.0" prefWidth="140.0"
+                                                          GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                                                <Label text="N° Partida:" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                                                <Label fx:id="lblNumeroPartida" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+
+                                                <Label text="Concepto:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                <TextField fx:id="txtConcepto" prefWidth="300"
+                                                           GridPane.columnIndex="1"
+                                                           GridPane.columnSpan="3"
+                                                           GridPane.rowIndex="1"/>
+                                            </children>
+                                        </GridPane>
+
+                                        <!-- DETALLE DE LÍNEA -->
+                                        <GridPane hgap="10" vgap="10">
+                                            <columnConstraints>
+                                                <ColumnConstraints maxWidth="72.0"  minWidth="42.0"  prefWidth="72.0" />
+                                                <ColumnConstraints maxWidth="180.0" minWidth="140.0" prefWidth="200.0" />
+                                                <ColumnConstraints maxWidth="120.0" minWidth="80.0"  prefWidth="120.0" />
+                                                <ColumnConstraints maxWidth="100.0" minWidth="80.0"  prefWidth="100.0" />
+                                                <ColumnConstraints maxWidth="220.0" minWidth="160.0" prefWidth="260.0" />
+                                            </columnConstraints>
+
+                                            <children>
+                                                <Label text="Cuenta:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                <ComboBox fx:id="comboCuenta" prefHeight="32.0"
+                                                          GridPane.columnIndex="1"
+                                                          GridPane.columnSpan="2"
+                                                          GridPane.rowIndex="0" />
+
+                                                <Label text="Tipo:" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                                <HBox spacing="10.0" GridPane.columnIndex="4" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <RadioButton fx:id="radioDebe"  text="Debe"/>
+                                                        <RadioButton fx:id="radioHaber" text="Haber"/>
+                                                    </children>
+                                                </HBox>
+
+                                                <Label text="Monto:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                <TextField fx:id="txtMonto" prefWidth="150"
+                                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                                <Label text="Descripción línea:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextField fx:id="txtDescripcionLinea" prefWidth="250"
+                                                           GridPane.columnIndex="3"
+                                                           GridPane.columnSpan="2"
+                                                           GridPane.rowIndex="1"/>
+                                            </children>
+                                        </GridPane>
+
+                                        <!-- BOTONES LÍNEA -->
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button fx:id="btnagregar"  prefWidth="110" text="Agregar línea"/>
+                                                <Button fx:id="btneditar"   prefWidth="110" text="Editar línea"/>
+                                                <Button fx:id="btneliminar" prefWidth="110" text="Eliminar línea"/>
+                                                <Button fx:id="btnSubirdoc" prefWidth="140" text="Subir documento"/>
+                                            </children>
+                                        </HBox>
+
+                                        <!-- TABLA DETALLE (crece dentro del TitledPane) -->
+                                        <TableView fx:id="tablaDetalle" VBox.vgrow="ALWAYS" prefHeight="220.0">
+                                            <columns>
+                                                <TableColumn fx:id="colCuentaDetalle"       text="Cuenta"       prefWidth="220.0"/>
+                                                <TableColumn fx:id="colDescripcionDetalle"  text="Descripción"  prefWidth="320.0"/>
+                                                <TableColumn fx:id="colDebeDetalle"         text="Debe"         prefWidth="120.0"/>
+                                                <TableColumn fx:id="colHaberDetalle"        text="Haber"        prefWidth="120.0"/>
+                                            </columns>
+                                        </TableView>
+
+                                        <!-- TOTALES -->
+                                        <HBox spacing="20.0">
+                                            <children>
+                                                <Label text="Total Debe:"/>
+                                                <Label fx:id="lblTotalDebe" text="0.00"/>
+                                                <Label text="Total Haber:"/>
+                                                <Label fx:id="lblTotalHaber" text="0.00"/>
+                                            </children>
+                                        </HBox>
+
+                                        <!-- BOTONES PARTIDA -->
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button fx:id="btnGuardarPartida" prefWidth="140" text="Guardar Partida"/>
+                                                <Button fx:id="btnNuevaPartida"  prefWidth="140" text="Nueva Partida"/>
+                                            </children>
+                                        </HBox>
+
+                                    </VBox>
+                                </content>
+                            </TitledPane>
+
+                            <Separator/>
+
+                            <!-- HISTORIAL DE PARTIDAS -->
+                            <TitledPane expanded="false" text="Partidas" VBox.vgrow="ALWAYS">
+                                <content>
+                                    <VBox spacing="10.0">
+                                        <!-- Filtros -->
+                                        <GridPane hgap="10" vgap="10">
+                                            <columnConstraints>
+                                                <ColumnConstraints/>
+                                                <ColumnConstraints/>
+                                                <ColumnConstraints/>
+                                                <ColumnConstraints/>
+                                                <ColumnConstraints/>
+                                                <ColumnConstraints/>
+                                                <ColumnConstraints/>
+                                            </columnConstraints>
+
+                                            <children>
+                                                <Label text="Año:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                                <ComboBox fx:id="comboAnio" prefWidth="90"
+                                                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                                <Label text="Mes:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                                <ComboBox fx:id="comboMes" prefWidth="90"
+                                                          GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                                                <Button fx:id="btndescargarpdf"   prefWidth="110" text="Descargar PDF"
+                                                        GridPane.columnIndex="4" GridPane.rowIndex="0"/>
+                                                <Button fx:id="btndescargarexcel" prefWidth="110" text="Descargar Excel"
+                                                        GridPane.columnIndex="5" GridPane.rowIndex="0"/>
+                                                <Button fx:id="btnbuscar"         prefWidth="100" text="Buscar"
+                                                        GridPane.columnIndex="6" GridPane.rowIndex="0"/>
+                                            </children>
+                                        </GridPane>
+
+                                        <!-- Tabla de historial -->
+                                        <TableView fx:id="tablaDiario" VBox.vgrow="ALWAYS" prefHeight="260.0">
+                                            <columns>
+                                                <TableColumn fx:id="colFecha"         text="Fecha"          prefWidth="120.0"/>
+                                                <TableColumn fx:id="colNumeroPartida" text="N° de Partida"  prefWidth="120.0"/>
+                                                <TableColumn fx:id="colConcepto"      text="Concepto"       prefWidth="260.0"/>
+                                                <TableColumn fx:id="colCuenta"        text="Cuenta"         prefWidth="180.0"/>
+                                                <TableColumn fx:id="colDebe"          text="Debe"           prefWidth="110.0"/>
+                                                <TableColumn fx:id="colHaber"         text="Haber"          prefWidth="110.0"/>
+                                                <TableColumn fx:id="colDocumento"     text="Documento"      prefWidth="160.0"/>
+                                            </columns>
+                                        </TableView>
+                                    </VBox>
+                                </content>
+                            </TitledPane>
+
+                        </VBox>
+                    </children>
+                </AnchorPane>
+
             </items>
         </SplitPane>
     </children>
