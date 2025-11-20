@@ -13,6 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <AnchorPane prefHeight="650.0" prefWidth="1373.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.UsuarioController">
     <children>
         <SplitPane dividerPositions="0.2335" prefHeight="800.0" prefWidth="1373.0">
@@ -64,59 +67,82 @@
                                 <!-- LADO DERECHO -->
                                 <AnchorPane>
                                     <children>
-                                        <Label layoutX="290.0" layoutY="31.0" text="Usuarios" textFill="#5a238a">
-                                            <font>
-                                                <Font size="24.0" />
-                                            </font></Label>
+                                        <VBox spacing="20" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.bottomAnchor="20.0">
+                                            <!-- Título -->
+                                            <Label text="Usuarios" textFill="#5a238a" alignment="CENTER">
+                                                <font>
+                                                    <Font size="24.0"/>
+                                                </font>
+                                            </Label>
 
-                                        <Label layoutX="50.0" layoutY="95.0" text="Nombre Completo" />
-                                        <TextField fx:id="txtNombre" layoutX="50.0" layoutY="120.0" promptText="Nombre completo" />
+                                            <!-- FORMULARIO EN GRID -->
+                                            <GridPane hgap="20" vgap="10">
+                                                <columnConstraints>
+                                                    <ColumnConstraints percentWidth="14"/>
+                                                    <ColumnConstraints percentWidth="18"/>
+                                                    <ColumnConstraints percentWidth="14"/>
+                                                    <ColumnConstraints percentWidth="18"/>
+                                                    <ColumnConstraints percentWidth="14"/>
+                                                    <ColumnConstraints percentWidth="22"/>
+                                                </columnConstraints>
 
-                                        <Label layoutX="296.0" layoutY="95.0" text="Género" />
-                                        <ComboBox fx:id="cmbGenero" layoutX="280.0" layoutY="116.0" promptText="Seleccione género" />
+                                                <!-- Fila 1 -->
+                                                <Label text="Nombre Completo" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                                <TextField fx:id="txtNombre" promptText="Nombre completo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                        <Label layoutX="520.0" layoutY="95.0" text="Fecha Nacimiento" />
-                                        <DatePicker fx:id="dpFechaNacimiento" layoutX="507.0" layoutY="113.0" />
+                                                <Label text="Género" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                                <ComboBox fx:id="cmbGenero" promptText="Seleccione género" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
-                                        <Label layoutX="50.0" layoutY="170.0" text="DUI" />
-                                        <TextField fx:id="txtDUI" layoutX="50.0" layoutY="195.0" />
+                                                <Label text="Fecha Nacimiento" GridPane.rowIndex="0" GridPane.columnIndex="4"/>
+                                                <DatePicker fx:id="dpFechaNacimiento" GridPane.rowIndex="0" GridPane.columnIndex="5"/>
 
-                                        <Label layoutX="200.0" layoutY="170.0" text="Teléfono" />
-                                        <TextField fx:id="txtTelefono" layoutX="200.0" layoutY="195.0" />
+                                                <!-- Fila 2 -->
+                                                <Label text="DUI" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                                <TextField fx:id="txtDUI" promptText="00000000-0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                                        <Label layoutX="350.0" layoutY="170.0" text="Dirección" />
-                                        <TextField fx:id="txtDireccion" layoutX="350.0" layoutY="195.0" />
+                                                <Label text="Teléfono" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                                                <TextField fx:id="txtTelefono" promptText="0000-0000" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
-                                        <Label layoutX="500.0" layoutY="170.0" text="Correo" />
-                                        <TextField fx:id="txtCorreo" layoutX="500.0" layoutY="195.0" />
+                                                <Label text="Rol" GridPane.rowIndex="1" GridPane.columnIndex="4"/>
+                                                <ComboBox fx:id="cmbRoles" promptText="Seleccione rol" GridPane.rowIndex="1" GridPane.columnIndex="5"/>
 
-                                        <Label layoutX="675.0" layoutY="170.0" text="Usuario" />
-                                        <TextField fx:id="txtNombreUsuario" layoutX="668.0" layoutY="195.0" promptText="Usuario" />
+                                                <!-- Fila 3 -->
+                                                <Label text="Dirección" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                                <TextField fx:id="txtDireccion" promptText="Dirección" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
 
-                                        <Label layoutX="825.0" layoutY="170.0" text="Contraseña" />
-                                        <PasswordField fx:id="txtContraseña" layoutX="825.0" layoutY="195.0" />
+                                                <Label text="Correo" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                                <TextField fx:id="txtCorreo" promptText="ejemplo@correo.com" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
 
-                                        <Label layoutX="787.0" layoutY="95.0" text="Rol" />
-                                        <ComboBox fx:id="cmbRoles" layoutX="774.0" layoutY="116.0" promptText="Seleccione rol" />
+                                                <!-- Fila 4 -->
+                                                <Label text="Usuario" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                                <TextField fx:id="txtNombreUsuario" promptText="Usuario" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                                        <Button fx:id="btnAgregarUsuario" layoutX="193.0" layoutY="260.0" mnemonicParsing="false" onAction="#agregarUsuario" text="Agregar" />
-                                        <Button fx:id="btnEditar" layoutX="476.0" layoutY="260.0" mnemonicParsing="false" onAction="#editarUsuario" text="Editar" />
-                                        <Button fx:id="btnEliminar" layoutX="713.0" layoutY="260.0" mnemonicParsing="false" onAction="#eliminarUsuario" text="Eliminar" />
+                                                <Label text="Contraseña" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+                                                <PasswordField fx:id="txtContraseña" promptText="Contraseña" GridPane.rowIndex="4" GridPane.columnIndex="3"/>
+                                            </GridPane>
 
-                                        <TableView fx:id="tblUsuarios" layoutX="50.0" layoutY="350.0" prefHeight="254.0" prefWidth="959.0">
-                                            <columns>
-                                                <TableColumn fx:id="colNombre" prefWidth="152.0" text="Nombre" />
-                                                <TableColumn fx:id="colGenero" minWidth="8.0" prefWidth="75.0" text="Género" />
-                                                <TableColumn fx:id="colFechaNacimiento" minWidth="5.0" prefWidth="100.0" text="Fecha Nacimiento" />
-                                                <TableColumn fx:id="colDUI" minWidth="0.0" prefWidth="94.0" text="DUI" />
-                                                <TableColumn fx:id="colTelefono" prefWidth="68.0" text="Teléfono" />
-                                                <TableColumn fx:id="colDireccion" prefWidth="120.0" text="Dirección" />
-                                                <TableColumn fx:id="colCorreo" prefWidth="150.0" text="Correo" />
-                                                <TableColumn fx:id="colUsuario" prefWidth="88.0" text="Usuario" />
-                                                <TableColumn fx:id="colRol" prefWidth="98.0" text="Rol" />
-                                            </columns>
-                                        </TableView>
+                                            <!-- BOTONES -->
+                                            <HBox spacing="20" alignment="CENTER">
+                                                <Button fx:id="btnAgregarUsuario" text="Agregar" onAction="#agregarUsuario"/>
+                                                <Button fx:id="btnEditar"          text="Editar"  onAction="#editarUsuario"/>
+                                                <Button fx:id="btnEliminar"        text="Eliminar" onAction="#eliminarUsuario"/>
+                                            </HBox>
 
+                                            <!-- TABLA -->
+                                            <TableView fx:id="tblUsuarios" VBox.vgrow="ALWAYS">
+                                                <columns>
+                                                    <TableColumn fx:id="colNombre"           text="Nombre"                minWidth="250"/>
+                                                    <TableColumn fx:id="colGenero"           text="Género"                minWidth="80"/>
+                                                    <TableColumn fx:id="colFechaNacimiento"  text="Fecha Nacimiento"      minWidth="120"/>
+                                                    <TableColumn fx:id="colDUI"              text="DUI"                   minWidth="110"/>
+                                                    <TableColumn fx:id="colTelefono"         text="Teléfono"              minWidth="110"/>
+                                                    <TableColumn fx:id="colDireccion"        text="Dirección"             minWidth="300"/>
+                                                    <TableColumn fx:id="colCorreo"           text="Correo"                minWidth="200"/>
+                                                    <TableColumn fx:id="colUsuario"          text="Usuario"               minWidth="90"/>
+                                                    <TableColumn fx:id="colRol"              text="Rol"                   minWidth="110"/>
+                                                </columns>
+                                            </TableView>
+                                        </VBox>
                                     </children>
                                 </AnchorPane>
                             </items>

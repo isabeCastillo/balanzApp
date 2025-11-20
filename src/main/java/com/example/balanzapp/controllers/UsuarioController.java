@@ -1,6 +1,7 @@
 package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.Conexion.ConexionDB;
+import com.example.balanzapp.dao.UsuarioDAO;
 import com.example.balanzapp.models.Rol;
 import com.example.balanzapp.models.Usuario;
 import com.example.balanzapp.utils.sessionUsu;
@@ -10,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import java.time.ZoneId;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-
+import java.time.ZoneId;           // 👈 importante para convertir a LocalDate
 
 public class UsuarioController extends BaseController {
 
@@ -58,61 +58,52 @@ public class UsuarioController extends BaseController {
     @FXML
     public void initialize() {
         Usuario usuarioActivo = sessionUsu.getUsuarioActivo();
-
         cmbGenero.setItems(FXCollections.observableArrayList("Masculino", "Femenino", "Otro"));
-        // Verificación de permisos
         if (usuarioActivo == null || usuarioActivo.getRol().getNivel_acceso() != 1) {
             bloquearFormulario();
             mostrarAlerta("Acceso denegado", "Solo el Administrador puede gestionar usuarios.");
             return;
         }
+
         cargarDatosUsuario();
         configurarTabla();
         cargarRoles();
         cargarUsuarios();
 
-        tblUsuarios.setOnMouseClicked(event -> {
-            Usuario seleccionado = tblUsuarios.getSelectionModel().getSelectedItem();
-            if (seleccionado != null) {
-                txtNombre.setText(seleccionado.getNombre());
-                cmbGenero.setValue(seleccionado.getGenero());
-                if (seleccionado.getFecha_nacimiento() != null) {
-                    dpFechaNacimiento.setValue(
-                            seleccionado.getFecha_nacimiento().toInstant()
-                                    .atZone(ZoneId.systemDefault())
-                                    .toLocalDate()
-                    );
-                } else {
-                    dpFechaNacimiento.setValue(null);
-                }
-                txtDUI.setText(seleccionado.getDui());
-                txtTelefono.setText(seleccionado.getTelefono());
-                txtDireccion.setText(seleccionado.getDireccion());
-                txtCorreo.setText(seleccionado.getCorreo());
-                txtNombreUsuario.setText(seleccionado.getUsuario());
-                txtContraseña.setText(seleccionado.getContraseña());
-                cmbRoles.setValue(seleccionado.getRol());
+        tblUsuarios.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        tblUsuarios.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, nuevo) -> {
+            if (nuevo != null) {
+                llenarFormularioDesdeUsuario(nuevo);
             }
         });
-
-
-
-
     }
-
 
     private void configurarTabla() {
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
-        colFechaNacimiento.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getFecha_nacimiento().toString()));
+
+        colFechaNacimiento.setCellValueFactory(data -> {
+            java.util.Date f = data.getValue().getFecha_nacimiento();
+            return new SimpleStringProperty(f != null ? f.toString() : "");
+        });
+
         colDUI.setCellValueFactory(new PropertyValueFactory<>("dui"));
         colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         colCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
         colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+
         colRol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getRol().getNombre_rol()));
+                new SimpleStringProperty(
+                        data.getValue().getRol() != null
+                                ? data.getValue().getRol().getNombre_rol()
+                                : ""
+                ));
+    }
+
+    private void cargarUsuarios() {
+        listaUsuarios = UsuarioDAO.obtenerUsuarios();
+        tblUsuarios.setItems(listaUsuarios);
     }
 
     private void cargarRoles() {
@@ -138,109 +129,78 @@ public class UsuarioController extends BaseController {
         }
     }
 
-    private void cargarUsuarios() {
-        Usuario usuario = new Usuario();
-        listaUsuarios = usuario.getUsuarios();
-        tblUsuarios.setItems(listaUsuarios);
-    }
+    private void llenarFormularioDesdeUsuario(Usuario u) {
+        txtNombre.setText(u.getNombre());
+        cmbGenero.setValue(u.getGenero());
 
-    @FXML
-    private void agregarUsuario() {
-        if (txtNombre.getText().isEmpty() || cmbGenero.getValue() == null || dpFechaNacimiento.getValue() == null ||
-                txtDUI.getText().isEmpty() || txtTelefono.getText().isEmpty() || txtDireccion.getText().isEmpty() ||
-                txtCorreo.getText().isEmpty() || txtNombreUsuario.getText().isEmpty() || txtContraseña.getText().isEmpty() ||
-                cmbRoles.getValue() == null) {
-            mostrarAlerta("Campos vacíos", "Completa todos los campos antes de agregar un usuario.");
-            return;
+        // --- FECHA (arreglado) ---
+        java.util.Date fecha = u.getFecha_nacimiento();
+        if (fecha != null) {
+            if (fecha instanceof java.sql.Date) {
+                // Viene de la BD como java.sql.Date -> usamos toLocalDate()
+                dpFechaNacimiento.setValue(((java.sql.Date) fecha).toLocalDate());
+            } else {
+                // Si alguna vez usas java.util.Date "pura", aquí sí se puede usar toInstant()
+                dpFechaNacimiento.setValue(
+                        fecha.toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                );
+            }
+        } else {
+            dpFechaNacimiento.setValue(null);
         }
 
-        String sql = "INSERT INTO tbl_usuarios (nombre, genero, fecha_nacimiento, dui, telefono, direccion, correo, usuario, contraseña, id_rol) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // --- RESTO DE CAMPOS ---
+        txtDUI.setText(u.getDui());
+        txtTelefono.setText(u.getTelefono());
+        txtDireccion.setText(u.getDireccion());
+        txtCorreo.setText(u.getCorreo());
+        txtNombreUsuario.setText(u.getUsuario());
+        txtContraseña.setText(u.getContraseña());
 
-        try (Connection con = ConexionDB.connection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, txtNombre.getText());
-            ps.setString(2, cmbGenero.getValue());
-            ps.setDate(3, Date.valueOf(dpFechaNacimiento.getValue()));
-            ps.setString(4, txtDUI.getText());
-            ps.setString(5, txtTelefono.getText());
-            ps.setString(6, txtDireccion.getText());
-            ps.setString(7, txtCorreo.getText());
-            ps.setString(8, txtNombreUsuario.getText());
-            ps.setString(9, txtContraseña.getText());
-            ps.setInt(10, cmbRoles.getValue().getId_rol());
-
-            ps.executeUpdate();
-            mostrarAlerta("Éxito", "Usuario agregado correctamente.");
-            limpiarCampos();
-            cargarUsuarios();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo agregar el usuario.");
+        if (u.getRol() != null && listaRoles != null) {
+            for (Rol r : listaRoles) {
+                if (r.getId_rol() == u.getRol().getId_rol()) {
+                    cmbRoles.setValue(r);
+                    break;
+                }
+            }
+        } else {
+            cmbRoles.setValue(null);
         }
     }
 
-    @FXML
-    private void editarUsuario() {
-        Usuario seleccionado = tblUsuarios.getSelectionModel().getSelectedItem();
-        if (seleccionado == null) {
-            mostrarAlerta("Atención", "Selecciona un usuario para editar.");
-            return;
-        }
 
-        String sql = "UPDATE tbl_usuarios SET nombre=?, genero=?, fecha_nacimiento=?, dui=?, telefono=?, direccion=?, correo=?, usuario=?, contraseña=?, id_rol=? " +
-                "WHERE id_usuario=?";
+    private Usuario construirDesdeFormulario() {
+        Usuario u = new Usuario();
 
-        try (Connection con = ConexionDB.connection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        u.setNombre(txtNombre.getText());
+        u.setGenero(cmbGenero.getValue());
+        LocalDate fecha = dpFechaNacimiento.getValue();
+        u.setFecha_nacimiento(fecha != null ? java.sql.Date.valueOf(fecha) : null);
+        u.setDui(txtDUI.getText());
+        u.setTelefono(txtTelefono.getText());
+        u.setDireccion(txtDireccion.getText());
+        u.setCorreo(txtCorreo.getText());
+        u.setUsuario(txtNombreUsuario.getText());
+        u.setContraseña(txtContraseña.getText());
+        u.setRol(cmbRoles.getValue());
 
-            ps.setString(1, txtNombre.getText());
-            ps.setString(2, cmbGenero.getValue());
-            ps.setDate(3, Date.valueOf(dpFechaNacimiento.getValue()));
-            ps.setString(4, txtDUI.getText());
-            ps.setString(5, txtTelefono.getText());
-            ps.setString(6, txtDireccion.getText());
-            ps.setString(7, txtCorreo.getText());
-            ps.setString(8, txtNombreUsuario.getText());
-            ps.setString(9, txtContraseña.getText());
-            ps.setInt(10, cmbRoles.getValue().getId_rol());
-            ps.setInt(11, seleccionado.getId_usuario());
-
-            ps.executeUpdate();
-            mostrarAlerta("Éxito", "Usuario actualizado correctamente.");
-            limpiarCampos();
-            cargarUsuarios();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo actualizar el usuario.");
-        }
+        return u;
     }
 
-    @FXML
-    private void eliminarUsuario() {
-        Usuario seleccionado = tblUsuarios.getSelectionModel().getSelectedItem();
-        if (seleccionado == null) {
-            mostrarAlerta("Atención", "Selecciona un usuario para eliminar.");
-            return;
-        }
-
-        String sql = "DELETE FROM tbl_usuarios WHERE id_usuario=?";
-        try (Connection con = ConexionDB.connection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, seleccionado.getId_usuario());
-            ps.executeUpdate();
-
-            mostrarAlerta("Éxito", "Usuario eliminado correctamente.");
-            cargarUsuarios();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo eliminar el usuario.");
-        }
+    private boolean hayCamposVacios() {
+        return txtNombre.getText().isEmpty()
+                || cmbGenero.getValue() == null
+                || dpFechaNacimiento.getValue() == null
+                || txtDUI.getText().isEmpty()
+                || txtTelefono.getText().isEmpty()
+                || txtDireccion.getText().isEmpty()
+                || txtCorreo.getText().isEmpty()
+                || txtNombreUsuario.getText().isEmpty()
+                || txtContraseña.getText().isEmpty()
+                || cmbRoles.getValue() == null;
     }
 
     private void limpiarCampos() {
@@ -254,6 +214,7 @@ public class UsuarioController extends BaseController {
         txtNombreUsuario.clear();
         txtContraseña.clear();
         cmbRoles.setValue(null);
+        tblUsuarios.getSelectionModel().clearSelection();
     }
 
     private void bloquearFormulario() {
@@ -280,6 +241,75 @@ public class UsuarioController extends BaseController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+    @FXML
+    private void agregarUsuario() {
+        if (hayCamposVacios()) {
+            mostrarAlerta("Campos vacíos", "Completa todos los campos antes de agregar un usuario.");
+            return;
+        }
+
+        try {
+            Usuario u = construirDesdeFormulario();
+            UsuarioDAO.insertarUsuario(u);
+
+            mostrarAlerta("Éxito", "Usuario agregado correctamente.");
+            limpiarCampos();
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo agregar el usuario.");
+        }
+    }
+
+    @FXML
+    private void editarUsuario() {
+        Usuario seleccionado = tblUsuarios.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            mostrarAlerta("Atención", "Selecciona un usuario para editar.");
+            return;
+        }
+
+        if (hayCamposVacios()) {
+            mostrarAlerta("Campos vacíos", "Completa todos los campos antes de actualizar.");
+            return;
+        }
+
+        try {
+            Usuario u = construirDesdeFormulario();
+            u.setId_usuario(seleccionado.getId_usuario());
+
+            UsuarioDAO.actualizarUsuario(u);
+
+            mostrarAlerta("Éxito", "Usuario actualizado correctamente.");
+            limpiarCampos();
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo actualizar el usuario.");
+        }
+    }
+
+    @FXML
+    private void eliminarUsuario() {
+        Usuario seleccionado = tblUsuarios.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            mostrarAlerta("Atención", "Selecciona un usuario para eliminar.");
+            return;
+        }
+
+        try {
+            UsuarioDAO.eliminarUsuario(seleccionado.getId_usuario());
+            mostrarAlerta("Éxito", "Usuario eliminado correctamente.");
+            limpiarCampos();
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo eliminar el usuario.");
+        }
+    }
 
     @FXML
     void Close(ActionEvent actionEvent) {
@@ -298,12 +328,8 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        } catch (IOException e) { e.printStackTrace(); }
     }
-
 
     @FXML
     void goToCatalogoCuentas(ActionEvent actionEvent) {
@@ -312,10 +338,7 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -325,9 +348,7 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -337,10 +358,7 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -350,9 +368,7 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -362,9 +378,7 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -374,9 +388,7 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -386,8 +398,6 @@ public class UsuarioController extends BaseController {
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }
