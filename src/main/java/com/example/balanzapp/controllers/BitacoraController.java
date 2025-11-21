@@ -1,16 +1,9 @@
 package com.example.balanzapp.controllers;
 
-import com.example.balanzapp.Conexion.ConexionDB;
+import com.example.balanzapp.dao.BitacoraDAO;
 import com.example.balanzapp.models.Bitacora;
-import com.example.balanzapp.models.Usuario;
-import com.example.balanzapp.utils.sessionUsu;
-import com.itextpdf.text.*;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,270 +11,167 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class BitacoraController extends BaseController {
-    @FXML
-    private Button btnbitacora;
+
+    // Combo de balances del sidebar
+    @FXML private ComboBox<String> cmbbalances;
+
+    // Filtros bitácora
+    @FXML private ComboBox<String> cmbusu;
+    @FXML private DatePicker dtdesde;
+    @FXML private DatePicker dthasta;
+    @FXML private ComboBox<String> cmbmodul;
+    @FXML private Button btnfiltrar;
+    @FXML private Button btndescargarPdf;
+    @FXML private Button btndescargarExcel;
+
+    // Tabla
+    @FXML private TableView<Bitacora> tblbitacora;
+    @FXML private TableColumn<Bitacora, String> colUsuario;
+    @FXML private TableColumn<Bitacora, String> colAccion;
+    @FXML private TableColumn<Bitacora, String> colRol;
+    @FXML private TableColumn<Bitacora, String> colModulo;
+    @FXML private TableColumn<Bitacora, String> colFecha;
+    @FXML private TableColumn<Bitacora, String> colHora;
 
     @FXML
-    private Button btncatalogo;
-
-    @FXML
-    private Button btncerrar;
-
-    @FXML
-    private Button btndoc;
-
-    @FXML
-    private Button btnestadoderesultados;
-
-    @FXML
-    private Button btninicio;
-
-    @FXML
-    private Button btnlibrodiario;
-
-    @FXML
-    private Button btnlibromayor;
-
-    @FXML
-    private Button btnusuario;
-
-    @FXML
-    private ComboBox<String> cmbbalances;
-
-    @FXML
-    private ComboBox<String> cmbmodul;
-
-    @FXML
-    private Label lblUs;
-
-    @FXML
-    private Label lblad;
-
-    @FXML
-    private TableView<Bitacora> tblbitacora;
-
-    @FXML
-    private Button btndescargarExcel;
-
-    @FXML
-    private Button btndescargarPdf;
-
-    @FXML
-    private TableColumn<Bitacora, String> colAccion;
-
-    @FXML
-    private TableColumn<Bitacora, String> colFecha;
-
-    @FXML
-    private TableColumn<Bitacora, String> colHora;
-
-    @FXML
-    private TableColumn<Bitacora, String> colModulo;
-
-    @FXML
-    private TableColumn<Bitacora, String> colRol;
-
-    @FXML
-    private ComboBox<String> cmbusu;
-
-    @FXML
-    private Button btnfiltrar;
-
-    @FXML
-    private DatePicker dtdesde;
-
-    @FXML
-    private DatePicker dthasta;
-
-    @FXML
-    private TableColumn<Bitacora, String> colUsuario;
-
-    @FXML
-    public void initialize() {
+    private void initialize() {
+        // Datos del usuario logueado (BaseController)
         cargarDatosUsuario();
-        cmbbalances.getItems().addAll(
-                "Balance de comprobación de saldos",
-                "Balance general"
+
+        // ====== COMBO BALANCES SIDEBAR ======
+        if (cmbbalances != null) {
+            cmbbalances.getItems().addAll(
+                    "Balance de comprobación de saldos",
+                    "Balance general"
+            );
+            cmbbalances.setOnAction(e -> balanceSelec());
+        }
+
+        // ====== COMBOS DE FILTRO ======
+        cargarCombosFiltros();
+
+        // ====== CONFIGURAR TABLA ======
+        configurarTabla();
+
+        // ====== BOTONES ======
+        btnfiltrar.setOnAction(e -> cargarBitacora());
+        btndescargarPdf.setOnAction(e -> descargarPDF());
+        btndescargarExcel.setOnAction(e -> descargarExcel());
+
+        // Cargar todo sin filtros al inicio
+        cargarBitacora();
+    }
+
+    // -------- CONFIGURAR TABLA ----------------------------------------------
+    private void configurarTabla() {
+        colUsuario.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getUsuario())
         );
-        cmbbalances.setOnAction(event -> balanceSelec());
-        btndescargarPdf.setOnAction(event -> descargarpdf());
-        btndescargarExcel.setOnAction(event -> descargarexcel());
 
-        tblbitacora.setItems(obtenerBitacora());
-        colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
-        colAccion.setCellValueFactory(new PropertyValueFactory<>("accionRealizada"));
-        colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
-        colModulo.setCellValueFactory(new PropertyValueFactory<>("modulo"));
-        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
+        colRol.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getRol())
+        );
 
-        cargarUsuariosCombo();
-        cmbmodul.getItems().add("Libro Diario");
-        btnfiltrar.setOnAction(event -> filtrarBitacora());
+        colAccion.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getAccion())
+        );
 
-    }
-    private void balanceSelec() {
-        String seleccion = cmbbalances.getValue();
-        String rutaFXML = null;
+        colModulo.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getModulo())
+        );
 
-        if (seleccion.equals("Balance de comprobación de saldos")) {
-            rutaFXML = "/views/balanceSaldos.fxml";
-        } else if (seleccion.equals("Balance general")) {
-            rutaFXML = "/views/balanceGeneral.fxml";
-        }
-
-        if (rutaFXML != null) {
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
-                Stage stage = (Stage) cmbbalances.getScene().getWindow();
-                stage.getScene().setRoot(root);
-            } catch (IOException e) {
-                e.printStackTrace();
+        colFecha.setCellValueFactory(cell -> {
+            String txt = "";
+            if (cell.getValue().getFecha() != null) {
+                txt = cell.getValue().getFecha().toString();
             }
-        }
+            return new SimpleStringProperty(txt);
+        });
+
+        colHora.setCellValueFactory(cell -> {
+            String txt = "";
+            if (cell.getValue().getHora() != null) {
+                txt = cell.getValue().getHora().toString();
+            }
+            return new SimpleStringProperty(txt);
+        });
     }
 
-    @FXML
-    void Close(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // -------- CARGAR COMBOS FILTROS ----------------------------------------
+    private void cargarCombosFiltros() {
+        // Usuarios
+        cmbusu.getItems().clear();
+        cmbusu.getItems().add("Todos");
+        cmbusu.getItems().addAll(BitacoraDAO.obtenerUsuariosFiltro());
+        cmbusu.setValue("Todos");
 
+        // Módulos
+        cmbmodul.getItems().clear();
+        cmbmodul.getItems().add("Todos");
+        cmbmodul.getItems().addAll(BitacoraDAO.obtenerModulosFiltro());
+        cmbmodul.setValue("Todos");
     }
 
+    // -------- BOTÓN FILTRAR (desde FXML: onAction="#filtrar") --------------
     @FXML
-    void goToBitacoraAuditor(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/bitacora.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    private void filtrar(ActionEvent event) {
+        cargarBitacora();
     }
 
-    @FXML
-    void goToCatalogoCuentas(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo_cuenta.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    // -------- CARGAR BITÁCORA CON FILTROS ----------------------------------
+    private void cargarBitacora() {
+        // Usuario (nombre o null)
+        String usuario = cmbusu.getValue();
+        if ("Todos".equals(usuario)) {
+            usuario = null;
         }
 
-    }
-
-    @FXML
-    void goToDoc(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/documentos.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Módulo (texto o null)
+        String modulo = cmbmodul.getValue();
+        if ("Todos".equals(modulo)) {
+            modulo = null;
         }
 
-    }
+        // Fechas (pueden ser null)
+        LocalDate desde = dtdesde.getValue();
+        LocalDate hasta = dthasta.getValue();
 
-    @FXML
-    void goToEstadoResultados(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/estadosResultados.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (desde != null && hasta != null && hasta.isBefore(desde)) {
+            mostrarAlerta("Error", "La fecha final no puede ser menor que la inicial.");
+            return;
         }
 
+        List<Bitacora> registros = BitacoraDAO.filtrarBitacora(usuario, desde, hasta, modulo);
+        tblbitacora.setItems(FXCollections.observableArrayList(registros));
     }
 
-    @FXML
-    void goToHome(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/inicio.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // ================== PDF ==================
 
-    }
-
-    @FXML
-    void goToLibroDiario(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/libroDiario.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    void goToLibroMayor(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/libroMayor.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    void goToUsuario(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/usuarios.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-    @FXML
-    private void descargarpdf() {
+    private void descargarPDF() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Bitacora Del Auditor como PDF");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        fileChooser.setTitle("Guardar Bitácora como PDF");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf")
+        );
         fileChooser.setInitialFileName("Bitacora_Auditor.pdf");
 
         Stage stage = (Stage) btndescargarPdf.getScene().getWindow();
@@ -294,66 +184,60 @@ public class BitacoraController extends BaseController {
             documento.open();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String fecha = LocalDateTime.now().format(formatter);
+            String fechaGen = LocalDateTime.now().format(formatter);
 
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
-            Paragraph titulo = new Paragraph("BITACORA DEL AUDITOR", fontTitulo);
+            Paragraph titulo = new Paragraph("BITÁCORA DEL AUDITOR", fontTitulo);
             titulo.setAlignment(Element.ALIGN_CENTER);
             titulo.setSpacingAfter(5);
 
             Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
-            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fechaGen, fontFecha);
             fechaParrafo.setAlignment(Element.ALIGN_CENTER);
-            fechaParrafo.setSpacingAfter(20);
+            fechaParrafo.setSpacingAfter(15);
 
             documento.add(titulo);
             documento.add(fechaParrafo);
 
-            PdfPTable tablaPDF = new PdfPTable(tblbitacora.getColumns().size());
+            PdfPTable tablaPDF = new PdfPTable(6);
             tablaPDF.setWidthPercentage(100);
 
-            for (TableColumn<?, ?> col : tblbitacora.getColumns()) {
-                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
-                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
-                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-                tablaPDF.addCell(celda);
+            String[] headers = {"Usuario", "Rol", "Acción", "Módulo", "Fecha", "Hora"};
+            for (String h : headers) {
+                PdfPCell cell = new PdfPCell(new Phrase(h));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                tablaPDF.addCell(cell);
             }
-            if (tblbitacora.getItems().isEmpty()) {
-                PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
-                celdaVacia.setColspan(tblbitacora.getColumns().size());
-                celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
-                tablaPDF.addCell(celdaVacia);
-            } else {
-                tblbitacora.getItems().forEach(item -> {
-                    for (TableColumn<?, ?> col : tblbitacora.getColumns()) {
-                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
-                        tablaPDF.addCell(valor == null ? "" : valor.toString());
-                    }
-                });
+
+            for (Bitacora reg : tblbitacora.getItems()) {
+                tablaPDF.addCell(reg.getUsuario());
+                tablaPDF.addCell(reg.getRol());
+                tablaPDF.addCell(reg.getAccion());
+                tablaPDF.addCell(reg.getModulo());
+                tablaPDF.addCell(reg.getFecha() != null ? reg.getFecha().toString() : "");
+                tablaPDF.addCell(reg.getHora() != null ? reg.getHora().toString() : "");
             }
 
             documento.add(tablaPDF);
             documento.close();
 
-            Alerta("Éxito", "El archivo PDF se generó correctamente.");
-        } catch (DocumentException | IOException ex) {
-            ex.printStackTrace();
-            System.err.println("Error al generar el PDF: " + ex.getMessage());
+            mostrarInfo("Éxito", "El archivo PDF se generó correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "Error al generar el PDF: " + e.getMessage());
         }
     }
-    private void Alerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-    @FXML
-    private void descargarexcel() {
 
+    // ================== EXCEL ==================
+
+    private void descargarExcel() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Bitacora Del Auditor en Excel");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        fileChooser.setTitle("Guardar Bitácora en Excel");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx")
+        );
         fileChooser.setInitialFileName("Bitacora_Auditor.xlsx");
 
         Stage stage = (Stage) btndescargarExcel.getScene().getWindow();
@@ -361,27 +245,30 @@ public class BitacoraController extends BaseController {
         if (archivo == null) return;
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-
-            XSSFSheet hoja = workbook.createSheet("Bitacora");
+            XSSFSheet hoja = workbook.createSheet("Bitácora");
             int filaIndex = 0;
 
+            // Cabecera
             Row filaCabecera = hoja.createRow(filaIndex++);
-            int colIndex = 0;
-            for (TableColumn<?, ?> col : tblbitacora.getColumns()) {
-                Cell cell = filaCabecera.createCell(colIndex++);
-                cell.setCellValue(col.getText());
-            }
+            filaCabecera.createCell(0).setCellValue("Usuario");
+            filaCabecera.createCell(1).setCellValue("Rol");
+            filaCabecera.createCell(2).setCellValue("Acción");
+            filaCabecera.createCell(3).setCellValue("Módulo");
+            filaCabecera.createCell(4).setCellValue("Fecha");
+            filaCabecera.createCell(5).setCellValue("Hora");
 
-            for (Object item : tblbitacora.getItems()) {
+            // Datos
+            for (Bitacora reg : tblbitacora.getItems()) {
                 Row fila = hoja.createRow(filaIndex++);
-                colIndex = 0;
-                for (TableColumn<?, ?> col : tblbitacora.getColumns()) {
-                    Object valor = col.getCellObservableValue((Integer) item).getValue();
-                    fila.createCell(colIndex++).setCellValue(valor == null ? "" : valor.toString());
-                }
+                fila.createCell(0).setCellValue(reg.getUsuario());
+                fila.createCell(1).setCellValue(reg.getRol());
+                fila.createCell(2).setCellValue(reg.getAccion());
+                fila.createCell(3).setCellValue(reg.getModulo());
+                fila.createCell(4).setCellValue(reg.getFecha() != null ? reg.getFecha().toString() : "");
+                fila.createCell(5).setCellValue(reg.getHora() != null ? reg.getHora().toString() : "");
             }
 
-            for (int i = 0; i < tblbitacora.getColumns().size(); i++) {
+            for (int i = 0; i < 6; i++) {
                 hoja.autoSizeColumn(i);
             }
 
@@ -389,122 +276,159 @@ public class BitacoraController extends BaseController {
                 workbook.write(fileOut);
             }
 
-            Alerta("Éxito","El archivo Excel se generó correctamente.");
+            mostrarInfo("Éxito", "El archivo Excel se generó correctamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Error al generar Excel: " + e.getMessage());
+            mostrarAlerta("Error", "Error al generar el Excel: " + e.getMessage());
         }
     }
 
-    public ObservableList<Bitacora> obtenerBitacora() {
-        ObservableList<Bitacora> lista = FXCollections.observableArrayList();
-        Connection conn = ConexionDB.connection();
+    // ================== ALERTAS LOCALES ==================
 
-        try {
-            PreparedStatement ps = conn.prepareStatement(
-                    "SELECT u.nombre AS usuario," +
-                            " b.accion AS accionRealizada, r.nombre_rol AS rol, b.modulo, b.fecha, b.hora " +
-                            "FROM tbl_bitacaud b " +
-                            "INNER JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario " +
-                            "INNER JOIN tbl_roles r ON u.id_rol = r.id_rol " +
-                            "ORDER BY b.fecha DESC, b.hora DESC"
-            );
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                lista.add(new Bitacora(
-                        rs.getString("usuario"),
-                        rs.getString("accionRealizada"),
-                        rs.getString("rol"),
-                        rs.getString("modulo"),
-                        rs.getDate("fecha").toString(),
-                        rs.getTime("hora").toString()
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lista;
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
-    public void cargarUsuariosCombo() {
-        ObservableList<String> listaUsuarios = FXCollections.observableArrayList();
 
+    private void mostrarInfo(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    // ================== NAVEGACIÓN (igual que otros controladores) ==========
+    @FXML
+    void Close(ActionEvent actionEvent) {
         try {
-            Connection conn = ConexionDB.connection();
-            PreparedStatement ps = conn.prepareStatement("SELECT nombre FROM tbl_usuarios");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                listaUsuarios.add(rs.getString("nombre"));
-            }
-
-            cmbusu.setItems(listaUsuarios);
-
-        } catch (SQLException e) {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void filtrar(ActionEvent actionEvent) {
-
-    }
-    public void filtrarBitacora() {
-        String usuario = cmbusu.getValue();
-        LocalDate desde = dtdesde.getValue();
-        LocalDate hasta = dthasta.getValue();
-        String modulo = cmbmodul.getValue(); // Libro Diario
-
-        ObservableList<Bitacora> lista = FXCollections.observableArrayList();
-
-        String sql = "SELECT u.nombre AS usuario, b.accion AS accionRealizada, r.nombre_rol AS rol, b.modulo, b.fecha, b.hora " +
-                "FROM tbl_bitacaud b " +
-                "INNER JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario " +
-                "INNER JOIN tbl_roles r ON u.id_rol = r.id_rol WHERE 1=1";
-
-        if(usuario != null){
-            sql += " AND u.nombre = ?";
-        }
-        if(desde != null){
-            sql += " AND b.fecha >= ?";
-        }
-        if(hasta != null){
-            sql += " AND b.fecha <= ?";
-        }
-        if(modulo != null){
-            sql += " AND b.modulo = ?";
-        }
-
-        sql += " ORDER BY b.fecha DESC, b.hora DESC";
-
+    @FXML
+    void goToBitacoraAuditor(ActionEvent actionEvent) {
         try {
-            Connection conn = ConexionDB.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            int i = 1;
-            if(usuario != null) ps.setString(i++, usuario);
-            if(desde != null) ps.setDate(i++, java.sql.Date.valueOf(desde));
-            if(hasta != null) ps.setDate(i++, java.sql.Date.valueOf(hasta));
-            if(modulo != null) ps.setString(i++, modulo);
-
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                lista.add(new Bitacora(
-                        rs.getString("usuario"),
-                        rs.getString("accionRealizada"),
-                        rs.getString("rol"),
-                        rs.getString("modulo"),
-                        rs.getDate("fecha").toString(),
-                        rs.getTime("hora").toString()
-                ));
-            }
-
-            tblbitacora.setItems(lista);
-
-        } catch (SQLException e) {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/bitacora.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToCatalogoCuentas(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/catalogo_cuenta.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToDoc(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/documentos.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToEstadoResultados(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/estadosResultados.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToHome(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/inicio.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToLibroDiario(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/libroDiario.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToLibroMayor(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/libroMayor.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void goToUsuario(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/usuarios.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void balanceSelec() {
+        String seleccion = cmbbalances.getValue();
+        String rutaFXML = null;
+
+        if ("Balance de comprobación de saldos".equals(seleccion)) {
+            rutaFXML = "/views/balanceSaldos.fxml";
+        } else if ("Balance general".equals(seleccion)) {
+            rutaFXML = "/views/balanceGeneral.fxml";
+        }
+
+        if (rutaFXML != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
+                Stage stage = (Stage) cmbbalances.getScene().getWindow();
+                stage.getScene().setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

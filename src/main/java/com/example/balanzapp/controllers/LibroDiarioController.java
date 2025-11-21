@@ -40,63 +40,109 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class LibroDiarioController extends BaseController{
-    @FXML private Button btninicio;
-    @FXML private Button btndoc;
-    @FXML private Button btnlibrodiario;
-    @FXML private Button btnlibromayor;
-    @FXML private ComboBox<String> cmbbalances;
-    @FXML private Button btnestadoderesultados;
-    @FXML private Button btncatalogo;
-    @FXML private Button btnusuario;
-    @FXML private Button btnbitacora;
-    @FXML private Button btncerrar;
+public class LibroDiarioController extends BaseController {
+    @FXML
+    private Button btninicio;
+    @FXML
+    private Button btndoc;
+    @FXML
+    private Button btnlibrodiario;
+    @FXML
+    private Button btnlibromayor;
+    @FXML
+    private ComboBox<String> cmbbalances;
+    @FXML
+    private Button btnestadoderesultados;
+    @FXML
+    private Button btncatalogo;
+    @FXML
+    private Button btnusuario;
+    @FXML
+    private Button btnbitacora;
+    @FXML
+    private Button btncerrar;
 
     // ====== ENCABEZADO PARTIDA ======
-    @FXML private DatePicker dateFecha;
-    @FXML private TextField txtConcepto;
-    @FXML private ComboBox<String> comboTipoPartida;
-    @FXML private Label lblNumeroPartida;
+    @FXML
+    private DatePicker dateFecha;
+    @FXML
+    private TextField txtConcepto;
+    @FXML
+    private ComboBox<String> comboTipoPartida;
+    @FXML
+    private Label lblNumeroPartida;
 
     // ====== DETALLE PARTIDA (formulario de línea) ======
-    @FXML private ComboBox<String> comboCuenta;
-    @FXML private RadioButton radioDebe;
-    @FXML private RadioButton radioHaber;
-    @FXML private TextField txtMonto;
-    @FXML private TextField txtDescripcionLinea;
-    @FXML private Button btnSubirdoc;
-    @FXML private Button btnagregar;
-    @FXML private Button btneditar;
-    @FXML private Button btneliminar;
-    @FXML private Button btnGuardarPartida;
-    @FXML private Button btnNuevaPartida;
+    @FXML
+    private ComboBox<String> comboCuenta;
+    @FXML
+    private RadioButton radioDebe;
+    @FXML
+    private RadioButton radioHaber;
+    @FXML
+    private TextField txtMonto;
+    @FXML
+    private TextField txtDescripcionLinea;
+    @FXML
+    private Button btnSubirdoc;
+    @FXML
+    private Button btnagregar;
+    @FXML
+    private Button btneditar;
+    @FXML
+    private Button btneliminar;
+    @FXML
+    private Button btnGuardarPartida;
+    @FXML
+    private Button btnNuevaPartida;
 
     // ====== TABLA DETALLE ======
-    @FXML private TableView<DetallePartidaTemp> tablaDetalle;
-    @FXML private TableColumn<DetallePartidaTemp, String> colCuentaDetalle;
-    @FXML private TableColumn<DetallePartidaTemp, String> colDescripcionDetalle;
-    @FXML private TableColumn<DetallePartidaTemp, Double> colDebeDetalle;
-    @FXML private TableColumn<DetallePartidaTemp, Double> colHaberDetalle;
+    @FXML
+    private TableView<DetallePartidaTemp> tablaDetalle;
+    @FXML
+    private TableColumn<DetallePartidaTemp, String> colCuentaDetalle;
+    @FXML
+    private TableColumn<DetallePartidaTemp, String> colDescripcionDetalle;
+    @FXML
+    private TableColumn<DetallePartidaTemp, Double> colDebeDetalle;
+    @FXML
+    private TableColumn<DetallePartidaTemp, Double> colHaberDetalle;
 
 
-    @FXML private Label lblTotalDebe;
-    @FXML private Label lblTotalHaber;
+    @FXML
+    private Label lblTotalDebe;
+    @FXML
+    private Label lblTotalHaber;
 
     // ====== HISTORIAL LIBRO DIARIO ======
-    @FXML private ComboBox<String> comboAnio;
-    @FXML private ComboBox<String> comboMes;
-    @FXML private Button btndescargarpdf;
-    @FXML private Button btndescargarexcel;
-    @FXML private Button btnbuscar;
-    @FXML private TableView<Partida> tablaDiario;
-    @FXML private TableColumn<Partida, LocalDate> colFecha;
-    @FXML private TableColumn<Partida, Integer> colNumeroPartida;
-    @FXML private TableColumn<Partida, String> colConcepto;
-    @FXML private TableColumn<Partida, String> colCuenta;
-    @FXML private TableColumn<Partida, Double> colDebe;
-    @FXML private TableColumn<Partida, Double> colHaber;
-    @FXML private TableColumn<Partida, String> colDocumento;
-    @FXML private TableColumn<Partida, String> colTipoPartida;
+    @FXML
+    private ComboBox<String> comboAnio;
+    @FXML
+    private ComboBox<String> comboMes;
+    @FXML
+    private Button btndescargarpdf;
+    @FXML
+    private Button btndescargarexcel;
+    @FXML
+    private Button btnbuscar;
+    @FXML
+    private TableView<Partida> tablaDiario;
+    @FXML
+    private TableColumn<Partida, LocalDate> colFecha;
+    @FXML
+    private TableColumn<Partida, Integer> colNumeroPartida;
+    @FXML
+    private TableColumn<Partida, String> colConcepto;
+    @FXML
+    private TableColumn<Partida, String> colCuenta;
+    @FXML
+    private TableColumn<Partida, Double> colDebe;
+    @FXML
+    private TableColumn<Partida, Double> colHaber;
+    @FXML
+    private TableColumn<Partida, String> colDocumento;
+    @FXML
+    private TableColumn<Partida, String> colTipoPartida;
 
 
     // ====== DATA EN MEMORIA ======
@@ -104,7 +150,7 @@ public class LibroDiarioController extends BaseController{
     private File documentoSeleccionado;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         cargarDatosUsuario();
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
@@ -112,7 +158,7 @@ public class LibroDiarioController extends BaseController{
         );
         cmbbalances.setOnAction(e -> balanceSelec());
         comboMes.getItems().addAll(
-                "1","2","3","4","5","6","7","8","9","10","11","12"
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
         );
         cargarAniosDesdeBD();
         // Seleccionar por defecto mes actual y último año si existen
@@ -354,6 +400,7 @@ public class LibroDiarioController extends BaseController{
         actualizarTotales();
         limpiarLinea();
     }
+
     private void eliminarLinea() {
         DetallePartidaTemp seleccionado = tablaDetalle.getSelectionModel().getSelectedItem();
         if (seleccionado == null) {
@@ -363,6 +410,7 @@ public class LibroDiarioController extends BaseController{
         detalles.remove(seleccionado);
         actualizarTotales();
     }
+
     private void actualizarTotales() {
         double totalDebe = detalles.stream().mapToDouble(DetallePartidaTemp::getDebe).sum();
         double totalHaber = detalles.stream().mapToDouble(DetallePartidaTemp::getHaber).sum();
@@ -441,7 +489,7 @@ public class LibroDiarioController extends BaseController{
             cargarTablaHistorial();
             Connection conn = ConexionDB.connection();
             StringBuilder detalleCompleto = new StringBuilder();
-            for (DetallePartidaTemp linea : detalles ) {
+            for (DetallePartidaTemp linea : detalles) {
                 detalleCompleto.append("Cuenta: ")
                         .append(linea.getCuenta())
                         .append(" - Debe: ").append(linea.getDebe())
@@ -496,7 +544,9 @@ public class LibroDiarioController extends BaseController{
             while (rs.next()) {
                 comboAnio.getItems().add(String.valueOf((int) rs.getDouble(1)));
             }
-        } catch (SQLException e) { System.out.println(e); }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     private void cargarCuentasDesdeBD() {
@@ -507,7 +557,9 @@ public class LibroDiarioController extends BaseController{
             while (rs.next()) {
                 comboCuenta.getItems().add(rs.getInt(1) + " - " + rs.getString(2));
             }
-        } catch (SQLException e) { System.out.println(e); }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     // ================== ALERTAS ==================
@@ -661,15 +713,19 @@ public class LibroDiarioController extends BaseController{
             e.printStackTrace();
         }
     }
+
+    // ================== PDF LIBRO DIARIO ==================
     @FXML
     private void descargarpdf() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar Libro Diario como PDF");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf")
+        );
         fileChooser.setInitialFileName("Libro_Diario.pdf");
 
         Stage stage = (Stage) btndescargarpdf.getScene().getWindow();
-        java.io.File archivo = fileChooser.showSaveDialog(stage);
+        File archivo = fileChooser.showSaveDialog(stage);
         if (archivo == null) return;
 
         try {
@@ -677,8 +733,9 @@ public class LibroDiarioController extends BaseController{
             PdfWriter.getInstance(documento, new FileOutputStream(archivo));
             documento.open();
 
+            // ===== ENCABEZADO =====
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String fecha = LocalDateTime.now().format(formatter);
+            String fechaGen = LocalDateTime.now().format(formatter);
 
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Paragraph titulo = new Paragraph("LIBRO DIARIO", fontTitulo);
@@ -686,43 +743,82 @@ public class LibroDiarioController extends BaseController{
             titulo.setSpacingAfter(5);
 
             Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
-            Paragraph fechaParrafo = new Paragraph("Generado el: " + fecha, fontFecha);
+            Paragraph fechaParrafo = new Paragraph("Generado el: " + fechaGen, fontFecha);
             fechaParrafo.setAlignment(Element.ALIGN_CENTER);
-            fechaParrafo.setSpacingAfter(20);
+            fechaParrafo.setSpacingAfter(15);
 
             documento.add(titulo);
             documento.add(fechaParrafo);
 
-            PdfPTable tablaPDF = new PdfPTable(tablaDiario.getColumns().size());
+            // ===== TABLA PDF =====
+            PdfPTable tablaPDF = new PdfPTable(7); // Fecha, Nº Partida, Concepto, Cuenta, Debe, Haber, Documento
             tablaPDF.setWidthPercentage(100);
 
-            for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
-                PdfPCell celda = new PdfPCell(new Phrase(col.getText()));
-                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
-                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-                tablaPDF.addCell(celda);
+            String[] headers = {"Fecha", "N° Partida", "Concepto", "Cuenta", "Debe", "Haber", "Documento"};
+            for (String h : headers) {
+                PdfPCell cell = new PdfPCell(new Phrase(h));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                tablaPDF.addCell(cell);
             }
-            if (tablaDiario.getItems().isEmpty()) {
-                PdfPCell celdaVacia = new PdfPCell(new Phrase("Tabla sin contenido"));
-                celdaVacia.setColspan(tablaDiario.getColumns().size());
-                celdaVacia.setHorizontalAlignment(Element.ALIGN_CENTER);
-                tablaPDF.addCell(celdaVacia);
-            } else {
-                tablaDiario.getItems().forEach(item -> {
-                    for (TableColumn<?, ?> col : tablaDiario.getColumns()) {
-                        Object valor = col.getCellData(Integer.parseInt(String.valueOf(item)));
-                        tablaPDF.addCell(valor == null ? "" : valor.toString());
-                    }
-                });
+
+            // Filas con los datos de la tablaDiario
+            for (Partida p : tablaDiario.getItems()) {
+                // Fecha
+                tablaPDF.addCell(p.getFecha() != null ? p.getFecha().toString() : "");
+                // Número de partida
+                tablaPDF.addCell(String.valueOf(p.getNumeroPartida()));
+                // Concepto
+                tablaPDF.addCell(p.getConcepto() != null ? p.getConcepto() : "");
+                // Cuenta
+                tablaPDF.addCell(p.getCuenta() != null ? p.getCuenta() : "");
+                // Debe
+                tablaPDF.addCell(String.format("%.2f", p.getDebe()));
+                // Haber
+                tablaPDF.addCell(String.format("%.2f", p.getHaber()));
+                // Documento
+                tablaPDF.addCell(p.getDocumento() != null ? p.getDocumento() : "");
             }
 
             documento.add(tablaPDF);
             documento.close();
 
-            Alerta("Éxito", "El archivo PDF se generó correctamente.");
-        } catch (DocumentException | IOException ex) {
-            ex.printStackTrace();
-            System.err.println("Error al generar el PDF: " + ex.getMessage());
+            // ===== REGISTRAR EN BITÁCORA =====
+            try (Connection conn = ConexionDB.connection()) {
+                Usuario usuario = sessionUsu.getUsuarioActivo();
+                if (usuario != null) {
+                    String accion = "Descargó el Libro Diario en PDF";
+                    String modulo = "Libro Diario";
+
+                    String detalles = "Archivo: " + archivo.getName()
+                            + " | Mes: " + (comboMes.getValue() != null ? comboMes.getValue() : "-")
+                            + " | Año: " + (comboAnio.getValue() != null ? comboAnio.getValue() : "-");
+
+                    LocalDate hoy = LocalDate.now();
+                    LocalTime hora = LocalTime.now();
+
+                    PreparedStatement psBitacora = conn.prepareStatement(
+                            "INSERT INTO tbl_bitacaud (id_usuario, accion, modulo, detalles, fecha, hora) " +
+                                    "VALUES (?, ?, ?, ?, ?, ?)"
+                    );
+                    psBitacora.setInt(1, usuario.getId_usuario());
+                    psBitacora.setString(2, accion);
+                    psBitacora.setString(3, modulo);
+                    psBitacora.setString(4, detalles);
+                    psBitacora.setDate(5, java.sql.Date.valueOf(hoy));
+                    psBitacora.setTime(6, java.sql.Time.valueOf(hora));
+                    psBitacora.executeUpdate();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // No rompas al usuario solo por fallo de bitácora
+            }
+
+            Alerta("Éxito", "El archivo PDF del Libro Diario se generó correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarError("Error al generar el PDF: " + e.getMessage());
         }
     }
 
