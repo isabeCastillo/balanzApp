@@ -10,7 +10,7 @@ public class ConexionDB {
 
     private static  final String USER = "postgres";
 
-    private static final String PASS = "progra2023";
+    private static final String PASS = "wosito20";
 
     //crear objeto de tipo conect
     public static Connection connection()
