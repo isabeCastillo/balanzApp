@@ -42,9 +42,9 @@ public class BaseController {
         if (btnusuario != null)   btnusuario.setVisible(nivel == 1);
         if (btnbitacora != null)  btnbitacora.setVisible(nivel == 1 || nivel == 3);
         if (btndoc != null)       btndoc.setVisible(nivel <= 2);
-        if (btnlibrodiario != null) btnlibrodiario.setVisible(nivel <= 2);
-        if (btnlibromayor != null)  btnlibromayor.setVisible(nivel <= 2);
-        if (btncatalogo != null)    btncatalogo.setVisible(nivel <= 2);
+        if (btnlibrodiario != null) btnlibrodiario.setVisible(nivel <= 3);
+        if (btnlibromayor != null)  btnlibromayor.setVisible(nivel <= 3);
+        if (btncatalogo != null)    btncatalogo.setVisible(nivel <= 3);
     }
 
 }
