@@ -3,6 +3,7 @@ package com.example.balanzapp.controllers;
 import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.dao.MayorDAO;
 import com.example.balanzapp.models.MovimientoMayor;
+import com.example.balanzapp.utils.sessionUsu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +24,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,8 +46,8 @@ public class LibroMayorController extends BaseController {
     @FXML private Label lblUs;
     @FXML private Label lblad;
 
-    // Filtros propio del mayor
-    @FXML private ComboBox<String> comboCuenta;
+    // Filtros propios del mayor
+    @FXML private ComboBox<String> comboCuenta;   // "1101 - Caja - Activo"
     @FXML private DatePicker dateDesde;
     @FXML private DatePicker dateHasta;
     @FXML private Button bntbuscar;
@@ -61,57 +61,60 @@ public class LibroMayorController extends BaseController {
     @FXML private Button btndescargarpdf;
     @FXML private Button btndescargarexcel;
 
-    private int idCuentaSeleccionada = -1;
-
     @FXML
     private void initialize() {
+        // Cargar usuario, permisos, etc.
         cargarDatosUsuario();
 
-        // combos de balances
+        // Combo de balances
         cmbbalances.getItems().addAll(
                 "Balance de comprobación de saldos",
                 "Balance general"
         );
         cmbbalances.setOnAction(e -> balanceSelec());
 
-        // filtros
+        // Cuentas para el combo
         cargarCuentasDesdeBD();
+
+        // Rango de fechas por defecto (mes actual)
         dateDesde.setValue(LocalDate.now().withDayOfMonth(1)); // 1er día del mes
         dateHasta.setValue(LocalDate.now());
 
+        // Eventos
         bntbuscar.setOnAction(e -> buscarMayor());
         btndescargarpdf.setOnAction(e -> descargarpdf());
         btndescargarexcel.setOnAction(e -> descargarexcel());
-
-        // si quieres que cargue algo al entrar, descomenta:
-        // buscarMayor();
     }
 
-    private void cargarCuentasDesdeBD() {
-        String sql = "SELECT id_cuenta, codigo, nombre, tipo FROM tbl_cntaContables ORDER BY codigo";
+    // ================== CARGAR CUENTAS ==================
 
-        try (Connection conn = ConexionDB.connection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+    private void cargarCuentasDesdeBD() {
+        // IMPORTANTE: aquí ya NO usamos id_cuenta, solo mostramos:
+        // "codigo - nombre - tipo"
+        String sql = "SELECT codigo, nombre, tipo FROM tbl_cntaContables ORDER BY codigo";
+
+        try (var conn = ConexionDB.connection();
+             var ps = conn.prepareStatement(sql);
+             var rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                int id = rs.getInt("id_cuenta");
                 String codigo = rs.getString("codigo");
                 String nombre = rs.getString("nombre");
-                String tipo = rs.getString("tipo");
+                String tipo   = rs.getString("tipo");
 
-                // muestra "1101 - Caja" en el combo
-                comboCuenta.getItems().add(id + " - " + codigo + " - " + nombre + " - " + tipo);
+                comboCuenta.getItems().add(codigo + " - " + nombre + " - " + tipo);
             }
 
-        } catch (SQLException e) {
-            System.out.println("Error cargando cuentas: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error cargando cuentas para mayor: " + e.getMessage());
         }
 
         if (!comboCuenta.getItems().isEmpty()) {
             comboCuenta.getSelectionModel().selectFirst();
         }
     }
+
+    // ================== BUSCAR MAYOR ==================
 
     private void buscarMayor() {
         if (comboCuenta.getValue() == null) {
@@ -123,15 +126,6 @@ public class LibroMayorController extends BaseController {
             return;
         }
 
-        String valorCuenta = comboCuenta.getValue();
-        String[] partes = valorCuenta.split(" - ");
-        idCuentaSeleccionada = Integer.parseInt(partes[0]);
-        String codigo = partes.length > 1 ? partes[1] : "";
-        String nombre = partes.length > 2 ? partes[2] : "";
-        String tipo = partes.length > 3 ? partes[3] : "";
-
-        lblNombreYTipoCuenta.setText(codigo + " " + nombre + " - " + tipo);
-
         LocalDate desde = dateDesde.getValue();
         LocalDate hasta = dateHasta.getValue();
 
@@ -140,8 +134,20 @@ public class LibroMayorController extends BaseController {
             return;
         }
 
+        // Ejemplo de valor: "1101 - Caja - Activo"
+        String valorCuenta = comboCuenta.getValue();
+        String[] partes = valorCuenta.split(" - ");
+
+        String codigo = partes.length > 0 ? partes[0] : "";
+        String nombre = partes.length > 1 ? partes[1] : "";
+        String tipo   = partes.length > 2 ? partes[2] : "";
+
+        // Etiqueta arriba del mayor
+        lblNombreYTipoCuenta.setText(codigo + " " + nombre + " - " + tipo);
+
+        // Llamamos al DAO usando SOLO el código
         List<MovimientoMayor> lista = MayorDAO.obtenerMayorPorCuentaYRango(
-                idCuentaSeleccionada, desde, hasta
+                codigo, desde, hasta
         );
 
         listDebe.getItems().clear();
@@ -163,12 +169,14 @@ public class LibroMayorController extends BaseController {
                 textoBase += " - " + mov.getDescripcion();
             }
 
+            // Columna DEBE
             if (mov.getDebe() > 0) {
                 listDebe.getItems().add(textoBase + " | " + String.format("%.2f", mov.getDebe()));
             } else {
                 listDebe.getItems().add("");
             }
 
+            // Columna HABER
             if (mov.getHaber() > 0) {
                 listHaber.getItems().add(textoBase + " | " + String.format("%.2f", mov.getHaber()));
             } else {
@@ -181,7 +189,7 @@ public class LibroMayorController extends BaseController {
         lblSaldo.setText(String.format("SALDO: $%.2f", saldoFinal));
     }
 
-    // ==== PDF & EXCEL ========================================================
+    // ================== PDF & EXCEL ==================
 
     @FXML
     private void descargarpdf() {
@@ -303,7 +311,7 @@ public class LibroMayorController extends BaseController {
         }
     }
 
-    // ==== NAVEGACIÓN Y UTILIDADES ============================================
+    // ================== BALANCES (NAVEGACIÓN) ==================
 
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
@@ -326,6 +334,8 @@ public class LibroMayorController extends BaseController {
         }
     }
 
+    // ================== ALERTAS ==================
+
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);
@@ -342,7 +352,7 @@ public class LibroMayorController extends BaseController {
         alert.showAndWait();
     }
 
-    // ==== LOS MISMOS MÉTODOS DE NAVEGACIÓN QUE YA TENÍAS =====================
+    // ==== NAVEGACIÓN (igual que ya tenías) =====================
 
     @FXML
     void Close(ActionEvent actionEvent) {
@@ -430,7 +440,6 @@ public class LibroMayorController extends BaseController {
 
     @FXML
     void goToLibroMayor(ActionEvent actionEvent) {
-        // ya estás en Libro Mayor; opcionalmente recargar:
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/views/libroMayor.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

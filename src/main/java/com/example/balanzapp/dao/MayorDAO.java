@@ -9,32 +9,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MayorDAO {
-
     public static List<MovimientoMayor> obtenerMayorPorCuentaYRango(
-            int idCuenta, LocalDate desde, LocalDate hasta) {
-
+            String codigoCuenta,
+            LocalDate desde,
+            LocalDate hasta
+    ) {
         List<MovimientoMayor> lista = new ArrayList<>();
 
         String sql = """
-                SELECT 
-                    p.fecha,
-                    p.concepto,
-                    d.descripcion,
-                    d.debe,
-                    d.haber,
-                    COALESCE(df.archivo_pdf, '') AS documento
-                FROM tbl_detallePartida d
-                JOIN tbl_partidas p ON p.id_partida = d.id_partida
-                LEFT JOIN tbl_docFuente df ON df.id_partida = p.id_partida
-                WHERE d.id_cuenta = ?
-                  AND p.fecha BETWEEN ? AND ?
-                ORDER BY p.fecha, p.numero_partida, d.id_detalle
-                """;
+            SELECT 
+                p.fecha,
+                p.concepto,
+                d.descripcion,
+                d.debe,
+                d.haber
+            FROM tbl_cntaContables c
+            JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
+            JOIN tbl_partidas p       ON p.id_partida = d.id_partida
+            WHERE c.codigo = ?
+              AND p.fecha BETWEEN ? AND ?
+            ORDER BY p.fecha, p.id_partida, d.id_detalle
+            """;
 
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idCuenta);
+            ps.setString(1, codigoCuenta);
             ps.setDate(2, Date.valueOf(desde));
             ps.setDate(3, Date.valueOf(hasta));
 
@@ -43,22 +43,29 @@ public class MayorDAO {
             double saldoAcumulado = 0.0;
 
             while (rs.next()) {
-                MovimientoMayor mov = new MovimientoMayor();
-                mov.setFecha(rs.getDate("fecha").toLocalDate());
-                mov.setConcepto(rs.getString("concepto"));
-                mov.setDescripcion(rs.getString("descripcion"));
-                mov.setDebe(rs.getDouble("debe"));
-                mov.setHaber(rs.getDouble("haber"));
-                mov.setDocumento(rs.getString("documento"));
+                LocalDate fecha       = rs.getDate("fecha").toLocalDate();
+                String concepto       = rs.getString("concepto");
+                String descripcion    = rs.getString("descripcion");
+                double debe           = rs.getDouble("debe");
+                double haber          = rs.getDouble("haber");
 
-                saldoAcumulado += mov.getDebe() - mov.getHaber();
-                mov.setSaldo(saldoAcumulado);
+                // saldo acumulado = suma(debe - haber)
+                saldoAcumulado += (debe - haber);
+
+                MovimientoMayor mov = new MovimientoMayor(
+                        fecha,
+                        concepto,
+                        descripcion,
+                        debe,
+                        haber,
+                        saldoAcumulado
+                );
 
                 lista.add(mov);
             }
 
         } catch (SQLException e) {
-            System.out.println("Error cargando mayor: " + e.getMessage());
+            System.out.println("Error obteniendo mayor por cuenta: " + e.getMessage());
         }
 
         return lista;

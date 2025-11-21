@@ -53,9 +53,15 @@ public class BaseController {
         if (btnlibromayor != null)  btnlibromayor.setVisible(nivel <= 3);
         if (btncatalogo != null)    btncatalogo.setVisible(nivel <= 3);
         if (partidaactual != null) {
-            partidaactual.setExpanded(false);
-            historial.setExpanded(true);
-            partidaactual.setDisable(nivel <= 3);
+            if (nivel == 3) {
+                partidaactual.setExpanded(false);
+                historial.setExpanded(true);
+                partidaactual.setDisable(true);
+            } else {
+                partidaactual.setExpanded(true);
+                historial.setExpanded(false);
+                partidaactual.setDisable(false);
+            }
         }
     }
 
