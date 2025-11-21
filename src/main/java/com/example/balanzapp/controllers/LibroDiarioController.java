@@ -83,7 +83,7 @@ public class LibroDiarioController extends BaseController{
 
     // ====== HISTORIAL LIBRO DIARIO ======
     @FXML private ComboBox<String> comboAnio;
-    @FXML private ComboBox<String> comboMes; // si creas un DTO específico puedes tiparla mejor
+    @FXML private ComboBox<String> comboMes;
     @FXML private Button btndescargarpdf;
     @FXML private Button btndescargarexcel;
     @FXML private Button btnbuscar;
@@ -98,7 +98,7 @@ public class LibroDiarioController extends BaseController{
 
     // ====== DATA EN MEMORIA ======
     private ObservableList<DetallePartidaTemp> detalles = FXCollections.observableArrayList();
-    private File documentoSeleccionado; // PDF evidencial (opcional)
+    private File documentoSeleccionado;
 
     @FXML
     private void initialize(){
@@ -124,7 +124,7 @@ public class LibroDiarioController extends BaseController{
         if (!comboAnio.getItems().isEmpty()) {
             comboAnio.getSelectionModel().selectFirst();
         }
-        comboTipoPartida.getItems().addAll("Regular", "Ajuste", "Apertura", "Cierre");
+        comboTipoPartida.getItems().addAll("Regular", "Apertura", "Cierre");
         cargarCuentasDesdeBD();
         ToggleGroup grupo = new ToggleGroup();
         radioDebe.setToggleGroup(grupo);
@@ -145,17 +145,40 @@ public class LibroDiarioController extends BaseController{
         cargarTablaHistorial();
         tablaDiario.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, nuevaPartida) -> {
             if (nuevaPartida != null) {
+                llenarEncabezadoDesdePartida(nuevaPartida);
                 int idPartida = nuevaPartida.getIdPartida();
                 var listaDetalles = PartidaDAO.obtenerDetallePorPartida(idPartida);
                 detalles.setAll(listaDetalles);
                 actualizarTotales();
             }
         });
+
         // si el usuario es auditor (nivel 3), deshabilitar edición
         Usuario u = sessionUsu.getUsuarioActivo();
         if (u != null && u.getRol().getNivel_acceso() == 3) {
             deshabilitarEdicion();
         }
+
+        tablaDetalle.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, det) -> {
+            if (det == null) return;
+
+            comboCuenta.getSelectionModel().select(det.getCuenta());
+
+            if (det.getDebe() > 0) {
+                radioDebe.setSelected(true);
+                radioHaber.setSelected(false);
+                txtMonto.setText(String.valueOf(det.getDebe()));
+            } else {
+                radioDebe.setSelected(false);
+                radioHaber.setSelected(true);
+                txtMonto.setText(String.valueOf(det.getHaber()));
+            }
+
+            txtDescripcionLinea.setText(
+                    det.getDescripcion() != null ? det.getDescripcion() : ""
+            );
+        });
+
     }
 
     private void configurarTablaHistorial() {
@@ -169,7 +192,6 @@ public class LibroDiarioController extends BaseController{
     }
 
     // ================== HISTORIAL ==================
-
     private void cargarTablaHistorial() {
         if (comboMes.getValue() == null || comboAnio.getValue() == null) {
             // no mostrar error aquí al iniciar, solo si el usuario da clic en buscar sin elegir
@@ -206,8 +228,53 @@ public class LibroDiarioController extends BaseController{
         colHaberDetalle.setCellValueFactory(new PropertyValueFactory<>("haber"));
 
         tablaDetalle.setItems(detalles);
+
+        tablaDetalle.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, nuevo) -> {
+            if (nuevo != null) {
+                llenarFormularioDesdeDetalle(nuevo);
+            }
+        });
     }
 
+    private void llenarEncabezadoDesdePartida(Partida p) {
+        if (p == null) return;
+
+        if (p.getFecha() != null) {
+            dateFecha.setValue(p.getFecha());
+        } else {
+            dateFecha.setValue(null);
+        }
+
+        txtConcepto.setText(
+                p.getConcepto() != null ? p.getConcepto() : ""
+        );
+
+        lblNumeroPartida.setText(
+                String.valueOf(p.getNumeroPartida())
+        );
+    }
+
+
+    private void llenarFormularioDesdeDetalle(DetallePartidaTemp det) {
+        String itemABuscar = det.getIdCuenta() + " - " + det.getCuenta();
+
+        for (String item : comboCuenta.getItems()) {
+            if (item.equals(itemABuscar) || item.startsWith(det.getIdCuenta() + " -")) {
+                comboCuenta.setValue(item);
+                break;
+            }
+        }
+        if (det.getDebe() > 0) {
+            radioDebe.setSelected(true);
+            radioHaber.setSelected(false);
+            txtMonto.setText(String.valueOf(det.getDebe()));
+        } else {
+            radioDebe.setSelected(false);
+            radioHaber.setSelected(true);
+            txtMonto.setText(String.valueOf(det.getHaber()));
+        }
+        txtDescripcionLinea.setText(det.getDescripcion());
+    }
     // ================== DETALLE EN MEMORIA ==================
 
     private void agregarLinea() {
@@ -216,12 +283,10 @@ public class LibroDiarioController extends BaseController{
             mostrarError("Selecciona una cuenta.");
             return;
         }
-
         if (!radioDebe.isSelected() && !radioHaber.isSelected()) {
             mostrarError("Selecciona si el monto va al Debe o al Haber.");
             return;
         }
-
         double monto;
         try {
             monto = Double.parseDouble(txtMonto.getText());
@@ -234,13 +299,10 @@ public class LibroDiarioController extends BaseController{
         int idCuenta = Integer.parseInt(cuentaStr.split(" - ")[0]);
         String nombreCuenta = cuentaStr.split(" - ")[1];
         String descLinea = txtDescripcionLinea.getText();
-
         double debe = radioDebe.isSelected() ? monto : 0.0;
         double haber = radioHaber.isSelected() ? monto : 0.0;
-
         DetallePartidaTemp det = new DetallePartidaTemp(idCuenta, nombreCuenta, descLinea, debe, haber);
         detalles.add(det);
-
         actualizarTotales();
         limpiarLinea();
     }
@@ -251,7 +313,6 @@ public class LibroDiarioController extends BaseController{
             mostrarError("Selecciona una línea para editar.");
             return;
         }
-
         String cuentaStr = comboCuenta.getValue();
         if (cuentaStr != null && !cuentaStr.isBlank()) {
             int idCuenta = Integer.parseInt(cuentaStr.split(" - ")[0]);
@@ -259,7 +320,6 @@ public class LibroDiarioController extends BaseController{
             seleccionado.setIdCuenta(idCuenta);
             seleccionado.setNombreCuenta(nombreCuenta);
         }
-
         if (radioDebe.isSelected() || radioHaber.isSelected()) {
             double monto;
             try {
@@ -277,14 +337,11 @@ public class LibroDiarioController extends BaseController{
                 seleccionado.setDebe(0.0);
             }
         }
-
         seleccionado.setDescripcion(txtDescripcionLinea.getText());
-
         tablaDetalle.refresh();
         actualizarTotales();
         limpiarLinea();
     }
-
     private void eliminarLinea() {
         DetallePartidaTemp seleccionado = tablaDetalle.getSelectionModel().getSelectedItem();
         if (seleccionado == null) {
@@ -294,11 +351,9 @@ public class LibroDiarioController extends BaseController{
         detalles.remove(seleccionado);
         actualizarTotales();
     }
-
     private void actualizarTotales() {
         double totalDebe = detalles.stream().mapToDouble(DetallePartidaTemp::getDebe).sum();
         double totalHaber = detalles.stream().mapToDouble(DetallePartidaTemp::getHaber).sum();
-
         lblTotalDebe.setText(String.format("%.2f", totalDebe));
         lblTotalHaber.setText(String.format("%.2f", totalHaber));
     }
@@ -322,9 +377,7 @@ public class LibroDiarioController extends BaseController{
         limpiarLinea();
     }
 
-
     // ================== GUARDAR PARTIDA EN BD ==================
-
     private void guardarPartida() {
         if (dateFecha.getValue() == null) {
             mostrarError("Selecciona la fecha de la partida.");
@@ -371,16 +424,12 @@ public class LibroDiarioController extends BaseController{
                     detalles,
                     documentoSeleccionado != null ? documentoSeleccionado.getAbsolutePath() : null
             );
-
             Alerta("Éxito", "Partida registrada correctamente.");
             limpiarFormulario();
             cargarTablaHistorial();
-
             Connection conn = ConexionDB.connection();
-
-            // Traer detalle completo de líneas del asiento
             StringBuilder detalleCompleto = new StringBuilder();
-            for (DetallePartidaTemp linea : detalles ) {  // tú ya tienes este array o lista en tu controlador
+            for (DetallePartidaTemp linea : detalles ) {
                 detalleCompleto.append("Cuenta: ")
                         .append(linea.getCuenta())
                         .append(" - Debe: ").append(linea.getDebe())
@@ -396,10 +445,10 @@ public class LibroDiarioController extends BaseController{
                     "INSERT INTO tbl_bitacaud (id_usuario, accion, modulo, detalles, fecha, hora) VALUES (?, ?, ?, ?, ?, ?)"
             );
 
-            psBitacora.setInt(1, usuario.getId_usuario()); // este es el usuario logueado (ya lo tienes guardado en sesión)
-            psBitacora.setString(2, accion); // concepto de partida
+            psBitacora.setInt(1, usuario.getId_usuario());
+            psBitacora.setString(2, accion);
             psBitacora.setString(3, "Libro Diario");
-            psBitacora.setString(4, detalleCompleto.toString()); // opción C
+            psBitacora.setString(4, detalleCompleto.toString());
             psBitacora.setDate(5, java.sql.Date.valueOf(fechaActual));
             psBitacora.setTime(6, java.sql.Time.valueOf(horaActual));
 
@@ -409,11 +458,9 @@ public class LibroDiarioController extends BaseController{
             e.printStackTrace();
             mostrarError("Error al guardar la partida: " + e.getMessage());
         }
-
     }
 
     // ================== DOCUMENTO FUENTE ==================
-
     private void seleccionarDocumento(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar documento (PDF)");
@@ -429,7 +476,6 @@ public class LibroDiarioController extends BaseController{
     }
 
     // ================== CARGAS AUXILIARES ==================
-
     private void cargarAniosDesdeBD() {
         String sql = "SELECT DISTINCT EXTRACT(YEAR FROM fecha) FROM tbl_partidas ORDER BY 1 DESC";
         try (Connection conn = ConexionDB.connection();
@@ -453,7 +499,6 @@ public class LibroDiarioController extends BaseController{
     }
 
     // ================== ALERTAS ==================
-
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR);
         alerta.setTitle("Error");
@@ -474,13 +519,11 @@ public class LibroDiarioController extends BaseController{
     private void balanceSelec() {
         String seleccion = cmbbalances.getValue();
         String rutaFXML = null;
-
         if (seleccion.equals("Balance de comprobación de saldos")) {
             rutaFXML = "/views/balanceSaldos.fxml";
         } else if (seleccion.equals("Balance general")) {
             rutaFXML = "/views/balanceGeneral.fxml";
         }
-
         if (rutaFXML != null) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource(rutaFXML));
@@ -495,14 +538,7 @@ public class LibroDiarioController extends BaseController{
     private void cargarTabla() {
         int mes = Integer.parseInt(comboMes.getValue());
         int anio = Integer.parseInt(comboAnio.getValue());
-
         tablaDiario.getItems().setAll(PartidaDAO.obtenerPartidasPorMesYAnio(mes, anio));
-    }
-
-    @FXML
-    void AggDoc(ActionEvent event) {
-
-
     }
 
     @FXML
@@ -515,17 +551,6 @@ public class LibroDiarioController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    @FXML
-    void EditDoc(ActionEvent event) {
-
-    }
-
-    @FXML
-    void EliminarDoc(ActionEvent event) {
-
     }
 
     @FXML
@@ -538,7 +563,6 @@ public class LibroDiarioController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -552,7 +576,6 @@ public class LibroDiarioController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -577,7 +600,6 @@ public class LibroDiarioController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -626,7 +648,6 @@ public class LibroDiarioController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
     @FXML
     private void descargarpdf() {
