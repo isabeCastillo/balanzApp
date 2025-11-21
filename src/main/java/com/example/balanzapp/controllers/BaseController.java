@@ -1,11 +1,14 @@
 package com.example.balanzapp.controllers;
 
+import com.example.balanzapp.models.Partida;
 import com.example.balanzapp.models.Usuario;
 import com.example.balanzapp.utils.sessionUsu;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
 
 public class BaseController {
     @FXML
@@ -25,6 +28,10 @@ public class BaseController {
     protected Button btnlibromayor;
     @FXML
     protected Button btncatalogo;
+    @FXML
+    protected TitledPane partidaactual;
+    @FXML
+    protected TitledPane historial;
 
     public void cargarDatosUsuario() {
         Usuario usuario = sessionUsu.getUsuarioActivo();
@@ -45,6 +52,11 @@ public class BaseController {
         if (btnlibrodiario != null) btnlibrodiario.setVisible(nivel <= 3);
         if (btnlibromayor != null)  btnlibromayor.setVisible(nivel <= 3);
         if (btncatalogo != null)    btncatalogo.setVisible(nivel <= 3);
+        if (partidaactual != null) {
+            partidaactual.setExpanded(false);
+            historial.setExpanded(true);
+            partidaactual.setDisable(nivel <= 3);
+        }
     }
 
 }

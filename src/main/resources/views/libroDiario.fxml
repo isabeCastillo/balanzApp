@@ -71,7 +71,7 @@
                             <Label styleClass="titulo" text="Libro Diario" />
 
                             <!-- PARTIDA ACTUAL -->
-                            <TitledPane expanded="true" text="Partida actual" VBox.vgrow="ALWAYS">
+                            <TitledPane expanded="true" text="Partida actual" fx:id="partidaactual" VBox.vgrow="ALWAYS">
                                 <content>
                                     <VBox spacing="10.0">
 
@@ -183,7 +183,7 @@
                             <Separator />
 
                             <!-- HISTORIAL DE PARTIDAS -->
-                            <TitledPane expanded="false" text="Partidas" VBox.vgrow="ALWAYS">
+                            <TitledPane expanded="false" text="Partidas" fx:id="historial" VBox.vgrow="ALWAYS">
                                 <content>
                                     <VBox spacing="10.0">
                                         <!-- Filtros -->

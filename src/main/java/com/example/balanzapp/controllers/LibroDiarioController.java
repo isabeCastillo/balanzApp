@@ -224,6 +224,7 @@ public class LibroDiarioController extends BaseController{
         btnSubirdoc.setDisable(true);
         btnGuardarPartida.setDisable(true);
         btnNuevaPartida.setDisable(true);
+
     }
 
     private void configurarTablaDetalle() {
