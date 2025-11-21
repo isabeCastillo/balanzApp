@@ -36,6 +36,7 @@ public class PartidaDAO {
             p.numero_partida,
             p.fecha,
             p.concepto,
+            p.tipo_partida,
             c.nombre AS cuenta,
             d.debe,
             d.haber,
@@ -62,6 +63,7 @@ public class PartidaDAO {
                 p.setNumeroPartida(rs.getInt("numero_partida"));
                 p.setFecha(rs.getDate("fecha").toLocalDate());
                 p.setConcepto(rs.getString("concepto"));
+                p.setTipoPartida(rs.getString("tipo_partida"));
                 p.setCuenta(rs.getString("cuenta"));
                 p.setDebe(rs.getDouble("debe"));
                 p.setHaber(rs.getDouble("haber"));
@@ -74,6 +76,7 @@ public class PartidaDAO {
 
         return lista;
     }
+
 
     public static List<DetallePartidaTemp> obtenerDetallePorPartida(int idPartida) {
         List<DetallePartidaTemp> detalles = new ArrayList<>();

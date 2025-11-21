@@ -12,13 +12,14 @@ public class Partida {
     private double debe;
     private double haber;
     private String documento;
+    private String tipoPartida;
 
     public Partida() {
     }
 
     public Partida(int idPartida, int numeroPartida, LocalDate fecha,
                    String concepto, String cuenta, double debe, double haber,
-                   String documento) {
+                   String documento, String tipoPartida) {
         this.idPartida = idPartida;
         this.numeroPartida = numeroPartida;
         this.fecha = fecha;
@@ -27,6 +28,7 @@ public class Partida {
         this.debe = debe;
         this.haber = haber;
         this.documento = documento;
+        this.tipoPartida = tipoPartida;
     }
 
     public int getIdPartida() {
@@ -92,4 +94,8 @@ public class Partida {
     public void setDocumento(String documento) {
         this.documento = documento;
     }
+
+    public String getTipoPartida() { return tipoPartida; }
+
+    public void setTipoPartida(String tipoPartida) { this.tipoPartida = tipoPartida; }
 }

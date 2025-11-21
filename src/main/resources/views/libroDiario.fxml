@@ -220,6 +220,7 @@
                                                 <TableColumn fx:id="colFecha" prefWidth="120.0" text="Fecha" />
                                                 <TableColumn fx:id="colNumeroPartida" prefWidth="120.0" text="N° de Partida" />
                                                 <TableColumn fx:id="colConcepto" prefWidth="260.0" text="Concepto" />
+                                                <TableColumn fx:id="colTipoPartida" prefWidth="120.0" text="Tipo" />
                                                 <TableColumn fx:id="colCuenta" prefWidth="180.0" text="Cuenta" />
                                                 <TableColumn fx:id="colDebe" prefWidth="110.0" text="Debe" />
                                                 <TableColumn fx:id="colHaber" prefWidth="110.0" text="Haber" />

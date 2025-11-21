@@ -78,6 +78,7 @@ public class LibroDiarioController extends BaseController{
     @FXML private TableColumn<DetallePartidaTemp, Double> colDebeDetalle;
     @FXML private TableColumn<DetallePartidaTemp, Double> colHaberDetalle;
 
+
     @FXML private Label lblTotalDebe;
     @FXML private Label lblTotalHaber;
 
@@ -95,6 +96,8 @@ public class LibroDiarioController extends BaseController{
     @FXML private TableColumn<Partida, Double> colDebe;
     @FXML private TableColumn<Partida, Double> colHaber;
     @FXML private TableColumn<Partida, String> colDocumento;
+    @FXML private TableColumn<Partida, String> colTipoPartida;
+
 
     // ====== DATA EN MEMORIA ======
     private ObservableList<DetallePartidaTemp> detalles = FXCollections.observableArrayList();
@@ -185,11 +188,13 @@ public class LibroDiarioController extends BaseController{
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         colNumeroPartida.setCellValueFactory(new PropertyValueFactory<>("numeroPartida"));
         colConcepto.setCellValueFactory(new PropertyValueFactory<>("concepto"));
+        colTipoPartida.setCellValueFactory(new PropertyValueFactory<>("tipoPartida"));
         colCuenta.setCellValueFactory(new PropertyValueFactory<>("cuenta"));
         colDebe.setCellValueFactory(new PropertyValueFactory<>("debe"));
         colHaber.setCellValueFactory(new PropertyValueFactory<>("haber"));
         colDocumento.setCellValueFactory(new PropertyValueFactory<>("documento"));
     }
+
 
     // ================== HISTORIAL ==================
     private void cargarTablaHistorial() {
@@ -252,6 +257,12 @@ public class LibroDiarioController extends BaseController{
         lblNumeroPartida.setText(
                 String.valueOf(p.getNumeroPartida())
         );
+        if (p.getTipoPartida() != null) {
+            comboTipoPartida.setValue(p.getTipoPartida());
+        } else {
+            comboTipoPartida.getSelectionModel().clearSelection();
+        }
+
     }
 
 
