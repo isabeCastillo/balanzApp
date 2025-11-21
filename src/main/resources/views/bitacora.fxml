@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="650.0" prefWidth="1373.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.BitacoraController">
 
@@ -55,29 +56,53 @@
                 <!-- ========== CONTENIDO DERECHO ========== -->
                 <AnchorPane>
                     <children>
-                        <VBox spacing="20" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0">
-                            <Label styleClass="titulo" text="Bitacora del Auditor" />
-                            <Label layoutX="55.0" layoutY="74.0" text="Usuario" />
-                            <Label layoutX="270.0" layoutY="74.0" text="Desde" />
-                            <Label layoutX="558.0" layoutY="74.0" text="Hasta" />
-                            <Label layoutX="813.0" layoutY="74.0" text="Modulo" />
-                            <ComboBox fx:id="cmbusu" layoutX="55.0" layoutY="104.0" prefWidth="150.0" />
-                            <DatePicker fx:id="dtdesde" layoutX="270.0" layoutY="101.0" />
-                            <DatePicker fx:id="dthasta" layoutX="545.0" layoutY="101.0" />
-                            <ComboBox fx:id="cmbmodul" layoutX="813.0" layoutY="104.0" prefWidth="150.0" />
-                            <Button fx:id="btnfiltrar" layoutX="276.0" layoutY="189.0" mnemonicParsing="false" onAction="#filtrar" text="Filtrar" />
-                            <Button fx:id="btndescargarPdf" layoutX="394.0" layoutY="189.0" mnemonicParsing="false" text="Descargar PDF" />
-                            <Button fx:id="btndescargarExcel" layoutX="558.0" layoutY="189.0" mnemonicParsing="false" text="Descargar Excel" />
-                            <TableView fx:id="tblbitacora" layoutX="27.0" layoutY="270.0" prefHeight="291.0" prefWidth="980.0">
-                                <columns>
-                                    <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
-                                    <TableColumn fx:id="colAccion" prefWidth="248.0" text="Accion Realizada" />
-                                    <TableColumn fx:id="colRol" minWidth="0.0" prefWidth="127.0" text="Rol" />
-                                    <TableColumn fx:id="colModulo" prefWidth="333.0" text="Modulo" />
-                                    <TableColumn fx:id="colFecha" prefWidth="143.0" text="Fecha" />
-                                    <TableColumn fx:id="colHora" prefWidth="102.0" text="Hora" />
-                                </columns>
-                            </TableView>
+                        <VBox spacing="20" AnchorPane.topAnchor="20.0"
+                              AnchorPane.bottomAnchor="20.0"
+                              AnchorPane.leftAnchor="40.0"
+                              AnchorPane.rightAnchor="40.0">
+
+                            <!-- Título -->
+                            <Label styleClass="titulo" text="Bitacora del Auditor"/>
+
+                            <!-- Filtros en una sola fila -->
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="Usuario"/>
+                                <ComboBox fx:id="cmbusu" prefWidth="150.0"/>
+
+                                <Label text="Desde"/>
+                                <DatePicker fx:id="dtdesde"/>
+
+                                <Label text="Hasta"/>
+                                <DatePicker fx:id="dthasta"/>
+
+                                <Label text="Modulo"/>
+                                <ComboBox fx:id="cmbmodul" prefWidth="150.0"/>
+                            </HBox>
+
+                            <!-- Botones en una sola fila -->
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Button fx:id="btnfiltrar" mnemonicParsing="false" onAction="#filtrar" text="Filtrar"/>
+                                <Button fx:id="btndescargarPdf" mnemonicParsing="false" text="Descargar PDF"/>
+                                <Button fx:id="btndescargarExcel" mnemonicParsing="false" text="Descargar Excel"/>
+                            </HBox>
+
+                            <!-- Contenedor fijo para la tabla -->
+                            <AnchorPane>
+                                <TableView fx:id="tblbitacora" prefHeight="291.0" prefWidth="980.0"
+                                           AnchorPane.topAnchor="0.0"
+                                           AnchorPane.bottomAnchor="0.0"
+                                           AnchorPane.leftAnchor="0.0"
+                                           AnchorPane.rightAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario"/>
+                                        <TableColumn fx:id="colAccion" prefWidth="248.0" text="Accion Realizada"/>
+                                        <TableColumn fx:id="colRol" prefWidth="127.0" text="Rol"/>
+                                        <TableColumn fx:id="colModulo" prefWidth="333.0" text="Modulo"/>
+                                        <TableColumn fx:id="colFecha" prefWidth="143.0" text="Fecha"/>
+                                        <TableColumn fx:id="colHora" prefWidth="102.0" text="Hora"/>
+                                    </columns>
+                                </TableView>
+                            </AnchorPane>
                         </VBox>
                     </children>
                 </AnchorPane>
