@@ -54,7 +54,6 @@ public class BitacoraController extends BaseController {
 
     @FXML
     private void initialize() {
-        // Datos del usuario logueado (BaseController)
         cargarDatosUsuario();
 
         // ====== COMBO BALANCES SIDEBAR ======
@@ -77,7 +76,6 @@ public class BitacoraController extends BaseController {
         btndescargarPdf.setOnAction(e -> descargarPDF());
         btndescargarExcel.setOnAction(e -> descargarExcel());
 
-        // Cargar todo sin filtros al inicio
         cargarBitacora();
     }
 

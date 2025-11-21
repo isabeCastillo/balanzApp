@@ -3,6 +3,7 @@ package com.example.balanzapp.controllers;
 import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.dao.MayorDAO;
 import com.example.balanzapp.models.MovimientoMayor;
+import com.example.balanzapp.service.AuditoriaService;
 import com.example.balanzapp.utils.sessionUsu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -187,6 +188,14 @@ public class LibroMayorController extends BaseController {
         }
 
         lblSaldo.setText(String.format("SALDO: $%.2f", saldoFinal));
+        AuditoriaService.registrarAccion(
+                "Libro Mayor",
+                "Consultó el Libro Mayor",
+                "Cuenta: " + comboCuenta.getValue()
+                        + " | Desde: " + dateDesde.getValue()
+                        + " | Hasta: " + dateHasta.getValue()
+        );
+
     }
 
     // ================== PDF & EXCEL ==================
@@ -258,6 +267,13 @@ public class LibroMayorController extends BaseController {
             documento.add(saldo);
 
             documento.close();
+            AuditoriaService.registrarAccion(
+                    "Libro Mayor",
+                    "Descargó el Libro Mayor en PDF",
+                    "Cuenta: " + comboCuenta.getValue()
+                            + " | Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
 
             mostrarInfo("Éxito", "El archivo PDF se generó correctamente.");
         } catch (Exception ex) {
@@ -303,7 +319,13 @@ public class LibroMayorController extends BaseController {
             try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
                 workbook.write(fileOut);
             }
-
+            AuditoriaService.registrarAccion(
+                    "Libro Mayor",
+                    "Descargó el Libro Mayor en Excel",
+                    "Cuenta: " + comboCuenta.getValue()
+                            + " | Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
             mostrarInfo("Éxito", "El archivo Excel se generó correctamente.");
         } catch (Exception e) {
             e.printStackTrace();

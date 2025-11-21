@@ -6,6 +6,7 @@ import com.example.balanzapp.dao.PartidaDAO;
 import com.example.balanzapp.models.DetallePartidaTemp;
 import com.example.balanzapp.models.Partida;
 import com.example.balanzapp.models.Usuario;
+import com.example.balanzapp.service.AuditoriaService;
 import com.example.balanzapp.utils.sessionUsu;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -399,6 +400,13 @@ public class LibroDiarioController extends BaseController {
         tablaDetalle.refresh();
         actualizarTotales();
         limpiarLinea();
+        AuditoriaService.registrarAccion(
+                "Libro Diario",
+                "Edito linea de la partida",
+                "Fecha: " + dateFecha.getValue()
+                        + " | Tipo: " + comboTipoPartida.getValue()
+                        + " | Concepto: " + txtConcepto.getText()
+        );
     }
 
     private void eliminarLinea() {
@@ -409,6 +417,13 @@ public class LibroDiarioController extends BaseController {
         }
         detalles.remove(seleccionado);
         actualizarTotales();
+        AuditoriaService.registrarAccion(
+                "Libro Diario",
+                "Elimino una partida",
+                "N° Partida: " + lblNumeroPartida.getText()
+                        + " | Fecha: " + dateFecha.getValue()
+                        + " | Concepto: " + txtConcepto.getText()
+        );
     }
 
     private void actualizarTotales() {
@@ -483,6 +498,15 @@ public class LibroDiarioController extends BaseController {
                     usuario.getId_usuario(),
                     detalles,
                     documentoSeleccionado != null ? documentoSeleccionado.getAbsolutePath() : null
+            );
+            AuditoriaService.registrarAccion(
+                    "Libro Diario",
+                    "Registró una partida",
+                    "Fecha: " + dateFecha.getValue()
+                            + " | Tipo: " + comboTipoPartida.getValue()
+                            + " | Concepto: " + txtConcepto.getText()
+                            + " | Total Debe: " + lblTotalDebe.getText()
+                            + " | Total Haber: " + lblTotalHaber.getText()
             );
             Alerta("Éxito", "Partida registrada correctamente.");
             limpiarFormulario();
@@ -783,36 +807,11 @@ public class LibroDiarioController extends BaseController {
             documento.add(tablaPDF);
             documento.close();
 
-            // ===== REGISTRAR EN BITÁCORA =====
-            try (Connection conn = ConexionDB.connection()) {
-                Usuario usuario = sessionUsu.getUsuarioActivo();
-                if (usuario != null) {
-                    String accion = "Descargó el Libro Diario en PDF";
-                    String modulo = "Libro Diario";
-
-                    String detalles = "Archivo: " + archivo.getName()
+            AuditoriaService.registrarAccion("Libro Diario", "Descargó el Libro Diario en PDF", "Archivo: " + archivo.getName()
                             + " | Mes: " + (comboMes.getValue() != null ? comboMes.getValue() : "-")
-                            + " | Año: " + (comboAnio.getValue() != null ? comboAnio.getValue() : "-");
+                            + " | Año: " + (comboAnio.getValue() != null ? comboAnio.getValue() : "-")
+            );
 
-                    LocalDate hoy = LocalDate.now();
-                    LocalTime hora = LocalTime.now();
-
-                    PreparedStatement psBitacora = conn.prepareStatement(
-                            "INSERT INTO tbl_bitacaud (id_usuario, accion, modulo, detalles, fecha, hora) " +
-                                    "VALUES (?, ?, ?, ?, ?, ?)"
-                    );
-                    psBitacora.setInt(1, usuario.getId_usuario());
-                    psBitacora.setString(2, accion);
-                    psBitacora.setString(3, modulo);
-                    psBitacora.setString(4, detalles);
-                    psBitacora.setDate(5, java.sql.Date.valueOf(hoy));
-                    psBitacora.setTime(6, java.sql.Time.valueOf(hora));
-                    psBitacora.executeUpdate();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                // No rompas al usuario solo por fallo de bitácora
-            }
 
             Alerta("Éxito", "El archivo PDF del Libro Diario se generó correctamente.");
 
@@ -832,6 +831,12 @@ public class LibroDiarioController extends BaseController {
 
         PartidaDAO.insertarPartida(dateFecha.getValue(), txtConcepto.getText(), idCuenta, esDebe, monto, 2); // id_usuario = 2 (Cambiar dinámico)
         cargarTabla();
+        AuditoriaService.registrarAccion(
+                "Libro Diario",
+                "Agrego una partida",
+                "Fecha: " + dateFecha.getValue()
+                        + " | Concepto: " + txtConcepto.getText()
+        );
     }
 
     @FXML
@@ -874,7 +879,10 @@ public class LibroDiarioController extends BaseController {
             try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
                 workbook.write(fileOut);
             }
-
+            AuditoriaService.registrarAccion("Libro Diario", "Descargó el Libro Diario en Excel", "Archivo: " + archivo.getName()
+                    + " | Mes: " + (comboMes.getValue() != null ? comboMes.getValue() : "-")
+                    + " | Año: " + (comboAnio.getValue() != null ? comboAnio.getValue() : "-")
+            );
             Alerta("Éxito","El archivo Excel se generó correctamente.");
 
         } catch (Exception e) {

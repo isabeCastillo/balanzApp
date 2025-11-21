@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BitacoraDAO {
-
-    // ==== PARA LLENAR COMBO DE USUARIOS (NOMBRES) ============================
     public static List<String> obtenerUsuariosFiltro() {
         List<String> usuarios = new ArrayList<>();
 
@@ -31,7 +29,7 @@ public class BitacoraDAO {
         return usuarios;
     }
 
-    // ==== PARA LLENAR COMBO DE MÓDULOS ======================================
+    // ==== PARA LLENAR COMBO DE MÓDULOS
     public static List<String> obtenerModulosFiltro() {
         List<String> modulos = new ArrayList<>();
 
@@ -52,12 +50,12 @@ public class BitacoraDAO {
         return modulos;
     }
 
-    // ==== FILTRAR BITÁCORA ==================================================
+    // ==== FILTRAR BITÁCORA
     public static List<Bitacora> filtrarBitacora(
-            String usuario,     // nombre (puede ser null)
-            LocalDate desde,    // puede ser null
-            LocalDate hasta,    // puede ser null
-            String modulo       // puede ser null
+            String usuario,
+            LocalDate desde,
+            LocalDate hasta,
+            String modulo
     ) {
         List<Bitacora> lista = new ArrayList<>();
 
@@ -117,14 +115,11 @@ public class BitacoraDAO {
                         rs.getDate("fecha").toLocalDate(),
                         rs.getTime("hora").toLocalTime()
                 );
-
                 lista.add(reg);
             }
-
         } catch (SQLException e) {
             System.out.println("Error filtrando bitácora: " + e.getMessage());
         }
-
         return lista;
     }
 }

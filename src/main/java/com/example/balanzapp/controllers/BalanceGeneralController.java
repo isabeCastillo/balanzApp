@@ -2,6 +2,7 @@ package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.dao.PartidaDAO;
 import com.example.balanzapp.models.BalanceGeneralFila;
+import com.example.balanzapp.service.AuditoriaService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -138,6 +139,13 @@ public class BalanceGeneralController extends BaseController {
 
         double utilidadNeta = PartidaDAO.calcularUtilidadNeta(desde, hasta);
         lblUtilidadNeta.setText(String.format("Utilidad Neta del Ejercicio: %.2f", utilidadNeta));
+        AuditoriaService.registrarAccion(
+                "Balance General",
+                "Consultó el Balance General",
+                "Desde: " + dateDesde.getValue()
+                        + " | Hasta: " + dateHasta.getValue()
+        );
+
     }
 
     // ================== NAVEGACIÓN ==================
@@ -314,6 +322,12 @@ public class BalanceGeneralController extends BaseController {
 
             documento.add(tablaPDF);
             documento.close();
+            AuditoriaService.registrarAccion(
+                    "Balance General",
+                    "Descargó el Balance General en PDF",
+                    "Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
 
             Alerta("Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
@@ -376,6 +390,12 @@ public class BalanceGeneralController extends BaseController {
             try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
                 workbook.write(fileOut);
             }
+            AuditoriaService.registrarAccion(
+                    "Balance General",
+                    "Descargó el Balance General en Excel",
+                    "Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
 
             Alerta("Éxito","El archivo Excel se generó correctamente.");
 

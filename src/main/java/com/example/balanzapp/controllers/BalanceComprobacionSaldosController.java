@@ -2,6 +2,7 @@ package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.dao.BalanceComprobacionDAO;
 import com.example.balanzapp.models.BalanceComprobacion;
+import com.example.balanzapp.service.AuditoriaService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -145,6 +146,14 @@ public class BalanceComprobacionSaldosController extends BaseController {
 
         lblTotalDebe.setText(String.format("$%.2f", totalDebe));
         lblTotalHaber.setText(String.format("$%.2f", totalHaber));
+
+        AuditoriaService.registrarAccion(
+                "Balance de Comprobación de Saldos",
+                "Consultó el Balance de Comprobación de Saldos",
+                "Desde: " + dateDesde.getValue()
+                        + " | Hasta: " + dateHasta.getValue()
+        );
+
     }
 
 
@@ -289,6 +298,12 @@ public class BalanceComprobacionSaldosController extends BaseController {
 
             documento.add(tablaPDF);
             documento.close();
+            AuditoriaService.registrarAccion(
+                    "Balance de Comprobación de Saldos",
+                    "Descargó el Balance de Comprobación de Saldos en PDF",
+                    "Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
 
             mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
@@ -352,6 +367,12 @@ public class BalanceComprobacionSaldosController extends BaseController {
             try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
                 workbook.write(fileOut);
             }
+            AuditoriaService.registrarAccion(
+                    "Balance de Comprobación de Saldos",
+                    "Descargó el Balance de Comprobación de Saldos en Excel",
+                    "Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
 
             mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El archivo Excel se generó correctamente.");
 

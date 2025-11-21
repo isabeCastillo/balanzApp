@@ -3,6 +3,7 @@ package com.example.balanzapp.controllers;
 import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.dao.CatalogoDAO;
 import com.example.balanzapp.models.Cuenta;
+import com.example.balanzapp.service.AuditoriaService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -237,6 +238,15 @@ public class CatalogoCuentaController extends BaseController{
 
         cargarTabla();
         limpiarCampos();
+        AuditoriaService.registrarAccion(
+                "Catálogo de Cuentas",
+                "Registró una cuenta contable",
+                "Código: " + txtCodigo.getText()
+                        + " | Nombre: " + txtCuenta.getText()
+                        + " | Tipo: " + txtTipo.getText()
+                        + " | Naturaleza: " + txtNaturaleza.getText()
+        );
+
     }
     private void cargarTabla() {
         var cuentas = CatalogoDAO.obtenerCuentas();
@@ -252,6 +262,14 @@ public class CatalogoCuentaController extends BaseController{
 
         CatalogoDAO.eliminarCuenta(seleccionada.getIdCuenta());
         cargarTabla();
+        AuditoriaService.registrarAccion(
+                "Catálogo de Cuentas",
+                "Eliminó una cuenta contable",
+                "Código: " + txtCodigo.getText()
+                        + " | Nombre: " + txtCuenta.getText()
+                        + " | Tipo: " + txtTipo.getText()
+                        + " | Naturaleza: " + txtNaturaleza.getText()
+        );
     }
     @FXML
     private void editarCuenta(ActionEvent event) {
@@ -270,6 +288,15 @@ public class CatalogoCuentaController extends BaseController{
         if (CatalogoDAO.actualizarCuenta(seleccionada)) {
             cargarTabla();
             limpiarCampos();
+            AuditoriaService.registrarAccion(
+                    "Catálogo de Cuentas",
+                    "Modificó una cuenta contable",
+                    "Código: " + txtCodigo.getText()
+                            + " | Nombre: " + txtCuenta.getText()
+                            + " | Tipo: " + txtTipo.getText()
+                            + " | Naturaleza: " + txtNaturaleza.getText()
+            );
+
         } else {
             mostrarAlerta("No se pudo actualizar la cuenta.");
         }
@@ -347,6 +374,15 @@ public class CatalogoCuentaController extends BaseController{
 
             documento.add(tablaPDF);
             documento.close();
+            // ===== AUDITORÍA: descarga de catálogo de cuentas en PDF =====
+            int totalCuentas = tblCatalogo.getItems() != null ? tblCatalogo.getItems().size() : 0;
+
+            AuditoriaService.registrarAccion(
+                    "Catálogo de Cuentas",
+                    "Descargó el Catálogo de Cuentas en PDF",
+                    "Total de cuentas en el reporte: " + totalCuentas
+            );
+
 
             Alerta("Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
@@ -402,6 +438,13 @@ public class CatalogoCuentaController extends BaseController{
             try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
                 workbook.write(fileOut);
             }
+            int totalCuentas = tblCatalogo.getItems() != null ? tblCatalogo.getItems().size() : 0;
+
+            AuditoriaService.registrarAccion(
+                    "Catálogo de Cuentas",
+                    "Descargó el Catálogo de Cuentas en Excel",
+                    "Total de cuentas en el reporte: " + totalCuentas
+            );
 
             Alerta("Éxito","El archivo Excel se generó correctamente.");
 

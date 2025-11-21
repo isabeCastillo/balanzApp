@@ -2,6 +2,7 @@ package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.dao.PartidaDAO;
 import com.example.balanzapp.models.EstadoResultadoFila;
+import com.example.balanzapp.service.AuditoriaService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -131,6 +132,13 @@ public class EstadosResultadosControllers extends BaseController {
 
         double utilidad = PartidaDAO.calcularUtilidadNeta(desde, hasta);
         lblUtilidadNeta.setText(String.format("Utilidad neta: %.2f", utilidad));
+        AuditoriaService.registrarAccion(
+                "Estado de Resultados",
+                "Consultó el Estado de Resultados",
+                "Desde: " + dateDesde.getValue()
+                        + " | Hasta: " + dateHasta.getValue()
+        );
+
     }
 
     // ================== NAVEGACIÓN ==================
@@ -229,6 +237,13 @@ public class EstadosResultadosControllers extends BaseController {
             documento.add(util);
 
             documento.close();
+            AuditoriaService.registrarAccion(
+                    "Estado de Resultados",
+                    "Descargó el Estado de Resultados en PDF",
+                    "Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
+
 
             Alerta("Éxito", "El archivo PDF se generó correctamente.");
         } catch (DocumentException | IOException ex) {
@@ -279,6 +294,12 @@ public class EstadosResultadosControllers extends BaseController {
             try (FileOutputStream fileOut = new FileOutputStream(archivo)) {
                 workbook.write(fileOut);
             }
+            AuditoriaService.registrarAccion(
+                    "Estado de Resultados",
+                    "Descargó el Estado de Resultados en Excel",
+                    "Desde: " + dateDesde.getValue()
+                            + " | Hasta: " + dateHasta.getValue()
+            );
 
             Alerta("Éxito","El archivo Excel se generó correctamente.");
 
