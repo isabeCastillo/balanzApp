@@ -4,6 +4,7 @@ import com.example.balanzapp.Conexion.ConexionDB;
 import com.example.balanzapp.models.DetallePartidaTemp;
 import com.example.balanzapp.models.EstadoResultadoFila;
 import com.example.balanzapp.models.BalanceGeneralFila;
+import com.example.balanzapp.models.CuentaSaldo;
 import com.example.balanzapp.models.Partida;
 
 import java.sql.*;
@@ -12,21 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PartidaDAO {
-
-    // ====== CLASE INTERNA PARA BALANCE GENERAL ======
-    private static class CuentaSaldo {
-        String nombre;
-        double saldo;
-
-        CuentaSaldo(String nombre, double saldo) {
-            this.nombre = nombre;
-            this.saldo = saldo;
-        }
-    }
-
-    // =================================================
-    //  LIBRO DIARIO
-    // =================================================
+    //LIBRO DIARIO
     public static List<Partida> obtenerPartidasPorMesYAnio(int mes, int anio) {
         List<Partida> lista = new ArrayList<>();
 
@@ -77,7 +64,6 @@ public class PartidaDAO {
         return lista;
     }
 
-
     public static List<DetallePartidaTemp> obtenerDetallePorPartida(int idPartida) {
         List<DetallePartidaTemp> detalles = new ArrayList<>();
 
@@ -117,10 +103,6 @@ public class PartidaDAO {
 
         return detalles;
     }
-
-    // =================================================
-    //  INSERTAR PARTIDAS
-    // =================================================
 
     public static void insertarPartidaConDetalles(
             LocalDate fecha,
@@ -247,98 +229,101 @@ public class PartidaDAO {
             System.out.println("Error insertando partida: " + e.getMessage());
         }
     }
-
-    // =================================================
     //  BALANCE GENERAL
-    // =================================================
-
-    public static List<BalanceGeneralFila> obtenerBalanceGeneral(LocalDate desde,
-                                                                 LocalDate hasta) {
-        // ¡OJO! Aquí usamos los tipos EXACTOS que tienes en la BD:
-        // 'Activo', 'Pasivo', 'Capital'
-        List<CuentaSaldo> activos      = obtenerCuentasPorTipo("Activo", desde, hasta);
-        List<CuentaSaldo> pasivos      = obtenerCuentasPorTipo("Pasivo", desde, hasta);
-        List<CuentaSaldo> patrimonios  = obtenerCuentasPorTipo("Capital", desde, hasta);
-
-        int maxFilas = Math.max(activos.size(), Math.max(pasivos.size(), patrimonios.size()));
-        List<BalanceGeneralFila> filas = new ArrayList<>();
-
-        for (int i = 0; i < maxFilas; i++) {
-            String nombreActivo = "";
-            double saldoActivo = 0.0;
-
-            String nombrePasivo = "";
-            double saldoPasivo = 0.0;
-
-            String nombrePatrimonio = "";
-            double saldoPatrimonio = 0.0;
-
-            if (i < activos.size()) {
-                nombreActivo = activos.get(i).nombre;
-                saldoActivo = activos.get(i).saldo;
-            }
-            if (i < pasivos.size()) {
-                nombrePasivo = pasivos.get(i).nombre;
-                saldoPasivo = pasivos.get(i).saldo;
-            }
-            if (i < patrimonios.size()) {
-                nombrePatrimonio = patrimonios.get(i).nombre;
-                saldoPatrimonio = patrimonios.get(i).saldo;
-            }
-
-            filas.add(new BalanceGeneralFila(
-                    nombreActivo, saldoActivo,
-                    nombrePasivo, saldoPasivo,
-                    nombrePatrimonio, saldoPatrimonio
-            ));
+    public static List<BalanceGeneralFila> obtenerBalanceGeneral(LocalDate desde, LocalDate hasta) {
+        List<CuentaSaldo> activos     = obtenerCuentasPorTipo(desde, hasta, "Activo");
+        List<CuentaSaldo> pasivos     = obtenerCuentasPorTipo(desde, hasta, "Pasivo");
+        List<CuentaSaldo> patrimonios = obtenerCuentasPorTipo(desde, hasta, "Capital");
+        double utilidad = calcularUtilidadNeta(desde, hasta);
+        if (utilidad != 0) {
+            patrimonios.add(new CuentaSaldo("Utilidad del ejercicio", utilidad));
         }
-
+        int maxFilas = Math.max(
+                activos.size(),
+                Math.max(pasivos.size(), patrimonios.size())
+        );
+        List<BalanceGeneralFila> filas = new ArrayList<>();
+        for (int i = 0; i < maxFilas; i++) {
+            String nomAct = null;
+            double salAct = 0.0;
+            if (i < activos.size()) {
+                nomAct = activos.get(i).getNombre();
+                salAct = activos.get(i).getSaldo();
+            }
+            String nomPas = null;
+            double salPas = 0.0;
+            if (i < pasivos.size()) {
+                nomPas = pasivos.get(i).getNombre();
+                salPas = pasivos.get(i).getSaldo();
+            }
+            String nomPat = null;
+            double salPat = 0.0;
+            if (i < patrimonios.size()) {
+                nomPat = patrimonios.get(i).getNombre();
+                salPat = patrimonios.get(i).getSaldo();
+            }
+            BalanceGeneralFila fila = new BalanceGeneralFila(
+                    nomAct, salAct,
+                    nomPas, salPas,
+                    nomPat, salPat
+            );
+            filas.add(fila);
+        }
         return filas;
     }
-
-    private static List<CuentaSaldo> obtenerCuentasPorTipo(String tipo,
-                                                           LocalDate desde,
-                                                           LocalDate hasta) {
+    private static List<CuentaSaldo> obtenerCuentasPorTipo(LocalDate desde, LocalDate hasta, String tipoCuenta) {
         List<CuentaSaldo> lista = new ArrayList<>();
 
-        String sql = """
-            SELECT c.nombre,
-                   SUM(d.debe - d.haber) AS saldo
-            FROM tbl_cntaContables c
-            JOIN tbl_detallePartida d ON c.id_cuenta = d.id_cuenta
-            JOIN tbl_partidas p ON p.id_partida = d.id_partida
-            WHERE c.tipo = ?
-              AND p.fecha BETWEEN ? AND ?
-            GROUP BY c.nombre
-            HAVING SUM(d.debe - d.haber) <> 0
-            ORDER BY c.nombre
-            """;
+        String sql =
+                "SELECT c.nombre AS cuenta, " +
+                        "       SUM( " +
+                        "           CASE " +
+                        "               WHEN c.tipo = 'Capital' THEN ABS(d.haber - d.debe) " +
+                        "               WHEN c.naturaleza = 'Deudora' THEN (d.debe - d.haber) " +
+                        "               WHEN c.naturaleza = 'Acreedora' THEN (d.haber - d.debe) " +
+                        "               ELSE (d.debe - d.haber) " +
+                        "           END " +
+                        "       ) AS saldo " +
+                        "FROM tbl_partidas p " +
+                        "JOIN tbl_detallePartida d ON p.id_partida = d.id_partida " +
+                        "JOIN tbl_cntaContables c ON d.id_cuenta = c.id_cuenta " +
+                        "WHERE p.fecha BETWEEN ? AND ? " +
+                        "  AND c.tipo = ? " +
+                        "GROUP BY c.nombre, c.codigo " +
+                        "HAVING SUM( " +
+                        "           CASE " +
+                        "               WHEN c.tipo = 'Capital' THEN ABS(d.haber - d.debe) " +
+                        "               WHEN c.naturaleza = 'Deudora' THEN (d.debe - d.haber) " +
+                        "               WHEN c.naturaleza = 'Acreedora' THEN (d.haber - d.debe) " +
+                        "               ELSE (d.debe - d.haber) " +
+                        "           END " +
+                        "       ) <> 0 " +
+                        "ORDER BY c.codigo";
 
         try (Connection conn = ConexionDB.connection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, tipo); // 'Activo', 'Pasivo', 'Capital'
-            ps.setDate(2, Date.valueOf(desde));
-            ps.setDate(3, Date.valueOf(hasta));
+            ps.setDate(1, Date.valueOf(desde));
+            ps.setDate(2, Date.valueOf(hasta));
+            ps.setString(3, tipoCuenta);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                String nombre = rs.getString("nombre");
-                double saldo = rs.getDouble("saldo");
+                String nombre = rs.getString("cuenta");
+                double saldo  = rs.getDouble("saldo");
+
                 lista.add(new CuentaSaldo(nombre, saldo));
             }
 
         } catch (SQLException e) {
-            System.out.println("Error obteniendo cuentas de tipo " + tipo + ": " + e.getMessage());
+            e.printStackTrace();
+            System.err.println("Error al obtener cuentas de tipo " + tipoCuenta + ": " + e.getMessage());
         }
 
         return lista;
     }
 
-    // =================================================
     //  ESTADO DE RESULTADOS
-    // =================================================
-
     public static List<EstadoResultadoFila> obtenerEstadoResultados(
             LocalDate desde,
             LocalDate hasta

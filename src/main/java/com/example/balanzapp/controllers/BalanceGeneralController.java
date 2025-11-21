@@ -133,9 +133,11 @@ public class BalanceGeneralController extends BaseController {
         double totalPasivo = filas.stream().mapToDouble(BalanceGeneralFila::getSaldoPasivo).sum();
         double totalPatrimonio = filas.stream().mapToDouble(BalanceGeneralFila::getSaldoPatrimonio).sum();
 
+        double totalPasivoMasPatrimonio = totalPasivo + totalPatrimonio;
+
         lblTotalActivo.setText(String.format("Total Activo: %.2f", totalActivo));
-        lblTotalPasivo.setText(String.format("Total Pasivo: %.2f", totalPasivo));
-        lblTotalPatrimonio.setText(String.format("Total Patrimonio: %.2f", totalPatrimonio));
+        lblTotalPatrimonio.setText(String.format("Total Pasivo: %.2f", totalPasivo));
+        lblTotalPasivo.setText(String.format("Total Pasivo + Capital: %.2f", totalPasivoMasPatrimonio));
 
         double utilidadNeta = PartidaDAO.calcularUtilidadNeta(desde, hasta);
         lblUtilidadNeta.setText(String.format("Utilidad Neta del Ejercicio: %.2f", utilidadNeta));

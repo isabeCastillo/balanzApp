@@ -13,9 +13,7 @@ public class BalanceGeneralFila {
 
     public BalanceGeneralFila() {}
 
-    public BalanceGeneralFila(String activo, double saldoActivo,
-                              String pasivo, double saldoPasivo,
-                              String patrimonio, double saldoPatrimonio) {
+    public BalanceGeneralFila(String activo, double saldoActivo, String pasivo, double saldoPasivo, String patrimonio, double saldoPatrimonio) {
         this.activo = activo;
         this.saldoActivo = saldoActivo;
         this.pasivo = pasivo;

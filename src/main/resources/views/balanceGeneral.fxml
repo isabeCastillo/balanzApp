@@ -92,8 +92,8 @@
                             <!-- Totales en una sola fila -->
                             <HBox alignment="CENTER_LEFT" spacing="20">
                                 <Label fx:id="lblTotalActivo" text="Total Activo: 0.00" />
-                                <Label fx:id="lblTotalPasivo" text="Total Pasivo: 0.00" />
-                                <Label fx:id="lblTotalPatrimonio" text="Total Patrimonio: 0.00" />
+                                <Label fx:id="lblTotalPatrimonio" text="Total Pasivo: 0.00" />
+                                <Label fx:id="lblTotalPasivo" text="Total Pasivo + Patrimonio: 0.00" />
                             </HBox>
 
                             <!-- Utilidad neta -->
