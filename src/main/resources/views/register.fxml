@@ -1,43 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.balanzapp.controllers.RegisterController"
-            prefHeight="650" prefWidth="1270"
-            stylesheets="@../styles/style.css">
+<BorderPane prefHeight="650" prefWidth="1270" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.balanzapp.controllers.RegisterController">
 
     <!-- PANEL IZQUIERDO -->
     <left>
-        <VBox fx:id="leftPanel"
-              prefWidth="320"
-              alignment="CENTER_LEFT"
-              spacing="18"
-              styleClass="login-left"
-              BorderPane.alignment="CENTER">
+        <VBox fx:id="leftPanel" alignment="CENTER_LEFT" prefWidth="320" spacing="18" styleClass="login-left" BorderPane.alignment="CENTER">
 
-            <Label fx:id="registerTitle"
-                   text="Crear cuenta"
-                   styleClass="welcome-title"/>
+            <Label fx:id="registerTitle" styleClass="welcome-title" text="Crear cuenta" />
 
-            <Label fx:id="registerMessage"
-                   text="Regístrate para comenzar a usar BalanzApp."
-                   wrapText="true"
-                   maxWidth="220"
-                   styleClass="welcome-message"/>
+            <Label fx:id="registerMessage" maxWidth="220" styleClass="welcome-message" text="Regístrate para comenzar a usar BalanzApp." wrapText="true" />
 
             <HBox alignment="CENTER" spacing="5">
-                <Label fx:id="alreadyAccountLabel"
-                       text="¿Ya tienes cuenta?"
-                       styleClass="welcome-message"/>
-                <Button fx:id="btnLogin"
-                        text="Inicia sesión"
-                        onAction="#irALogin"
-                        styleClass="outline-btn" />
+                <Label fx:id="alreadyAccountLabel" styleClass="welcome-message" text="¿Ya tienes cuenta?" />
+                <Button fx:id="btnLogin" onAction="#irALogin" styleClass="outline-btn" text="Inicia sesión" />
             </HBox>
         </VBox>
     </left>
@@ -45,129 +38,82 @@
     <!-- PANEL CENTRAL -->
     <center>
         <!-- Opcional: ScrollPane por si se desborda en pantallas pequeñas -->
-        <ScrollPane fitToWidth="true"
-                    hbarPolicy="NEVER"
-                    vbarPolicy="AS_NEEDED">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
             <content>
-                <VBox fx:id="centerPanel"
-                      alignment="CENTER"
-                      spacing="20"
-                      styleClass="login-center"
-                      BorderPane.alignment="CENTER">
+                <VBox fx:id="centerPanel" alignment="CENTER" spacing="20" styleClass="login-center" BorderPane.alignment="CENTER">
 
                     <!-- Logo -->
-                    <ImageView fitWidth="150"
-                               preserveRatio="true"
-                               styleClass="login-logo">
+                    <ImageView fitHeight="150.0" fitWidth="187.0" preserveRatio="true" styleClass="login-logo">
                         <image>
                             <Image url="@../imagenes/logoOscuro.png" />
                         </image>
                     </ImageView>
 
                     <!-- FORMULARIO EN DOS COLUMNAS -->
-                    <GridPane fx:id="gridForm"
-                              hgap="20"
-                              vgap="10"
-                              alignment="CENTER"
-                              maxWidth="650">
+                    <GridPane fx:id="gridForm" alignment="CENTER" hgap="20" prefHeight="357.0" prefWidth="888.0" vgap="10">
 
                         <columnConstraints>
-                            <ColumnConstraints percentWidth="40"/>
-                            <ColumnConstraints percentWidth="60"/>
+                            <ColumnConstraints percentWidth="67.0" />
+                            <ColumnConstraints percentWidth="116.0" />
+                     <ColumnConstraints minWidth="10.0" percentWidth="83.0" prefWidth="100.0" />
+                     <ColumnConstraints minWidth="10.0" percentWidth="115.0" prefWidth="100.0" />
                         </columnConstraints>
 
                         <!-- Nombre -->
-                        <Label text="Nombre completo"
-                               styleClass="register-label"
-                               GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                        <TextField fx:id="txtNombre"
-                                   promptText="Ingresa tu nombre"
-                                   styleClass="register-field"
-                                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Nombre completo" />
+                        <TextField fx:id="txtNombre" promptText="Ingresa tu nombre" styleClass="register-field" GridPane.columnIndex="1" GridPane.columnSpan="3" />
 
                         <!-- Género -->
-                        <Label text="Género"
-                               styleClass="register-label"
-                               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                        <ComboBox fx:id="cmbGenero"
-                                  promptText="Seleccione género"
-                                  styleClass="register-field"
-                                  GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Género" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="cmbGenero" promptText="Seleccione género" styleClass="register-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <!-- Fecha nacimiento -->
-                        <Label text="Fecha de nacimiento"
-                               styleClass="register-label"
-                               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                        <DatePicker fx:id="dateNacimiento"
-                                    styleClass="register-field"
-                                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Fecha de nacimiento" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="dateNacimiento" styleClass="register-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                         <!-- DUI -->
-                        <Label text="DUI"
-                               styleClass="register-label"
-                               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <TextField fx:id="txtDui"
-                                   promptText="00000000-0"
-                                   styleClass="register-field"
-                                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="DUI" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtDui" promptText="00000000-0" styleClass="register-field" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
 
                         <!-- Teléfono -->
-                        <Label text="Teléfono"
-                               styleClass="register-label"
-                               GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                        <TextField fx:id="txtTelefono"
-                                   promptText="0000-0000"
-                                   styleClass="register-field"
-                                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Teléfono" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtTelefono" promptText="0000-0000" styleClass="register-field" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" />
 
                         <!-- Dirección -->
-                        <Label text="Dirección"
-                               styleClass="register-label"
-                               GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                        <TextField fx:id="txtDireccion"
-                                   promptText="Ingresa tu dirección"
-                                   styleClass="register-field"
-                                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Dirección" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtDireccion" promptText="Ingresa tu dirección" styleClass="register-field" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4" />
 
                         <!-- Correo -->
-                        <Label text="Correo"
-                               styleClass="register-label"
-                               GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-                        <TextField fx:id="txtCorreo"
-                                   promptText="ejemplo@gmail.com"
-                                   styleClass="register-field"
-                                   GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Correo" GridPane.rowIndex="5" />
+                        <TextField fx:id="txtCorreo" promptText="ejemplo@gmail.com" styleClass="register-field" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" />
 
                         <!-- Usuario -->
-                        <Label text="Usuario"
-                               styleClass="register-label"
-                               GridPane.rowIndex="7" GridPane.columnIndex="0"/>
-                        <TextField fx:id="txtUsuario"
-                                   promptText="Nombre de usuario"
-                                   styleClass="register-field"
-                                   GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                        <Label styleClass="register-label" text="Usuario" GridPane.rowIndex="6" />
+                        <TextField fx:id="txtUsuario" promptText="Nombre de usuario" styleClass="register-field" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="6" />
+                         <Label styleClass="register-label" text="Contraseña" GridPane.rowIndex="7" />
 
                         <!-- Contraseña -->
-                        <StackPane alignment="CENTER_LEFT" layoutX="100.0" layoutY="50.0">
-                            <Label text="Contraseña"
-                                   styleClass="register-label"
-                                   GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                        <StackPane alignment="CENTER_LEFT" layoutX="100.0" layoutY="50.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="7">
                             <TextField fx:id="passwordVisibleField" visible="false" />
-                            <PasswordField fx:id="txtContrasena"
-                                           promptText="Crea una contraseña"
-                                           styleClass="register-field"
-                                           GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                            <PasswordField fx:id="txtContrasena" prefHeight="31.0" prefWidth="494.0" promptText="Crea una contraseña" styleClass="register-field" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                         </StackPane>
-
-                        <CheckBox fx:id="showPasswordCheckBox" layoutX="300.0" layoutY="55.0" text="Mostrar contraseña" onAction="#handleShowPassword" />
+                  <CheckBox fx:id="showPasswordCheckBox" onAction="#handleShowPassword" text="Mostrar contraseña" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                     <RowConstraints />
+                  </rowConstraints>
                     </GridPane>
 
                     <!-- BOTÓN REGISTRAR -->
-                    <Button fx:id="btnRegistrar"
-                            text="Registrar cuenta"
-                            onAction="#registrar"
-                            prefWidth="250"
-                            styleClass="primary-btn"/>
+                    <Button fx:id="btnRegistrar" onAction="#registrar" prefWidth="250" styleClass="primary-btn" text="Registrar cuenta" />
                 </VBox>
             </content>
         </ScrollPane>
