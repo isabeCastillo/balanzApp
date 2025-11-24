@@ -148,13 +148,18 @@
                                    GridPane.rowIndex="7" GridPane.columnIndex="1"/>
 
                         <!-- Contraseña -->
-                        <Label text="Contraseña"
-                               styleClass="register-label"
-                               GridPane.rowIndex="8" GridPane.columnIndex="0"/>
-                        <PasswordField fx:id="txtContrasena"
-                                       promptText="Crea una contraseña"
-                                       styleClass="register-field"
-                                       GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                        <StackPane alignment="CENTER_LEFT" layoutX="100.0" layoutY="50.0">
+                            <Label text="Contraseña"
+                                   styleClass="register-label"
+                                   GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                            <TextField fx:id="passwordVisibleField" visible="false" />
+                            <PasswordField fx:id="txtContrasena"
+                                           promptText="Crea una contraseña"
+                                           styleClass="register-field"
+                                           GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                        </StackPane>
+
+                        <CheckBox fx:id="showPasswordCheckBox" layoutX="300.0" layoutY="55.0" text="Mostrar contraseña" onAction="#handleShowPassword" />
                     </GridPane>
 
                     <!-- BOTÓN REGISTRAR -->

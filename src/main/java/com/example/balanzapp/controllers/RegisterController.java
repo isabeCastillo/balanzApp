@@ -1,6 +1,7 @@
 package com.example.balanzapp.controllers;
 
 import com.example.balanzapp.Conexion.ConexionDB;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,10 +25,13 @@ public class RegisterController {
     @FXML private TextField txtUsuario;
     @FXML private PasswordField txtContrasena;
     @FXML private Button btnLogin;
+    @FXML private TextField passwordVisibleField;
+    @FXML private CheckBox showPasswordCheckBox;
 
     @FXML
     private void initialize() {
         cmbGenero.getItems().addAll("Masculino", "Femenino", "Otro");
+        passwordVisibleField.textProperty().bindBidirectional(txtContrasena.textProperty());
     }
 
     @FXML
@@ -104,5 +108,22 @@ public class RegisterController {
         a.setHeaderText(null);
         a.setContentText(msg);
         a.showAndWait();
+    }
+
+    @FXML
+    private void handleShowPassword(ActionEvent event) {
+        if (showPasswordCheckBox.isSelected()) {
+            passwordVisibleField.setVisible(true);
+            txtContrasena.setVisible(false);
+        } else {
+            passwordVisibleField.setVisible(false);
+            txtContrasena.setVisible(true);
+        }
+        passwordVisibleField.requestFocus();
+        passwordVisibleField.positionCaret(txtContrasena.getCaretPosition());
+    }
+
+    public String getPasswordValue() {
+        return txtContrasena.getText();
     }
 }

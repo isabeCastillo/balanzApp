@@ -32,9 +32,10 @@ public class UsuarioController extends BaseController {
     @FXML private TextField txtTelefono;
     @FXML private TextField txtDireccion;
     @FXML private TextField txtCorreo;
-
     @FXML private TextField txtNombreUsuario;
     @FXML private PasswordField txtContraseña;
+    @FXML private TextField passwordVisibleField;
+    @FXML private CheckBox showPasswordCheckBox;
     @FXML private ComboBox<Rol> cmbRoles;
     @FXML private ComboBox<String> cmbbalances;
 
@@ -59,6 +60,7 @@ public class UsuarioController extends BaseController {
     @FXML
     public void initialize() {
         Usuario usuarioActivo = sessionUsu.getUsuarioActivo();
+        passwordVisibleField.textProperty().bindBidirectional(txtContraseña.textProperty());
         cmbGenero.setItems(FXCollections.observableArrayList("Masculino", "Femenino", "Otro"));
         if (usuarioActivo == null || usuarioActivo.getRol().getNivel_acceso() != 1) {
             bloquearFormulario();
@@ -267,6 +269,23 @@ public class UsuarioController extends BaseController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+    @FXML
+    private void handleShowPassword(ActionEvent event) {
+        if (showPasswordCheckBox.isSelected()) {
+            passwordVisibleField.setVisible(true);
+            txtContraseña.setVisible(false);
+        } else {
+            passwordVisibleField.setVisible(false);
+            txtContraseña.setVisible(true);
+        }
+        passwordVisibleField.requestFocus();
+        passwordVisibleField.positionCaret(txtContraseña.getCaretPosition());
+    }
+
+    public String getPasswordValue() {
+        return txtContraseña.getText();
+    }
+
     @FXML
     private void agregarUsuario() {
         if (hayCamposVacios()) {

@@ -67,13 +67,13 @@
                            prefWidth="600"
                            styleClass="login-field"/>
 
-                <Label fx:id="passLabel"
-                       text="Contraseña"
-                       styleClass="field-label"/>
-                <PasswordField fx:id="txtContrasena"
-                               promptText="Ingresa tu contraseña"
-                               prefWidth="600"
-                               styleClass="login-field"/>
+                <StackPane alignment="CENTER_LEFT" layoutX="100.0" layoutY="50.0">
+                    <Label fx:id="passLabel" text="Contraseña" styleClass="field-label"/>
+                    <TextField fx:id="passwordVisibleField" visible="false" />
+                    <PasswordField fx:id="txtContrasena" promptText="Ingresa tu contraseña" prefWidth="600" styleClass="login-field"/>
+                </StackPane>
+
+                <CheckBox fx:id="showPasswordCheckBox" layoutX="300.0" layoutY="55.0" text="Mostrar contraseña" onAction="#handleShowPassword" />
 
                 <Button fx:id="btnIngresar"
                         text="Ingresar"

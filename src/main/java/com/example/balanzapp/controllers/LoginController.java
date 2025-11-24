@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -25,6 +26,15 @@ public class LoginController {
     private TextField txtUsuario;
     @FXML
     private PasswordField txtContrasena;
+    @FXML
+    private TextField passwordVisibleField;
+    @FXML
+    private CheckBox showPasswordCheckBox;
+
+    @FXML
+    public void initialize() {
+        passwordVisibleField.textProperty().bindBidirectional(txtContrasena.textProperty());
+    }
 
     @FXML
     private void iniciarSesion() {
@@ -41,8 +51,6 @@ public class LoginController {
         if (usuarioLogueado != null) {
             try {
                 sessionUsu.setUsuarioActivo(usuarioLogueado);
-
-                // Luego cargar la vista de inicio
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/inicio.fxml"));
                 Parent root = loader.load();
 
@@ -58,7 +66,6 @@ public class LoginController {
             mostrarError("Usuario o contraseña incorrectos.");
         }
     }
-
 
     private Usuario autenticarUsuario(String usuarioTxt, String contrasenaTxt) {
         Usuario usuario = null;
@@ -115,5 +122,22 @@ public class LoginController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    @FXML
+    private void handleShowPassword(ActionEvent event) {
+        if (showPasswordCheckBox.isSelected()) {
+            passwordVisibleField.setVisible(true);
+            txtContrasena.setVisible(false);
+        } else {
+            passwordVisibleField.setVisible(false);
+            txtContrasena.setVisible(true);
+        }
+        passwordVisibleField.requestFocus();
+        passwordVisibleField.positionCaret(txtContrasena.getCaretPosition());
+    }
+
+    public String getPasswordValue() {
+        return txtContrasena.getText();
     }
 }
