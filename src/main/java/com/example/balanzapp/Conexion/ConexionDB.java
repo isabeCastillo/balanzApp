@@ -8,9 +8,9 @@ public class ConexionDB {
 
     private static String url = "jdbc:postgresql://localhost:5432/db_contables";
 
-    private static  final String USER = "postgres";
+    private static  final String USER = "postgres"; //ingrese el nombre de su usuario de postgres
 
-    private static final String PASS = "progra2023";
+    private static final String PASS = "ingrese_su_contraseña_de_postgres";
 
     //crear objeto de tipo conect
     public static Connection connection()
